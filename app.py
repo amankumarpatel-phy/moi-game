@@ -937,3 +937,28 @@ elif page == "How to Play":
     st.latex(r"I=\int r^2\,dm")
     st.latex(r"I=I_{\mathrm{cm}}+Md^2")
     st.latex(r"\tau_{\mathrm{net}}=I\alpha")
+
+
+# ---------- Signature footer: Aman Edge Physics ----------
+st.markdown("""
+<div class="aep-love-footer">
+  <div class="aep-orbit aep-orbit-one"></div><div class="aep-orbit aep-orbit-two"></div><div class="aep-orbit aep-orbit-three"></div><div class="aep-footer-grid"></div>
+  <div class="aep-footer-content">
+    <div class="aep-footer-kicker"><span class="aep-pulse"></span> AMAN EDGE PHYSICS <span class="aep-footer-sep">/</span> ROTATIONAL MECHANICS LAB</div>
+    <div class="aep-footer-title">Built with <span class="aep-heart">❤️</span></div>
+    <div class="aep-footer-credit">Developed in love by <span class="aep-name">Aman Kumar Patel</span></div>
+    <div class="aep-footer-line"></div>
+    <div class="aep-footer-bottom"><span>MOI QUEST</span><span>INERTIA · MOTION · IMAGINATION</span><span>© 2026</span></div>
+  </div><div class="aep-footer-glyph">I = ∫ r² dm</div>
+</div>
+<style>
+.aep-love-footer{position:relative;isolation:isolate;overflow:hidden;margin:3.2rem 0 1rem;padding:38px 34px 23px;min-height:245px;border-radius:24px;border:1px solid rgba(85,246,220,.24);background:radial-gradient(ellipse at 12% 5%,rgba(85,246,220,.17),transparent 32%),radial-gradient(ellipse at 88% 90%,rgba(154,123,255,.24),transparent 38%),linear-gradient(125deg,#080d18,#10172b 47%,#090b16);box-shadow:0 20px 70px rgba(0,0,0,.28),inset 0 0 45px rgba(85,246,220,.035);color:#f5f7ff}
+.aep-footer-grid{position:absolute;inset:0;z-index:-1;opacity:.18;background-image:linear-gradient(rgba(130,160,200,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(130,160,200,.15) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(90deg,black,transparent 80%)}
+.aep-orbit{position:absolute;z-index:-1;right:-35px;top:10px;width:260px;height:105px;border:1px solid rgba(85,246,220,.48);border-radius:50%;transform:rotate(-28deg);box-shadow:0 0 24px rgba(85,246,220,.08)}.aep-orbit-two{right:5px;top:0;width:225px;height:145px;border-color:rgba(154,123,255,.48);transform:rotate(42deg)}.aep-orbit-three{right:25px;top:32px;width:290px;height:95px;border-color:rgba(255,105,180,.3);transform:rotate(12deg)}
+.aep-footer-content{position:relative;z-index:1}.aep-footer-kicker{font:700 10px/1.5 monospace;letter-spacing:.19em;color:#55f6dc;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.aep-pulse{width:7px;height:7px;background:#55f6dc;border-radius:50%;box-shadow:0 0 13px #55f6dc}.aep-footer-sep{color:#ff9d70}
+.aep-footer-title{font:800 clamp(27px,4vw,43px)/1.15 system-ui,sans-serif;letter-spacing:-.045em;margin-top:25px}.aep-heart{display:inline-block;filter:drop-shadow(0 0 12px rgba(255,65,125,.7));animation:aep-heartbeat 1.7s ease-in-out infinite}.aep-footer-credit{font:500 clamp(13px,2vw,17px)/1.7 system-ui,sans-serif;color:#b8c4d8;margin-top:7px}.aep-name{font-weight:800;color:#fff;background:linear-gradient(90deg,#55f6dc,#a99aff,#ff9ccf);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.aep-footer-line{height:1px;margin:25px 0 15px;background:linear-gradient(90deg,rgba(85,246,220,.75),rgba(154,123,255,.6),transparent 85%)}.aep-footer-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 9px/1.5 monospace;letter-spacing:.13em;color:#8493ab}.aep-footer-bottom span:first-child{color:#55f6dc}.aep-footer-glyph{position:absolute;right:25px;bottom:43px;font:700 clamp(15px,2vw,24px) Georgia,serif;color:rgba(224,232,255,.09);transform:rotate(-8deg);pointer-events:none;white-space:nowrap}
+@keyframes aep-heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.14)}24%{transform:scale(1)}36%{transform:scale(1.08)}48%{transform:scale(1)}}
+@media(max-width:600px){.aep-love-footer{padding:27px 20px 19px;min-height:235px}.aep-footer-glyph{right:12px;bottom:63px;font-size:16px}.aep-footer-bottom{font-size:8px}}
+</style>
+""", unsafe_allow_html=True)
