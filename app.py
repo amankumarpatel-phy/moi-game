@@ -102,111 +102,60 @@ div[data-testid="stAlert"]{border-radius:14px}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Photorealistic Swarg Lok-inspired background ----------
-# A real temple photograph supplies photographic texture; cinematic atmospheric layers
-# add a restrained, heavenly Indra-Lok mood without cartoon SVG objects.
-st.markdown('<div class="swarg-layer" aria-hidden="true"></div>', unsafe_allow_html=True)
+# ---------- Ultra-abstract neon cosmos background ----------
 st.markdown("""
+<div class="neon-universe" aria-hidden="true">
+  <div class="nebula nebula-a"></div><div class="nebula nebula-b"></div><div class="nebula nebula-c"></div>
+  <div class="light-ribbon ribbon-a"></div><div class="light-ribbon ribbon-b"></div><div class="light-ribbon ribbon-c"></div>
+  <div class="om-float om-a">ॐ</div><div class="om-float om-b">ॐ</div><div class="om-float om-c">ॐ</div><div class="om-float om-d">ॐ</div><div class="om-float om-e">ॐ</div>
+  <div class="particle-field">
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <div class="light-orb orb-a"></div><div class="light-orb orb-b"></div><div class="light-orb orb-c"></div><div class="light-orb orb-d"></div>
+  <div class="cosmic-vignette"></div>
+</div>
 <style>
-/* Real photographic scene with cinematic colour grading and restrained cloud haze */
-.swarg-layer{
-  position:fixed;inset:-2.5vh -2.5vw;width:105vw;height:105vh;z-index:0;pointer-events:none;overflow:hidden;
-  background-image:
-    linear-gradient(180deg,rgba(255,217,155,.02) 0%,rgba(55,34,48,.04) 25%,rgba(20,22,39,.20) 62%,rgba(12,15,29,.46) 100%),
-    linear-gradient(90deg,rgba(39,22,34,.35) 0%,rgba(34,25,43,.08) 28%,rgba(22,22,40,.02) 64%,rgba(39,22,34,.18) 100%),
-    url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=90&w=2560');
-  background-size:cover;background-position:center 43%;background-repeat:no-repeat;
-  filter:saturate(1.12) contrast(1.02) brightness(1.12);transform:scale(1.015);transform-origin:center;
-  animation:indraLokKenBurns 95s ease-in-out infinite alternate;
-}
-.swarg-layer:before{
-  content:"";position:absolute;inset:-8%;
-  background:
-   radial-gradient(ellipse at 72% 23%,rgba(255,215,150,.19) 0%,rgba(255,215,150,.06) 17%,transparent 40%),
-   radial-gradient(ellipse at 15% 54%,rgba(255,194,218,.13) 0%,transparent 34%),
-   radial-gradient(ellipse at 86% 62%,rgba(190,203,255,.13) 0%,transparent 32%);
-  filter:blur(28px);animation:indraLokHaze 48s ease-in-out infinite alternate;
-}
-.swarg-layer:after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(22,15,31,.02),rgba(18,19,34,.04) 45%,rgba(12,15,29,.40));
-}
-@keyframes indraLokKenBurns{
-  0%{transform:scale(1.015) translate3d(0,0,0)}
-  100%{transform:scale(1.105) translate3d(-.8%,.3%,0)}
-}
-@keyframes indraLokHaze{
-  0%{transform:translate3d(-1.5%,0,0) scale(1);opacity:.55}
-  100%{transform:translate3d(1.8%,-1%,0) scale(1.06);opacity:.9}
-}
-/* Glass panels remain readable over a luminous photographic background */
-.stApp{background:linear-gradient(180deg,rgba(23,17,32,.18),rgba(12,16,29,.38))!important}
+.neon-universe{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 48% 48%,#17102f 0%,#090a1b 54%,#03040b 100%);isolation:isolate}
+.neon-universe *{box-sizing:border-box}
+.nebula{position:absolute;width:65vw;height:58vw;max-height:85vh;max-width:1000px;border-radius:50%;filter:blur(78px);mix-blend-mode:screen;opacity:.32;will-change:transform}
+.nebula-a{left:-20%;top:-30%;background:conic-gradient(from 20deg,transparent,#00f5d4,#5a28ff,transparent,#ff28bd,transparent);animation:nebulaFlow 29s ease-in-out infinite alternate}
+.nebula-b{right:-22%;top:8%;background:conic-gradient(from 190deg,transparent,#00b7ff,#a020f0,transparent,#ff4db8,transparent);animation:nebulaFlow 36s ease-in-out infinite alternate-reverse}
+.nebula-c{left:22%;bottom:-42%;background:conic-gradient(from 80deg,transparent,#fe32c5,#572dff,transparent,#00ffdb,transparent);animation:nebulaFlow 41s ease-in-out infinite alternate}
+.light-ribbon{position:absolute;width:150vw;height:19vh;left:-25vw;border-radius:50%;filter:blur(17px);opacity:.27;mix-blend-mode:screen;transform-origin:center;will-change:transform}
+.ribbon-a{top:22%;border-top:2px solid #00ffe1;box-shadow:0 -8px 28px #00d9ff,0 -20px 65px rgba(0,217,255,.45);transform:rotate(-18deg);animation:ribbonDriftA 24s ease-in-out infinite alternate}
+.ribbon-b{top:51%;border-top:2px solid #ff3dd1;box-shadow:0 -7px 26px #ff3dd1,0 -20px 60px rgba(255,61,209,.4);transform:rotate(13deg);animation:ribbonDriftB 31s ease-in-out infinite alternate}
+.ribbon-c{top:72%;border-top:1px solid #8c70ff;box-shadow:0 -7px 30px #8c70ff,0 -18px 65px rgba(111,76,255,.45);transform:rotate(-7deg);animation:ribbonDriftA 38s ease-in-out infinite alternate-reverse}
+.om-float{position:absolute;font-family:serif;font-weight:500;line-height:1;color:#ff9bfa;text-shadow:0 0 8px #ff40df,0 0 25px rgba(255,52,218,.8),0 0 55px rgba(134,69,255,.6);opacity:.44;user-select:none;will-change:transform}
+.om-a{font-size:clamp(42px,6vw,88px);left:9%;top:22%;animation:omFloatA 21s ease-in-out infinite}
+.om-b{font-size:clamp(28px,4vw,58px);right:14%;top:16%;color:#8afff0;text-shadow:0 0 10px #00ffe1,0 0 36px rgba(0,255,225,.7);animation:omFloatB 25s ease-in-out infinite}
+.om-c{font-size:clamp(55px,8vw,112px);right:21%;bottom:12%;opacity:.23;animation:omFloatA 30s ease-in-out infinite reverse}
+.om-d{font-size:clamp(24px,3vw,45px);left:38%;top:8%;color:#c8a5ff;text-shadow:0 0 10px #9d5cff,0 0 35px #743dff;animation:omFloatB 19s ease-in-out infinite reverse}
+.om-e{font-size:clamp(32px,4vw,62px);left:5%;bottom:12%;color:#a4c9ff;text-shadow:0 0 10px #4d8dff,0 0 35px #4d8dff;animation:omFloatB 28s ease-in-out infinite}
+.particle-field{position:absolute;inset:0;overflow:hidden}
+.particle-field i{position:absolute;left:var(--x,50%);top:110%;width:var(--s,3px);height:var(--s,3px);border-radius:50%;background:var(--c,#b5fff5);box-shadow:0 0 8px 2px var(--c,#b5fff5),0 0 22px var(--c,#b5fff5);opacity:0;animation:particleAscend var(--d,19s) linear var(--delay,0s) infinite}
+.particle-field i:nth-child(6n+1){--x:4%;--s:2px;--c:#00ffe1;--d:17s;--delay:-8s}.particle-field i:nth-child(6n+2){--x:16%;--s:4px;--c:#ff55da;--d:23s;--delay:-16s}.particle-field i:nth-child(6n+3){--x:29%;--s:2px;--c:#9c7cff;--d:19s;--delay:-4s}.particle-field i:nth-child(6n+4){--x:42%;--s:3px;--c:#8dfbff;--d:27s;--delay:-20s}.particle-field i:nth-child(6n+5){--x:57%;--s:2px;--c:#ffd0fa;--d:21s;--delay:-12s}.particle-field i:nth-child(6n){--x:72%;--s:3px;--c:#7d7bff;--d:25s;--delay:-5s}
+.particle-field i:nth-child(3n){margin-left:13%}.particle-field i:nth-child(4n){margin-left:19%}.particle-field i:nth-child(5n){margin-left:8%}
+.light-orb{position:absolute;width:clamp(70px,12vw,180px);aspect-ratio:1;border-radius:50%;filter:blur(1px);opacity:.14;mix-blend-mode:screen}
+.orb-a{left:18%;top:43%;background:radial-gradient(circle at 35% 30%,#fff,#00ffe1 13%,#00c8ff 34%,transparent 72%);animation:orbDrift 18s ease-in-out infinite alternate}
+.orb-b{right:22%;top:35%;background:radial-gradient(circle at 35% 30%,#fff,#ff52db 12%,#8d32ff 38%,transparent 72%);animation:orbDrift 23s ease-in-out infinite alternate-reverse}
+.orb-c{left:55%;bottom:3%;background:radial-gradient(circle at 35% 30%,#fff,#50a0ff 14%,#723dff 38%,transparent 72%);animation:orbDrift 28s ease-in-out infinite alternate}
+.orb-d{right:4%;bottom:30%;background:radial-gradient(circle at 35% 30%,#fff,#00ffe1 14%,#00aaff 38%,transparent 72%);animation:orbDrift 20s ease-in-out infinite alternate-reverse}
+.cosmic-vignette{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,4,12,.4),transparent 26%,transparent 76%,rgba(3,4,12,.28)),linear-gradient(180deg,rgba(3,4,12,.15),transparent 40%,rgba(3,4,12,.42));}
+@keyframes nebulaFlow{0%{transform:translate3d(-4%,-3%,0) rotate(-16deg) scale(.88)}100%{transform:translate3d(8%,6%,0) rotate(21deg) scale(1.12)}}
+@keyframes ribbonDriftA{0%{translate:-3% -12%;rotate:-4deg}100%{translate:4% 15%;rotate:5deg}}
+@keyframes ribbonDriftB{0%{translate:3% 12%;rotate:4deg}100%{translate:-4% -10%;rotate:-5deg}}
+@keyframes omFloatA{0%,100%{transform:translate3d(0,0,0) rotate(-8deg) scale(.96)}50%{transform:translate3d(28px,-36px,0) rotate(8deg) scale(1.05)}}
+@keyframes omFloatB{0%,100%{transform:translate3d(0,0,0) rotate(7deg)}50%{transform:translate3d(-25px,32px,0) rotate(-9deg)}}
+@keyframes particleAscend{0%{transform:translate3d(0,0,0) scale(.4);opacity:0}10%{opacity:.8}85%{opacity:.5}100%{transform:translate3d(45px,-125vh,0) scale(1.4);opacity:0}}
+@keyframes orbDrift{0%{transform:translate3d(-25px,10px,0) scale(.8)}100%{transform:translate3d(40px,-30px,0) scale(1.15)}}
+.stApp{background:transparent!important}
 .block-container,[data-testid="stSidebar"],[data-testid="stHeader"]{position:relative;z-index:1}
-[data-testid="stSidebar"]{
- background:linear-gradient(180deg,rgba(26,19,34,.90),rgba(17,22,41,.91))!important;
- border-right:1px solid rgba(255,225,181,.22)!important;backdrop-filter:blur(20px);
-}
-[data-testid="stMetric"]{
- background:linear-gradient(140deg,rgba(58,45,61,.74),rgba(20,29,48,.78))!important;
- border:1px solid rgba(255,225,181,.25)!important;backdrop-filter:blur(17px);
- box-shadow:0 12px 36px rgba(6,4,16,.18),inset 0 1px rgba(255,255,255,.08)!important;
-}
-.hero,.card{
- background:linear-gradient(135deg,rgba(45,34,52,.78),rgba(18,27,47,.79))!important;
- border:1px solid rgba(255,226,182,.24)!important;backdrop-filter:blur(17px);
- box-shadow:0 18px 55px rgba(5,5,16,.22),inset 0 1px rgba(255,255,255,.07)!important;
-}
-.stButton>button{
- background:linear-gradient(120deg,rgba(255,219,160,.18),rgba(233,189,211,.15),rgba(170,192,238,.13))!important;
- border-color:rgba(255,223,176,.45)!important;backdrop-filter:blur(12px);
-}
-.stButton>button:hover{box-shadow:0 0 25px rgba(255,219,160,.17),0 0 34px rgba(215,191,244,.12)!important}
-.aep-love-footer{
- background:linear-gradient(110deg,rgba(31,22,35,.90),rgba(25,30,49,.87)),url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=70&w=1400') center 64%/cover!important;
- border-color:rgba(255,224,179,.35)!important;backdrop-filter:blur(8px);
-}
-.aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
-
-/* Cinematic Swarg-Lok atmosphere: layered mist, god-rays and drifting cloud veils */
-.swarg-layer{background-position:center 43%;will-change:transform;background-color:#34243b}
-.swarg-layer:before{
-  content:"";position:absolute;inset:-12%;
-  background:
-   radial-gradient(ellipse at 76% 20%,rgba(255,224,164,.23) 0%,rgba(255,218,165,.09) 15%,transparent 34%),
-   radial-gradient(ellipse at 42% 62%,rgba(255,245,228,.10) 0%,transparent 30%),
-   radial-gradient(ellipse at 14% 72%,rgba(245,195,222,.13) 0%,transparent 33%),
-   linear-gradient(108deg,transparent 28%,rgba(255,236,194,.075) 43%,transparent 53%),
-   linear-gradient(78deg,transparent 48%,rgba(255,232,184,.06) 58%,transparent 66%);
-  filter:blur(24px);animation:indraLokHaze 48s ease-in-out infinite alternate;
-}
-.swarg-layer:after{
-  content:"";position:absolute;inset:0;
-  background:
-   linear-gradient(180deg,rgba(19,14,29,.03),rgba(20,18,32,.06) 40%,rgba(11,14,27,.32) 100%),
-   linear-gradient(90deg,rgba(18,12,24,.10),transparent 32%,transparent 72%,rgba(18,12,24,.16));
-}
-@media(min-width:1200px){.swarg-layer{background-position:center 43%}}
-
-/* Gold-glass Swarg Lok dashboard treatment inspired by the generated concept */
-.swarg-welcome{text-align:center;position:relative;overflow:hidden;padding:28px 18px 24px;margin:4px 0 18px;border:1px solid rgba(255,221,157,.48);border-radius:22px;background:linear-gradient(180deg,rgba(43,28,38,.20),rgba(19,21,34,.32));box-shadow:0 12px 60px rgba(5,4,14,.2),inset 0 0 38px rgba(255,218,151,.08);backdrop-filter:blur(8px)}
-.swarg-eyebrow{font:700 10px/1.7 monospace;letter-spacing:.28em;color:#ffe7b0}
-.swarg-welcome h1{font-family:Georgia,'Times New Roman',serif!important;font-size:clamp(40px,6vw,76px)!important;letter-spacing:.08em!important;line-height:1.08!important;margin:8px 0!important;color:#ffe3a0!important;text-shadow:0 2px 2px #54331d,0 0 22px rgba(255,203,104,.42)}
-.swarg-subtitle{font:600 12px/1.7 Georgia,serif;letter-spacing:.2em;color:#fff1d0}
-.swarg-byline{font:italic 14px/1.7 Georgia,serif;color:#f7d9c5;margin-top:7px}
-.swarg-hero-card{text-align:center;margin:8px auto 14px;padding:25px 18px 22px;max-width:920px;border:1px solid rgba(255,221,157,.54);border-radius:20px;background:linear-gradient(120deg,rgba(68,43,48,.50),rgba(28,30,46,.58),rgba(72,48,48,.44));box-shadow:0 14px 50px rgba(8,5,15,.2),inset 0 0 35px rgba(255,213,143,.09);backdrop-filter:blur(12px)}
-.swarg-hero-kicker{font:700 10px/1.7 monospace;letter-spacing:.22em;color:#ffe1a0}
-.swarg-hero-card h2{font:700 clamp(23px,3vw,34px)/1.2 Georgia,serif!important;color:#ffe0a0!important;margin:10px 0 7px!important;text-shadow:0 0 15px rgba(255,204,105,.25)}
-.swarg-hero-card p{font:16px/1.7 Georgia,serif;color:#fff0d5;margin:0}
-.swarg-quote{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,220,160,.32);font:italic 16px Georgia,serif;color:#f9e8d1}
-.swarg-pillars{margin-top:10px;font:700 10px/1.7 monospace;letter-spacing:.16em;color:#ffe2a0}
-[data-testid="stMetric"]{border-radius:16px!important;background:linear-gradient(145deg,rgba(93,64,67,.54),rgba(25,29,44,.70))!important;border:1px solid rgba(255,221,157,.4)!important;box-shadow:0 8px 28px rgba(8,5,16,.2),inset 0 1px rgba(255,245,219,.1)!important}
-[data-testid="stMetricLabel"]{color:#f9dfb0!important}
-.stButton>button{font-family:Georgia,'Times New Roman',serif!important;font-weight:700!important;letter-spacing:.04em!important;color:#fff0cf!important;border:1px solid rgba(255,219,143,.65)!important;border-radius:12px!important;background:linear-gradient(120deg,rgba(135,83,42,.76),rgba(83,54,54,.83),rgba(110,77,50,.76))!important;box-shadow:0 0 20px rgba(255,198,91,.1)!important}
-.stButton>button:hover{border-color:#ffe8ad!important;box-shadow:0 0 28px rgba(255,211,116,.26)!important}
-.aep-love-footer{border-color:rgba(255,221,157,.42)!important}
-
-@media(prefers-reduced-motion:reduce){.swarg-layer{animation:none!important}.swarg-layer:before{animation:none!important}}
-
+[data-testid="stSidebar"]{background:linear-gradient(180deg,rgba(7,9,25,.87),rgba(12,8,29,.88))!important;border-right:1px solid rgba(0,255,225,.22)!important;backdrop-filter:blur(24px)}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(22,32,64,.76),rgba(13,12,36,.82))!important;border:1px solid rgba(139,115,255,.32)!important;box-shadow:0 0 24px rgba(0,255,225,.04),0 12px 38px rgba(0,0,0,.25)!important;backdrop-filter:blur(18px)}
+.hero,.card{background:linear-gradient(135deg,rgba(27,23,65,.76),rgba(10,18,39,.80))!important;border:1px solid rgba(123,115,255,.29)!important;backdrop-filter:blur(17px)}
+.stButton>button{border-color:rgba(0,255,225,.42)!important;background:linear-gradient(115deg,rgba(0,255,225,.12),rgba(140,65,255,.18),rgba(255,50,197,.12))!important;box-shadow:0 0 22px rgba(0,255,225,.06)!important}
+.aep-minimal-footer{border-color:rgba(0,255,225,.22)!important}
+@media(prefers-reduced-motion:reduce){.neon-universe *{animation:none!important;transition:none!important}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -278,64 +227,7 @@ st.markdown('<div class="eyebrow">INTERACTIVE PHYSICS • SEASON 01</div>', unsa
 st.markdown('<div class="hero"><span class="tag">LEARN BY PLAYING</span><h1 style="margin:.8rem 0 .5rem">MOI <span style="color:#55f6dc">QUEST.</span></h1><p style="font-size:1.12rem;max-width:720px;margin-bottom:.7rem">The axis is your choice. The mass distribution is your puzzle. Discover why some objects resist rotational acceleration more than others.</p><span class="smallmuted">A rotational mechanics game by Aman Edge Physics</span></div>', unsafe_allow_html=True)
 st.write("")
 
-# ---------- Sound studio: synthesized audio, no external assets ----------
-# Browsers require a user gesture before audio can start. The control panel is intentionally opt-in.
-SOUND_STUDIO = r"""
-<div class="sound-shell">
-  <div class="sound-head"><span class="sound-dot"></span><span class="sound-title">MOI AUDIO ENGINE</span><span class="sound-sub">SYNTH · AMBIENCE · MOTION FX</span></div>
-  <div class="sound-controls">
-    <button id="ambience">◉ AMBIENCE OFF</button>
-    <button id="rotor">⟳ ROTOR HUM OFF</button>
-    <button id="whoosh">〰 WHOOSH</button>
-    <button id="clickfx">✦ UI PULSE</button>
-    <button id="successfx">✓ SUCCESS</button>
-    <button id="stopfx" class="stop">■ MUTE ALL</button>
-  </div>
-  <div class="sound-bottom"><label for="vol">MASTER VOLUME</label><input id="vol" type="range" min="0" max="100" value="22"><span id="volread">22%</span><span class="sound-hint">Audio starts only when you press a control.</span></div>
-</div>
-<style>
-*{box-sizing:border-box}body{margin:0;background:transparent;color:#f4f7ff;font-family:Arial,sans-serif}
-.sound-shell{padding:13px 15px;border:1px solid rgba(85,246,220,.24);border-radius:16px;background:linear-gradient(110deg,rgba(11,20,34,.94),rgba(24,18,43,.91));box-shadow:0 8px 32px rgba(0,0,0,.18)}
-.sound-head{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}.sound-dot{width:8px;height:8px;border-radius:50%;background:#55f6dc;box-shadow:0 0 12px #55f6dc}.sound-title{font-weight:800;letter-spacing:.13em;font-size:12px;color:#55f6dc}.sound-sub{font-size:9px;letter-spacing:.12em;color:#9ba8bc}
-.sound-controls{display:flex;gap:7px;flex-wrap:wrap}.sound-controls button{border:1px solid rgba(154,123,255,.4);background:rgba(154,123,255,.09);color:#f4f7ff;border-radius:9px;padding:9px 11px;font-weight:700;font-size:10px;letter-spacing:.04em;cursor:pointer;transition:.18s}
-.sound-controls button:hover{border-color:#55f6dc;transform:translateY(-1px)}.sound-controls button.active{border-color:#55f6dc;background:rgba(85,246,220,.13);color:#55f6dc}.sound-controls .stop{border-color:rgba(255,110,130,.4)}
-.sound-bottom{display:flex;align-items:center;gap:10px;margin-top:11px;flex-wrap:wrap;font-size:9px;letter-spacing:.1em;color:#9ba8bc}.sound-bottom input{width:115px;accent-color:#55f6dc}.sound-hint{letter-spacing:0;font-size:10px;color:#8795ab;margin-left:auto}
-</style>
-<script>
-(()=>{
-let ctx=null, master=null, ambienceOn=false, rotorOn=false, ambienceNodes=[], rotorNodes=[], activeTones=[];
-const $=id=>document.getElementById(id);
-function init(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=+$('vol').value/100*.22;master.connect(ctx.destination)}if(ctx.state==='suspended')ctx.resume();return ctx}
-function tone(freq,dur,type='sine',gain=.12,slide=null){
- const a=init(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,slide),a.currentTime+dur);
- g.gain.setValueAtTime(.0001,a.currentTime);g.gain.exponentialRampToValueAtTime(gain,a.currentTime+.025);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur);
- o.connect(g);g.connect(master);o.start();o.stop(a.currentTime+dur+.04);activeTones.push(o);o.onended=()=>{activeTones=activeTones.filter(n=>n!==o)}
-}
-function noise(dur,gain=.07,filterFreq=800){
- const a=init(),n=Math.floor(a.sampleRate*dur),buf=a.createBuffer(1,n,a.sampleRate),data=buf.getChannelData(0);
- for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*(1-i/n);
- const src=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();src.buffer=buf;f.type='lowpass';f.frequency.value=filterFreq;g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur);src.connect(f);f.connect(g);g.connect(master);src.start();src.stop(a.currentTime+dur)
-}
-function loopTone(freq,type,gain,detune=0){
- const a=init(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=freq;o.detune.value=detune;g.gain.value=gain;o.connect(g);g.connect(master);o.start();return {o,g}
-}
-function startAmbience(){if(ambienceOn)return;init();ambienceOn=true;ambienceNodes=[loopTone(55,'sine',.18),loopTone(82.4,'triangle',.045),loopTone(164.8,'sine',.025,7)];$('ambience').classList.add('active');$('ambience').textContent='◉ AMBIENCE ON'}
-function stopNodes(nodes){nodes.forEach(n=>{try{n.g.gain.setTargetAtTime(.0001,ctx.currentTime,.04);n.o.stop(ctx.currentTime+.2)}catch(e){}})}
-function stopAmbience(){ambienceOn=false;stopNodes(ambienceNodes);ambienceNodes=[];$('ambience').classList.remove('active');$('ambience').textContent='◉ AMBIENCE OFF'}
-function startRotor(){if(rotorOn)return;init();rotorOn=true;rotorNodes=[loopTone(42,'sawtooth',.025),loopTone(43.7,'triangle',.02),loopTone(86,'sine',.018)];$('rotor').classList.add('active');$('rotor').textContent='⟳ ROTOR HUM ON'}
-function stopRotor(){rotorOn=false;stopNodes(rotorNodes);rotorNodes=[];$('rotor').classList.remove('active');$('rotor').textContent='⟳ ROTOR HUM OFF'}
-$('ambience').onclick=()=>ambienceOn?stopAmbience():startAmbience();
-$('rotor').onclick=()=>rotorOn?stopRotor():startRotor();
-$('whoosh').onclick=()=>{noise(.65,.11,1800);tone(180,.55,'sine',.035,55)};
-$('clickfx').onclick=()=>{tone(740,.09,'sine',.075);setTimeout(()=>tone(1120,.12,'sine',.045),65)};
-$('successfx').onclick=()=>{tone(523.25,.22,'sine',.075);setTimeout(()=>tone(659.25,.22,'sine',.075),100);setTimeout(()=>tone(783.99,.34,'sine',.075),200)};
-$('stopfx').onclick=()=>{stopAmbience();stopRotor();activeTones.forEach(o=>{try{o.stop()}catch(e){}});activeTones=[]};
-$('vol').oninput=()=>{const v=+$('vol').value;$('volread').textContent=v+'%';if(master)master.gain.setTargetAtTime(v/100*.22,ctx.currentTime,.03)};
-})();
-</script>
-"""
-components.html(SOUND_STUDIO, height=142, scrolling=False)
-
+# ---------- Mission Control ----------
 if page == "Mission Control":
     st.markdown("""
     <div class="swarg-welcome">
@@ -628,68 +520,6 @@ elif page == "Dynamics Arena":
     alphas[-1] = alphas[-2]
     energy = 0.5*Iaxis*omegas**2
 
-    # Physics-linked audio: the rotor pitch follows the simulated angular-speed curve.
-    # The user must press PLAY because browsers block unsolicited audio.
-    import json
-    audio_times = json.dumps(times.tolist())
-    audio_omegas = json.dumps(omegas.tolist())
-    audio_angles = json.dumps(angles.tolist())
-    audio_friction = float(friction)
-    audio_torque = float(torque)
-    audio_duration = float(duration)
-    DYNAMICS_AUDIO = r"""
-    <div class="dyn-audio">
-      <div class="dyn-audio-top"><span class="live-dot"></span><b>PHYSICS-LINKED AUDIO</b><span id="soundState">STANDBY</span></div>
-      <div class="dyn-audio-controls">
-        <button id="soundPlay">▶ PLAY SIM + SOUND</button><button id="soundPause">Ⅱ PAUSE</button><button id="soundReset">↺ RESET</button>
-        <label>VOLUME <input id="soundVol" type="range" min="0" max="100" value="25"><span id="soundVolText">25%</span></label>
-      </div>
-      <div class="dyn-audio-readout"><span>TIME <strong id="soundTime">0.00 s</strong></span><span>ANGULAR SPEED <strong id="soundOmega">0.00 rad/s</strong></span><span>ROTOR PITCH <strong id="soundPitch">— Hz</strong></span></div>
-      <input id="soundSeek" aria-label="Simulation time" type="range" min="0" max="__DURATION__" step="0.01" value="0">
-      <p>Audio pitch follows |ω(t)|. Friction adds a subtle mechanical texture; mute or pause at any time.</p>
-    </div>
-    <style>
-    *{box-sizing:border-box}.dyn-audio{font-family:Arial,sans-serif;color:#eaf2ff;background:linear-gradient(110deg,rgba(8,18,30,.97),rgba(25,17,43,.96));border:1px solid rgba(85,246,220,.28);border-radius:15px;padding:13px 15px}
-    .dyn-audio-top,.dyn-audio-controls,.dyn-audio-readout{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dyn-audio-top{font-size:11px;letter-spacing:.1em;color:#55f6dc}.dyn-audio-top #soundState{margin-left:auto;color:#a8b5c8;font-size:10px}
-    .live-dot{width:7px;height:7px;border-radius:50%;background:#55f6dc;box-shadow:0 0 10px #55f6dc}.dyn-audio-controls{margin:12px 0}.dyn-audio button{background:rgba(85,246,220,.08);border:1px solid rgba(85,246,220,.35);border-radius:8px;padding:8px 10px;color:#eaf2ff;font-weight:700;font-size:10px;cursor:pointer}.dyn-audio button:hover{border-color:#9a7bff}.dyn-audio label{display:flex;align-items:center;gap:6px;font-size:9px;color:#a8b5c8}.dyn-audio input[type=range]{accent-color:#55f6dc;width:100px}.dyn-audio-readout{justify-content:space-between;font-size:9px;color:#93a4bb;letter-spacing:.07em}.dyn-audio-readout strong{display:block;color:#fff;font-size:12px;letter-spacing:0;margin-top:3px}.dyn-audio #soundSeek{width:100%;margin:12px 0 2px;accent-color:#55f6dc}.dyn-audio p{font-size:10px;line-height:1.5;color:#8f9db1;margin:5px 0 0}
-    </style>
-    <script>
-    (()=>{
-      const ts=__TIMES__, ws=__OMEGAS__, duration=__DURATION__, friction=__FRICTION__, torque=__TORQUE__;
-      const $=id=>document.getElementById(id);
-      let ctx=null,master=null,osc=null,oscGain=null,noiseGain=null,noiseSrc=null,playing=false,startWall=0,startTime=0,elapsed=0,raf=0;
-      function init(){
-        if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=+$('soundVol').value/100*.28;master.connect(ctx.destination);
-          osc=ctx.createOscillator();osc.type='triangle';osc.frequency.value=65;oscGain=ctx.createGain();oscGain.gain.value=0;osc.connect(oscGain);oscGain.connect(master);osc.start();
-          const n=Math.floor(ctx.sampleRate*2),buf=ctx.createBuffer(1,n,ctx.sampleRate),data=buf.getChannelData(0);for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*.35;
-          noiseSrc=ctx.createBufferSource();noiseSrc.buffer=buf;noiseSrc.loop=true;const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=Math.min(1400,350+friction*80);noiseGain=ctx.createGain();noiseGain.gain.value=0;noiseSrc.connect(filter);filter.connect(noiseGain);noiseGain.connect(master);noiseSrc.start();
-        }if(ctx.state==='suspended')ctx.resume();
-      }
-      function sample(t){let i=Math.max(0,Math.min(ts.length-2,Math.floor(t/duration*(ts.length-1))));let f=(t-ts[i])/(ts[i+1]-ts[i]||1);return ws[i]+(ws[i+1]-ws[i])*Math.max(0,Math.min(1,f))}
-      function draw(){
-        if(!playing)return;const t=Math.min(duration,startTime+(performance.now()-startWall)/1000);
-        $('soundSeek').value=t;$('soundTime').textContent=t.toFixed(2)+' s';
-        const w=sample(t),pitch=Math.max(38,Math.min(420,55+Math.abs(w)*15));
-        $('soundOmega').textContent=w.toFixed(2)+' rad/s';$('soundPitch').textContent=pitch.toFixed(0)+' Hz';
-        osc.frequency.setTargetAtTime(pitch,ctx.currentTime,.045);
-        const amp=Math.min(.16,.018+Math.abs(w)*.004);oscGain.gain.setTargetAtTime(amp,ctx.currentTime,.06);
-        noiseGain.gain.setTargetAtTime(Math.min(.045,friction*.003),ctx.currentTime,.08);
-        if(t>=duration){playing=false;elapsed=duration;$('soundState').textContent='COMPLETE';oscGain.gain.setTargetAtTime(0,ctx.currentTime,.15);noiseGain.gain.setTargetAtTime(0,ctx.currentTime,.15);return}
-        raf=requestAnimationFrame(draw);
-      }
-      function play(){if(playing)return;init();playing=true;startTime=elapsed;startWall=performance.now();$('soundState').textContent='PLAYING';draw()}
-      function pause(){if(playing){elapsed=Math.min(duration,startTime+(performance.now()-startWall)/1000);playing=false;cancelAnimationFrame(raf)}if(ctx){oscGain.gain.setTargetAtTime(0,ctx.currentTime,.04);noiseGain.gain.setTargetAtTime(0,ctx.currentTime,.04)}$('soundState').textContent='PAUSED'}
-      $('soundPlay').onclick=play;
-      $('soundPause').onclick=pause;
-      $('soundReset').onclick=()=>{pause();elapsed=0;$('soundSeek').value=0;$('soundTime').textContent='0.00 s';$('soundOmega').textContent=ws[0].toFixed(2)+' rad/s';$('soundPitch').textContent='— Hz';$('soundState').textContent='STANDBY'};
-      $('soundSeek').oninput=()=>{pause();elapsed=+$('soundSeek').value;const w=sample(elapsed);$('soundTime').textContent=elapsed.toFixed(2)+' s';$('soundOmega').textContent=w.toFixed(2)+' rad/s';$('soundPitch').textContent=Math.max(38,Math.min(420,55+Math.abs(w)*15)).toFixed(0)+' Hz';$('soundState').textContent='SCRUBBED'};
-      $('soundVol').oninput=()=>{$('soundVolText').textContent=$('soundVol').value+'%';if(master)master.gain.setTargetAtTime(+$('soundVol').value/100*.28,ctx.currentTime,.03)};
-      $('soundOmega').textContent=ws[0].toFixed(2)+' rad/s';
-    })();
-    </script>
-    """
-    DYNAMICS_AUDIO = DYNAMICS_AUDIO.replace("__TIMES__", audio_times).replace("__OMEGAS__", audio_omegas).replace("__DURATION__", str(audio_duration)).replace("__FRICTION__", str(audio_friction)).replace("__TORQUE__", str(audio_torque))
-    components.html(DYNAMICS_AUDIO, height=190, scrolling=False)
     with view:
         m1,m2,m3,m4=st.columns(4)
         m1.metric("MOMENT OF INERTIA",f"{Iaxis:.4f} kg·m²")
