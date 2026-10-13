@@ -6,6 +6,7 @@ A dark, neon-accented Streamlit learning game for rotational mechanics by **Aman
 - Mission Control dashboard and session XP
 - Animated canvas rotor in the Spin Lab
 - Interactive 3D geometry lab with play/pause tracer animation, rotation-axis display, and body comparison
+- Torque Duel prediction game with side-by-side body comparisons, live inertia/acceleration values, and XP
 - Live calculations for common bodies and axes
 - Challenge Arena with 12 conceptual questions and explanations
 - Formula Vault and field manual
