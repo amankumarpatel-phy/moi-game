@@ -443,40 +443,61 @@ elif page == "Dynamics Arena":
         m3.metric("FINAL ω",f"{omegas[-1]:.3f} rad/s")
         m4.metric("FINAL Krot",f"{energy[-1]:.3f} J")
         st.caption(f"Axis: {axis}. Icm = {Icm:.4f} kg·m²; parallel-axis contribution Md² = {M*d*d:.4f} kg·m².")
-        # Conceptual 3D rotor with an animated marker rotating about the selected axis.
+        # Build a true rotating 3D body. Animation frames rotate every surface mesh
+        # around the selected axis, not just a marker.
         u=np.linspace(0,2*np.pi,48); fig3=go.Figure()
         if "sphere" in body.lower():
             v=np.linspace(0,np.pi,28); U,V=np.meshgrid(u,v)
             fig3.add_trace(go.Surface(x=R*np.sin(V)*np.cos(U),y=R*np.sin(V)*np.sin(U),z=R*np.cos(V),opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            if hollow:
+                fig3.add_trace(go.Surface(x=Ri*np.sin(V)*np.cos(U),y=Ri*np.sin(V)*np.sin(U),z=Ri*np.cos(V),opacity=.42,colorscale=[[0,"#9a7bff"],[1,"#9a7bff"]],showscale=False,name="Inner surface"))
         elif "cone" in body.lower():
             zz=np.linspace(0,H,24); U,Z=np.meshgrid(u,zz); RR=R*(1-Z/H)
-            fig3.add_trace(go.Surface(x=RR*np.cos(U),y=RR*np.sin(U),z=Z,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            fig3.add_trace(go.Surface(x=RR*np.cos(U),y=RR*np.sin(U),z=Z-H/2,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
         else:
             zz=np.linspace(-H/2,H/2,20); U,Z=np.meshgrid(u,zz)
             fig3.add_trace(go.Surface(x=R*np.cos(U),y=R*np.sin(U),z=Z,opacity=.62,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
             if hollow:
                 fig3.add_trace(go.Surface(x=Ri*np.cos(U),y=Ri*np.sin(U),z=Z,opacity=.75,colorscale=[[0,"#9a7bff"],[1,"#9a7bff"]],showscale=False,name="Inner wall"))
-        def axis_line(axis_name):
-            if axis_name == "Central transverse axis (x)":
-                return dict(x=[-R*1.4,R*1.4],y=[0,0],z=[0,0])
-            if axis_name == "Parallel axis offset by d":
-                return dict(x=[d,d],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
-            return dict(x=[0,0],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
-        ax=axis_line(axis)
-        fig3.add_trace(go.Scatter3d(**ax,mode="lines",line=dict(color="white",width=6,dash="dash"),name="Selected axis"))
+        surface_count=len(fig3.data)
+        if axis == "Central transverse axis (x)":
+            ax=dict(x=[-R*1.4,R*1.4],y=[0,0],z=[0,0])
+        elif axis == "Parallel axis offset by d":
+            ax=dict(x=[d,d],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
+        else:
+            ax=dict(x=[0,0],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
+        fig3.add_trace(go.Scatter3d(**ax,mode="lines",line=dict(color="white",width=6,dash="dash"),name="Selected rotation axis"))
+        # Tracer point is a visual reference on the rotating body.
+        tracer_index=len(fig3.data)
+        fig3.add_trace(go.Scatter3d(x=[R,R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7),name="Surface tracer"))
+        base_meshes=[(np.array(t.x),np.array(t.y),np.array(t.z)) for t in list(fig3.data)[:surface_count]]
         frames=[]
         for fi in range(48):
             ang=2*np.pi*fi/48
-            x0,y0=R*np.cos(ang),R*np.sin(ang)
+            frame_data=[]
+            for bx,by,bz in base_meshes:
+                if axis == "Central transverse axis (x)":
+                    fx,fy,fz=bx,by*np.cos(ang)-bz*np.sin(ang),by*np.sin(ang)+bz*np.cos(ang)
+                elif axis == "Parallel axis offset by d":
+                    xx=bx-d
+                    fx=d+xx*np.cos(ang)-by*np.sin(ang)
+                    fy=xx*np.sin(ang)+by*np.cos(ang)
+                    fz=bz
+                else:
+                    fx=bx*np.cos(ang)-by*np.sin(ang)
+                    fy=bx*np.sin(ang)+by*np.cos(ang)
+                    fz=bz
+                frame_data.append(go.Surface(x=fx,y=fy,z=fz,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False))
             if axis == "Central transverse axis (x)":
-                xx=[-R*.2,R*.2]; yy=[y0,y0]; zz=[x0,x0]
+                tx=[0,0]; ty=[R*np.cos(ang),R*np.cos(ang+.18)]; tz=[R*np.sin(ang),R*np.sin(ang+.18)]
+            elif axis == "Parallel axis offset by d":
+                tx=[d+R*np.cos(ang),d+R*np.cos(ang+.18)]; ty=[R*np.sin(ang),R*np.sin(ang+.18)]; tz=[0,0]
             else:
-                xx=[d+x0,d+R*np.cos(ang+.18)]; yy=[y0,R*np.sin(ang+.18)]; zz=[0,0]
-            frames.append(go.Frame(data=[go.Scatter3d(x=xx,y=yy,z=zz,mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7))],traces=[len(fig3.data)],name=str(fi)))
-        ang=0.0
-        fig3.add_trace(go.Scatter3d(x=[d+R,d+R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7),name="Rotating tracer"))
+                tx=[R*np.cos(ang),R*np.cos(ang+.18)]; ty=[R*np.sin(ang),R*np.sin(ang+.18)]; tz=[0,0]
+            frame_data.append(go.Scatter3d(x=tx,y=ty,z=tz,mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7)))
+            frames.append(go.Frame(data=frame_data,traces=list(range(surface_count))+[tracer_index],name=str(fi)))
         fig3.frames=frames
-        fig3.update_layout(height=420,margin=dict(l=0,r=0,t=8,b=0),paper_bgcolor="rgba(0,0,0,0)",font=dict(color="#eaf2ff"),scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),updatemenus=[dict(type="buttons",showactive=False,x=.02,y=.98,buttons=[dict(label="▶ ROTATE",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0}}]),dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False}}])])])
+        fig3.update_layout(height=450,margin=dict(l=0,r=0,t=8,b=0),paper_bgcolor="rgba(0,0,0,0)",font=dict(color="#eaf2ff"),scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),updatemenus=[dict(type="buttons",showactive=False,x=.02,y=.98,buttons=[dict(label="▶ ROTATE BODY",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}])])])
         st.plotly_chart(fig3,use_container_width=True,config={"displaylogo":False},key="dynamics_rotor_3d")
         graphs=go.Figure()
         graphs.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=3)))
