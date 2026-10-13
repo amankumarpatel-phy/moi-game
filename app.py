@@ -11,9 +11,9 @@ st.set_page_config(page_title="MOI QUEST | Aman Edge Physics", page_icon="◉", 
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-:root{--bg:#080b12;--panel:#111827;--line:rgba(148,163,184,.18);--cyan:#55f6dc;--violet:#9a7bff;--muted:#9ba8bc;--white:#f4f7ff}
+:root{--bg:#070814;--panel:#11152b;--line:rgba(188,169,255,.22);--cyan:#a5fff2;--violet:#c7a6ff;--muted:#b7b5d4;--white:#fff9ff}
 html,body,[class*="css"]{font-family:'Space Grotesk',sans-serif}
-.stApp{background:radial-gradient(ellipse at 12% 0%,rgba(78,65,160,.19),transparent 35%),radial-gradient(ellipse at 88% 12%,rgba(28,202,180,.12),transparent 28%),var(--bg);color:var(--white);overflow:hidden}
+.stApp{background:radial-gradient(ellipse at 10% 0%,rgba(255,190,238,.22),transparent 31%),radial-gradient(ellipse at 82% 10%,rgba(133,220,255,.2),transparent 30%),radial-gradient(ellipse at 48% 90%,rgba(190,145,255,.18),transparent 38%),linear-gradient(145deg,#070814,#11112a 52%,#080b1b);color:var(--white);overflow:hidden}
 .stApp:before{content:"";position:fixed;inset:-30%;pointer-events:none;z-index:0;background:
 radial-gradient(ellipse at 18% 28%,rgba(85,246,220,.12) 0%,transparent 17%),
 radial-gradient(ellipse at 78% 24%,rgba(154,123,255,.16) 0%,transparent 19%),
@@ -32,6 +32,21 @@ animation:particleFlow 18s linear infinite}
 @keyframes particleFlow{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-1.5%,2%,0)}100%{transform:translate3d(1.5%,-2%,0)}}
 .cosmic-layer{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;pointer-events:none;z-index:0;opacity:.78}
 .cosmic-layer svg{width:100%;height:100%;display:block}
+.cosmic-layer{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;pointer-events:none;z-index:0;opacity:.96;mix-blend-mode:screen}
+.cosmic-layer svg{width:100%;height:100%;display:block;filter:saturate(1.3)}
+/* Celestial, glassy surfaces and drifting light */
+.stApp:before{filter:blur(38px);opacity:.9}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,rgba(13,15,35,.97),rgba(17,12,38,.96));border-right:1px solid rgba(202,170,255,.22);backdrop-filter:blur(22px)}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(39,34,72,.76),rgba(14,23,47,.82));border:1px solid rgba(184,170,255,.25);box-shadow:inset 0 1px rgba(255,255,255,.06),0 10px 35px rgba(5,4,20,.22);backdrop-filter:blur(18px)}
+.stButton>button{border-radius:14px;border:1px solid rgba(165,255,242,.48);background:linear-gradient(115deg,rgba(165,255,242,.14),rgba(199,166,255,.19),rgba(255,182,230,.13));box-shadow:0 0 22px rgba(174,157,255,.08);backdrop-filter:blur(12px)}
+.stButton>button:hover{box-shadow:0 0 28px rgba(165,255,242,.19),0 0 44px rgba(199,166,255,.12);transform:translateY(-2px)}
+.hero{background:radial-gradient(ellipse at 85% 5%,rgba(255,195,239,.12),transparent 40%),linear-gradient(130deg,rgba(35,32,70,.83),rgba(11,18,40,.78));border-color:rgba(201,181,255,.25);box-shadow:0 20px 80px rgba(6,5,24,.22),inset 0 1px rgba(255,255,255,.07);backdrop-filter:blur(16px)}
+.card{background:linear-gradient(145deg,rgba(37,32,70,.75),rgba(12,19,42,.82));border-color:rgba(187,169,255,.23);box-shadow:inset 0 1px rgba(255,255,255,.05),0 16px 44px rgba(4,5,20,.16);backdrop-filter:blur(14px)}
+@keyframes celestialShimmer{0%,100%{filter:hue-rotate(0deg) brightness(1)}50%{filter:hue-rotate(18deg) brightness(1.08)}}
+.aep-love-footer{box-shadow:0 0 65px rgba(183,151,255,.13),0 22px 90px rgba(0,0,0,.34),inset 0 0 65px rgba(165,255,242,.07);border-color:rgba(203,180,255,.36)}
+.aep-orbit{box-shadow:0 0 25px rgba(165,255,242,.15),inset 0 0 20px rgba(199,166,255,.07)}
+@media(prefers-reduced-motion:no-preference){.hero,.aep-love-footer{animation:celestialShimmer 16s ease-in-out infinite}}
+
 .block-container,[data-testid="stSidebar"],[data-testid="stHeader"]{position:relative;z-index:1}
 @media(prefers-reduced-motion:reduce){.stApp:before,.stApp:after{animation:none!important}.cosmic-layer{display:none}}
 .block-container{max-width:1400px;padding-top:1.3rem;padding-bottom:2rem}
@@ -99,6 +114,18 @@ st.markdown("""
  <circle cx="970" cy="470" r="2.5"><animate attributeName="cx" values="970;1000;970" dur="11s" repeatCount="indefinite"/></circle>
  <circle cx="390" cy="420" r="1.5"><animate attributeName="cy" values="420;460;420" dur="8s" repeatCount="indefinite"/></circle>
  <circle cx="1180" cy="760" r="2"><animate attributeName="cy" values="760;720;760" dur="10s" repeatCount="indefinite"/></circle>
+</g>
+<!-- Celestial light streams and fairy-like floating motes -->
+<g fill="none" stroke-linecap="round" opacity=".5">
+ <path d="M-40 350 C220 180 360 520 610 300 S1040 130 1480 320" stroke="#ffb8ed" stroke-width="1.2" stroke-dasharray="2 12"><animate attributeName="stroke-dashoffset" values="0;-140" dur="18s" repeatCount="indefinite"/></path>
+ <path d="M-20 520 C230 700 470 300 740 500 S1190 720 1460 480" stroke="#a5fff2" stroke-width="1.4" stroke-dasharray="1 16"><animate attributeName="stroke-dashoffset" values="0;180" dur="23s" repeatCount="indefinite"/></path>
+</g>
+<g filter="url(#glow)">
+ <circle cx="710" cy="330" r="5" fill="#ffd5f3"><animate attributeName="cy" values="330;290;330" dur="7s" repeatCount="indefinite"/></circle>
+ <circle cx="880" cy="570" r="3" fill="#b5fff4"><animate attributeName="cy" values="570;525;570" dur="8s" repeatCount="indefinite"/></circle>
+ <circle cx="180" cy="300" r="4" fill="#c9b1ff"><animate attributeName="cx" values="180;230;180" dur="11s" repeatCount="indefinite"/></circle>
+ <circle cx="1240" cy="420" r="4" fill="#ffd1eb"><animate attributeName="cy" values="420;380;420" dur="9s" repeatCount="indefinite"/></circle>
+ <circle cx="1040" cy="720" r="2.5" fill="#c9fff6"><animate attributeName="cx" values="1040;990;1040" dur="12s" repeatCount="indefinite"/></circle>
 </g>
 </svg>
 </div>
@@ -945,7 +972,7 @@ st.markdown("""
   <div class="aep-orbit aep-orbit-one"></div><div class="aep-orbit aep-orbit-two"></div><div class="aep-orbit aep-orbit-three"></div><div class="aep-footer-grid"></div>
   <div class="aep-footer-content">
     <div class="aep-footer-kicker"><span class="aep-pulse"></span> AMAN EDGE PHYSICS <span class="aep-footer-sep">/</span> ROTATIONAL MECHANICS LAB</div>
-    <div class="aep-footer-title">Built with <span class="aep-heart">❤️</span></div>
+    <div class="aep-footer-title">A little universe, built with <span class="aep-heart">❤️</span></div>
     <div class="aep-footer-credit">Developed in love by <span class="aep-name">Aman Kumar Patel</span></div>
     <div class="aep-footer-line"></div>
     <div class="aep-footer-bottom"><span>MOI QUEST</span><span>INERTIA · MOTION · IMAGINATION</span><span>© 2026</span></div>
