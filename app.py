@@ -228,7 +228,7 @@ $('vol').oninput=()=>{const v=+$('vol').value;$('volread').textContent=v+'%';if(
 })();
 </script>
 """
-components.html(SOUND_STUDIO, height=142, scrolling=False, key="moi_audio_engine")
+components.html(SOUND_STUDIO, height=142, scrolling=False)
 
 if page == "Mission Control":
     c1,c2,c3,c4 = st.columns(4)
