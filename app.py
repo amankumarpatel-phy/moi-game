@@ -112,11 +112,11 @@ st.markdown("""
 .swarg-layer{
   position:fixed;inset:-2.5vh -2.5vw;width:105vw;height:105vh;z-index:0;pointer-events:none;overflow:hidden;
   background-image:
-    linear-gradient(180deg,rgba(18,13,27,.12) 0%,rgba(22,17,31,.13) 28%,rgba(14,17,31,.38) 68%,rgba(10,12,24,.66) 100%),
-    linear-gradient(90deg,rgba(29,18,29,.58) 0%,rgba(22,21,38,.19) 28%,rgba(22,22,40,.08) 64%,rgba(24,17,35,.28) 100%),
+    linear-gradient(180deg,rgba(255,217,155,.02) 0%,rgba(55,34,48,.04) 25%,rgba(20,22,39,.20) 62%,rgba(12,15,29,.46) 100%),
+    linear-gradient(90deg,rgba(39,22,34,.35) 0%,rgba(34,25,43,.08) 28%,rgba(22,22,40,.02) 64%,rgba(39,22,34,.18) 100%),
     url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=90&w=2560');
-  background-size:cover;background-position:center 46%;background-repeat:no-repeat;
-  filter:saturate(.88) contrast(1.04);transform:scale(1.015);transform-origin:center;
+  background-size:cover;background-position:center 43%;background-repeat:no-repeat;
+  filter:saturate(1.12) contrast(1.02) brightness(1.12);transform:scale(1.015);transform-origin:center;
   animation:indraLokKenBurns 95s ease-in-out infinite alternate;
 }
 .swarg-layer:before{
@@ -168,7 +168,7 @@ st.markdown("""
 .aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
 
 /* Cinematic Swarg-Lok atmosphere: layered mist, god-rays and drifting cloud veils */
-.swarg-layer{background-position:center 42%;will-change:transform;background-color:#211a2b}
+.swarg-layer{background-position:center 43%;will-change:transform;background-color:#34243b}
 .swarg-layer:before{
   content:"";position:absolute;inset:-12%;
   background:
@@ -182,24 +182,24 @@ st.markdown("""
 .swarg-layer:after{
   content:"";position:absolute;inset:0;
   background:
-   linear-gradient(180deg,rgba(19,14,29,.03),rgba(20,18,32,.06) 40%,rgba(11,14,27,.52) 100%),
-   linear-gradient(90deg,rgba(18,12,24,.24),transparent 32%,transparent 72%,rgba(18,12,24,.16));
+   linear-gradient(180deg,rgba(19,14,29,.03),rgba(20,18,32,.06) 40%,rgba(11,14,27,.32) 100%),
+   linear-gradient(90deg,rgba(18,12,24,.10),transparent 32%,transparent 72%,rgba(18,12,24,.16));
 }
 @media(min-width:1200px){.swarg-layer{background-position:center 43%}}
 
 /* Gold-glass Swarg Lok dashboard treatment inspired by the generated concept */
-.swarg-welcome{text-align:center;position:relative;overflow:hidden;padding:28px 18px 24px;margin:4px 0 18px;border:1px solid rgba(255,221,157,.48);border-radius:22px;background:linear-gradient(180deg,rgba(43,28,38,.30),rgba(19,21,34,.42));box-shadow:0 12px 60px rgba(5,4,14,.2),inset 0 0 38px rgba(255,218,151,.08);backdrop-filter:blur(8px)}
+.swarg-welcome{text-align:center;position:relative;overflow:hidden;padding:28px 18px 24px;margin:4px 0 18px;border:1px solid rgba(255,221,157,.48);border-radius:22px;background:linear-gradient(180deg,rgba(43,28,38,.20),rgba(19,21,34,.32));box-shadow:0 12px 60px rgba(5,4,14,.2),inset 0 0 38px rgba(255,218,151,.08);backdrop-filter:blur(8px)}
 .swarg-eyebrow{font:700 10px/1.7 monospace;letter-spacing:.28em;color:#ffe7b0}
 .swarg-welcome h1{font-family:Georgia,'Times New Roman',serif!important;font-size:clamp(40px,6vw,76px)!important;letter-spacing:.08em!important;line-height:1.08!important;margin:8px 0!important;color:#ffe3a0!important;text-shadow:0 2px 2px #54331d,0 0 22px rgba(255,203,104,.42)}
 .swarg-subtitle{font:600 12px/1.7 Georgia,serif;letter-spacing:.2em;color:#fff1d0}
 .swarg-byline{font:italic 14px/1.7 Georgia,serif;color:#f7d9c5;margin-top:7px}
-.swarg-hero-card{text-align:center;margin:8px auto 14px;padding:25px 18px 22px;max-width:920px;border:1px solid rgba(255,221,157,.54);border-radius:20px;background:linear-gradient(120deg,rgba(68,43,48,.65),rgba(28,30,46,.72),rgba(72,48,48,.56));box-shadow:0 14px 50px rgba(8,5,15,.2),inset 0 0 35px rgba(255,213,143,.09);backdrop-filter:blur(12px)}
+.swarg-hero-card{text-align:center;margin:8px auto 14px;padding:25px 18px 22px;max-width:920px;border:1px solid rgba(255,221,157,.54);border-radius:20px;background:linear-gradient(120deg,rgba(68,43,48,.50),rgba(28,30,46,.58),rgba(72,48,48,.44));box-shadow:0 14px 50px rgba(8,5,15,.2),inset 0 0 35px rgba(255,213,143,.09);backdrop-filter:blur(12px)}
 .swarg-hero-kicker{font:700 10px/1.7 monospace;letter-spacing:.22em;color:#ffe1a0}
 .swarg-hero-card h2{font:700 clamp(23px,3vw,34px)/1.2 Georgia,serif!important;color:#ffe0a0!important;margin:10px 0 7px!important;text-shadow:0 0 15px rgba(255,204,105,.25)}
 .swarg-hero-card p{font:16px/1.7 Georgia,serif;color:#fff0d5;margin:0}
 .swarg-quote{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,220,160,.32);font:italic 16px Georgia,serif;color:#f9e8d1}
 .swarg-pillars{margin-top:10px;font:700 10px/1.7 monospace;letter-spacing:.16em;color:#ffe2a0}
-[data-testid="stMetric"]{border-radius:16px!important;background:linear-gradient(145deg,rgba(93,64,67,.66),rgba(25,29,44,.82))!important;border:1px solid rgba(255,221,157,.4)!important;box-shadow:0 8px 28px rgba(8,5,16,.2),inset 0 1px rgba(255,245,219,.1)!important}
+[data-testid="stMetric"]{border-radius:16px!important;background:linear-gradient(145deg,rgba(93,64,67,.54),rgba(25,29,44,.70))!important;border:1px solid rgba(255,221,157,.4)!important;box-shadow:0 8px 28px rgba(8,5,16,.2),inset 0 1px rgba(255,245,219,.1)!important}
 [data-testid="stMetricLabel"]{color:#f9dfb0!important}
 .stButton>button{font-family:Georgia,'Times New Roman',serif!important;font-weight:700!important;letter-spacing:.04em!important;color:#fff0cf!important;border:1px solid rgba(255,219,143,.65)!important;border-radius:12px!important;background:linear-gradient(120deg,rgba(135,83,42,.76),rgba(83,54,54,.83),rgba(110,77,50,.76))!important;box-shadow:0 0 20px rgba(255,198,91,.1)!important}
 .stButton>button:hover{border-color:#ffe8ad!important;box-shadow:0 0 28px rgba(255,211,116,.26)!important}
