@@ -39,3 +39,7 @@ The simulation assumes a rigid body, fixed axis, constant net torque and no spee
 
 ### MOI Audio Engine
 The app includes a user-activated synthesized sound panel: ambient sci-fi drone, rotor hum, whoosh, UI pulse, success chime, master volume, and mute-all. Audio is generated locally with the browser Web Audio API; no external audio files are required. Browsers block autoplay, so users must click a sound control to begin playback.
+
+
+### Physics-linked sound in Dynamics Arena
+The Dynamics Arena audio panel plays a synthesized rotor tone whose pitch follows the computed angular-speed history, with optional friction texture, play/pause/reset, timeline seeking, and volume control. Browser audio requires a user gesture. Audio playback has its own timeline and is not yet coupled to Plotly's separate 3D animation controls.
