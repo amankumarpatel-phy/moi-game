@@ -149,7 +149,7 @@ with st.sidebar:
     st.markdown('<div class="eyebrow">AMAN EDGE PHYSICS</div>', unsafe_allow_html=True)
     st.markdown("## ◉ MOI QUEST")
     st.caption("ROTATIONAL MECHANICS / GAME LAB")
-    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Torque Duel", "Challenge Arena", "Formula Vault", "How to Play"]
+    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Dynamics Arena", "Torque Duel", "Challenge Arena", "Formula Vault", "How to Play"]
     jump = st.session_state.pop("nav_jump", None)
     nav_index = nav_options.index(jump) if jump in nav_options else 0
     page = st.radio("NAVIGATION", nav_options, index=nav_index, label_visibility="collapsed")
@@ -377,6 +377,154 @@ elif page == "3D Lab":
     comp_df={"Body":list(comparison.keys()),"I (kg·m²)":list(comparison.values())}
     st.bar_chart(comp_df,x="Body",y="I (kg·m²)")
     st.caption("Comparison uses the same mass and outer radius. Thick-shell entries use the selected inner radius; bodies have different geometries and idealized mass distributions.")
+
+elif page == "Dynamics Arena":
+    st.markdown("## Dynamics Arena <span style='color:#55f6dc'>/ axis • torque • motion</span>", unsafe_allow_html=True)
+    st.write("Choose a body and a rotation axis, apply torque against friction, and inspect its motion, energy and angular-velocity history.")
+    setup, view = st.columns([0.85, 1.15], gap="large")
+    with setup:
+        player = st.text_input("PLAYER NAME (for leaderboard)", value=st.session_state.get("dynamics_player",""), max_chars=32, key="dynamics_player")
+        body = st.selectbox("BODY", ["Solid cylinder","Thin hollow cylinder","Thick hollow cylinder","Solid sphere","Thin hollow sphere","Thick hollow sphere","Solid cone","Hollow cone"], key="dyn_body")
+        axis = st.selectbox("CHOOSE ROTATION AXIS", [
+            "Symmetry axis (z)",
+            "Central transverse axis (x)",
+            "Parallel axis offset by d"
+        ], key="dyn_axis")
+        M = st.slider("Mass M (kg)", 0.5, 20.0, 4.0, 0.5, key="dyn_mass")
+        R = st.slider("Outer radius Rₒ (m)", 0.2, 2.0, 1.0, 0.1, key="dyn_radius")
+        hollow = body in ("Thick hollow cylinder","Thick hollow sphere")
+        Ri = st.slider("Inner radius Rᵢ (m)", 0.05, max(0.1,R-0.05), min(0.4,R-0.05), 0.05, key="dyn_inner") if hollow else 0.0
+        H = st.slider("Length / height L (m)", 0.5, 4.0, 2.0, 0.1, key="dyn_height") if "cylinder" in body.lower() or "cone" in body.lower() else 2*R
+        d = st.slider("Parallel-axis offset d (m)", 0.0, 2.0, 0.5, 0.1, key="dyn_offset") if axis == "Parallel axis offset by d" else 0.0
+        torque = st.slider("Applied torque τ (N·m)", -20.0, 20.0, 8.0, 0.5, key="dyn_torque")
+        friction = st.slider("Friction torque magnitude (N·m)", 0.0, 10.0, 0.5, 0.5, key="dyn_friction")
+        omega0 = st.slider("Initial angular velocity ω₀ (rad/s)", -15.0, 15.0, 2.0, 0.5, key="dyn_omega")
+        duration = st.slider("Simulation duration (s)", 1.0, 10.0, 5.0, 0.5, key="dyn_duration")
+    # Inertia about selected centre-of-mass axis; transverse-axis models are explicit idealisations.
+    if body == "Solid cylinder":
+        Iz, Ix = 0.5*M*R**2, M*(3*R**2+H**2)/12
+    elif body == "Thin hollow cylinder":
+        Iz, Ix = M*R**2, M*(6*R**2+H**2)/12
+    elif body == "Thick hollow cylinder":
+        Iz, Ix = 0.5*M*(R**2+Ri**2), M*(3*(R**2+Ri**2)+H**2)/12
+    elif body == "Solid sphere":
+        Iz = Ix = 0.4*M*R**2
+    elif body == "Thin hollow sphere":
+        Iz = Ix = (2/3)*M*R**2
+    elif body == "Thick hollow sphere":
+        Iz = Ix = (2/5)*M*(R**5-Ri**5)/(R**3-Ri**3)
+    elif body == "Solid cone":
+        Iz, Ix = 0.3*M*R**2, M*(3*R**2/20+3*H**2/80)
+    else:
+        Iz, Ix = 0.5*M*R**2, M*(R**2/4+H**2/12)
+    Icm = Ix if axis == "Central transverse axis (x)" else Iz
+    Iaxis = Icm + M*d**2
+    # Coulomb-like friction opposes the instantaneous motion; integrate with small fixed time steps.
+    times = np.linspace(0.0, duration, 301)
+    dt = times[1]-times[0]
+    omegas = np.zeros_like(times); angles = np.zeros_like(times); alphas = np.zeros_like(times)
+    omegas[0] = omega0
+    for j in range(1,len(times)):
+        sign = np.sign(omegas[j-1]) if abs(omegas[j-1]) > 1e-8 else np.sign(torque)
+        net = torque - friction*sign
+        if abs(omegas[j-1]) <= 1e-8 and abs(torque) <= friction:
+            net = 0.0
+        alphas[j-1] = net/Iaxis
+        omegas[j] = omegas[j-1] + alphas[j-1]*dt
+        if omegas[j-1]*omegas[j] < 0 and abs(torque) <= friction:
+            omegas[j] = 0.0
+        angles[j] = angles[j-1] + omegas[j]*dt
+    alphas[-1] = alphas[-2]
+    energy = 0.5*Iaxis*omegas**2
+    with view:
+        m1,m2,m3,m4=st.columns(4)
+        m1.metric("MOMENT OF INERTIA",f"{Iaxis:.4f} kg·m²")
+        m2.metric("INITIAL α",f"{alphas[0]:.3f} rad/s²")
+        m3.metric("FINAL ω",f"{omegas[-1]:.3f} rad/s")
+        m4.metric("FINAL Krot",f"{energy[-1]:.3f} J")
+        st.caption(f"Axis: {axis}. Icm = {Icm:.4f} kg·m²; parallel-axis contribution Md² = {M*d*d:.4f} kg·m².")
+        # Conceptual 3D rotor with an animated marker rotating about the selected axis.
+        u=np.linspace(0,2*np.pi,48); fig3=go.Figure()
+        if "sphere" in body.lower():
+            v=np.linspace(0,np.pi,28); U,V=np.meshgrid(u,v)
+            fig3.add_trace(go.Surface(x=R*np.sin(V)*np.cos(U),y=R*np.sin(V)*np.sin(U),z=R*np.cos(V),opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+        elif "cone" in body.lower():
+            zz=np.linspace(0,H,24); U,Z=np.meshgrid(u,zz); RR=R*(1-Z/H)
+            fig3.add_trace(go.Surface(x=RR*np.cos(U),y=RR*np.sin(U),z=Z,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+        else:
+            zz=np.linspace(-H/2,H/2,20); U,Z=np.meshgrid(u,zz)
+            fig3.add_trace(go.Surface(x=R*np.cos(U),y=R*np.sin(U),z=Z,opacity=.62,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            if hollow:
+                fig3.add_trace(go.Surface(x=Ri*np.cos(U),y=Ri*np.sin(U),z=Z,opacity=.75,colorscale=[[0,"#9a7bff"],[1,"#9a7bff"]],showscale=False,name="Inner wall"))
+        def axis_line(axis_name):
+            if axis_name == "Central transverse axis (x)":
+                return dict(x=[-R*1.4,R*1.4],y=[0,0],z=[0,0])
+            if axis_name == "Parallel axis offset by d":
+                return dict(x=[d,d],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
+            return dict(x=[0,0],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
+        ax=axis_line(axis)
+        fig3.add_trace(go.Scatter3d(**ax,mode="lines",line=dict(color="white",width=6,dash="dash"),name="Selected axis"))
+        frames=[]
+        for fi in range(48):
+            ang=2*np.pi*fi/48
+            x0,y0=R*np.cos(ang),R*np.sin(ang)
+            if axis == "Central transverse axis (x)":
+                xx=[-R*.2,R*.2]; yy=[y0,y0]; zz=[x0,x0]
+            else:
+                xx=[d+x0,d+R*np.cos(ang+.18)]; yy=[y0,R*np.sin(ang+.18)]; zz=[0,0]
+            frames.append(go.Frame(data=[go.Scatter3d(x=xx,y=yy,z=zz,mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7))],traces=[len(fig3.data)],name=str(fi)))
+        ang=0.0
+        fig3.add_trace(go.Scatter3d(x=[d+R,d+R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7),name="Rotating tracer"))
+        fig3.frames=frames
+        fig3.update_layout(height=420,margin=dict(l=0,r=0,t=8,b=0),paper_bgcolor="rgba(0,0,0,0)",font=dict(color="#eaf2ff"),scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),updatemenus=[dict(type="buttons",showactive=False,x=.02,y=.98,buttons=[dict(label="▶ ROTATE",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0}}]),dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False}}])])])
+        st.plotly_chart(fig3,use_container_width=True,config={"displaylogo":False},key="dynamics_rotor_3d")
+        graphs=go.Figure()
+        graphs.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=3)))
+        graphs.update_layout(title="Angular velocity vs time",xaxis_title="Time (s)",yaxis_title="Angular velocity ω (rad/s)",height=300,margin=dict(l=10,r=10,t=45,b=10),paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.45)",font=dict(color="#eaf2ff"))
+        st.plotly_chart(graphs,use_container_width=True,config={"displaylogo":False},key="dynamics_omega_graph")
+        energy_fig=go.Figure()
+        energy_fig.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=3),fill="tozeroy"))
+        energy_fig.update_layout(title="Rotational kinetic energy vs time",xaxis_title="Time (s)",yaxis_title="Krot (J)",height=280,margin=dict(l=10,r=10,t=45,b=10),paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.45)",font=dict(color="#eaf2ff"))
+        st.plotly_chart(energy_fig,use_container_width=True,config={"displaylogo":False},key="dynamics_energy_graph")
+    st.markdown("### Head-to-head prediction")
+    challenge=st.selectbox("Which has greater angular acceleration under the same torque?",["Solid cylinder vs thin hollow cylinder","Solid sphere vs thin hollow sphere","Solid cylinder vs solid cone"],key="dyn_challenge")
+    answer=st.radio("Your prediction",["First body","Second body","Equal"],horizontal=True,key="dyn_prediction")
+    if st.button("REVEAL DUEL RESULT",key="dyn_reveal"):
+        pairs={"Solid cylinder vs thin hollow cylinder":(0.5,1.0),"Solid sphere vs thin hollow sphere":(0.4,2/3),"Solid cylinder vs solid cone":(0.5,0.3)}
+        ca,cb=pairs[challenge]
+        # For same M,R,tau, smaller I means larger alpha.
+        correct="First body" if ca<cb else "Second body" if cb<ca else "Equal"
+        if "dyn_duel_history" not in st.session_state: st.session_state.dyn_duel_history={}
+        if challenge not in st.session_state.dyn_duel_history:
+            st.session_state.dyn_duel_history[challenge]=answer==correct
+            if answer==correct:
+                st.session_state.score+=15
+                st.session_state.best=max(st.session_state.best,st.session_state.score)
+        if answer==correct: st.success("Correct prediction — +15 XP!")
+        else: st.info(f"Correct answer: {correct}. Since α = τ/I, the smaller I accelerates faster.")
+    st.markdown("### Classroom leaderboard")
+    st.caption("For a leaderboard shared persistently across devices, configure Supabase secrets as described below. Without database credentials, this leaderboard is saved for this browser session only.")
+    if "dyn_leaderboard" not in st.session_state: st.session_state.dyn_leaderboard=[]
+    if st.button("SAVE MY SCORE",key="dyn_save_score"):
+        entry={"player":player.strip() or "Anonymous","xp":int(st.session_state.score)}
+        st.session_state.dyn_leaderboard.append(entry)
+        st.session_state.dyn_leaderboard=sorted(st.session_state.dyn_leaderboard,key=lambda x:x["xp"],reverse=True)[:20]
+        st.success("Score saved to this session leaderboard.")
+    if st.session_state.dyn_leaderboard:
+        st.dataframe(st.session_state.dyn_leaderboard,use_container_width=True,hide_index=True)
+    with st.expander("Enable a persistent, shared leaderboard across devices"):
+        st.markdown("Create a Supabase table named `moi_leaderboard` with columns `id` (identity primary key), `player` (text), `xp` (integer), and `created_at` (timestamp, default now()). Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Streamlit Cloud app secrets and enable INSERT/SELECT policies for that table. The app will use the database once configured; otherwise it keeps a session leaderboard.")
+        if st.button("TEST DATABASE CONNECTION",key="dyn_test_db"):
+            try:
+                import requests
+                url=st.secrets["SUPABASE_URL"].rstrip("/")+"/rest/v1/moi_leaderboard?select=player,xp&order=xp.desc&limit=20"
+                key=st.secrets["SUPABASE_ANON_KEY"]
+                resp=requests.get(url,headers={"apikey":key,"Authorization":f"Bearer {key}"},timeout=5)
+                if resp.ok:
+                    st.success("Database connection successful.")
+                    st.dataframe(resp.json(),use_container_width=True,hide_index=True)
+                else: st.error(f"Database returned HTTP {resp.status_code}. Check table policies and secrets.")
+            except Exception: st.error("Database is not configured yet. Add SUPABASE_URL and SUPABASE_ANON_KEY to Streamlit Cloud secrets.")
 
 elif page == "Torque Duel":
     st.markdown("## Torque Duel <span style='color:#55f6dc'>/ predict • compare • prove</span>", unsafe_allow_html=True)
