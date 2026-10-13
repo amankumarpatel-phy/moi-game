@@ -574,10 +574,11 @@ elif page == "Dynamics Arena":
         from plotly.subplots import make_subplots
         u=np.linspace(0,2*np.pi,48)
         fig_sync=make_subplots(
-            rows=1, cols=3,
-            specs=[[{"type":"scene"},{"type":"xy"},{"type":"xy"}]],
-            column_widths=[1.22,0.9,0.9],
-            horizontal_spacing=0.055,
+            rows=2, cols=2,
+            specs=[[{"type":"scene","colspan":2},None],[{"type":"xy"},{"type":"xy"}]],
+            row_heights=[0.60,0.40],
+            vertical_spacing=0.17,
+            horizontal_spacing=0.12,
             subplot_titles=("3D ROTOR · SELECTED AXIS","ANGULAR VELOCITY ω(t)","ROTATIONAL ENERGY K(t)")
         )
         mesh_coords=[]; mesh_styles=[]
@@ -614,7 +615,7 @@ elif page == "Dynamics Arena":
         fig_sync.add_trace(go.Scatter3d(x=[R,R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=6),name="Surface tracer",hoverinfo="skip"),row=1,col=1)
 
         # Full histories stay visible; each frame moves a vertical cursor and a point on both curves.
-        fig_sync.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=2.5),showlegend=False),row=1,col=2)
+        fig_sync.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=2.5),showlegend=False),row=2,col=1)
         omega_lo=float(np.min(omegas)); omega_hi=float(np.max(omegas))
         omega_pad=max(0.2,(omega_hi-omega_lo)*0.12)
         omega_cursor_index=len(fig_sync.data)
@@ -622,7 +623,7 @@ elif page == "Dynamics Arena":
         omega_dot_index=len(fig_sync.data)
         fig_sync.add_trace(go.Scatter(x=[times[0]],y=[omegas[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#55f6dc",width=2)),showlegend=False,name="Current ω",hovertemplate="t=%{x:.2f} s<br>ω=%{y:.3f} rad/s<extra></extra>"),row=1,col=2)
 
-        fig_sync.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=2.5),fill="tozeroy",fillcolor="rgba(154,123,255,.12)",showlegend=False),row=1,col=3)
+        fig_sync.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=2.5),fill="tozeroy",fillcolor="rgba(154,123,255,.12)",showlegend=False),row=2,col=2)
         energy_lo=0.0; energy_hi=float(np.max(energy))
         energy_pad=max(0.2,energy_hi*0.12)
         energy_cursor_index=len(fig_sync.data)
@@ -671,20 +672,20 @@ elif page == "Dynamics Arena":
         fig_sync.frames=frames
         slider_steps=[dict(method="animate",args=[[name],{"mode":"immediate","frame":{"duration":0,"redraw":True},"transition":{"duration":0}}],label=f"{tval:.1f}") for name,tval in frame_labels]
         fig_sync.update_layout(
-            height=535,margin=dict(l=4,r=4,t=58,b=48),
+            height=780,margin=dict(l=22,r=22,t=95,b=80),
             paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.42)",
             font=dict(color="#eaf2ff",family="Space Grotesk, sans-serif"),
             scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),
+            xaxis=dict(title="Time (s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)"),
+            yaxis=dict(title="ω (rad/s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[omega_lo-omega_pad,omega_hi+omega_pad]),
             xaxis2=dict(title="Time (s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)"),
-            yaxis2=dict(title="ω (rad/s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[omega_lo-omega_pad,omega_hi+omega_pad]),
-            xaxis3=dict(title="Time (s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)"),
-            yaxis3=dict(title="Krot (J)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[energy_lo,energy_hi+energy_pad]),
-            updatemenus=[dict(type="buttons",showactive=False,x=.0,y=1.12,xanchor="left",yanchor="top",direction="right",buttons=[
+            yaxis2=dict(title="Krot (J)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[energy_lo,energy_hi+energy_pad]),
+            updatemenus=[dict(type="buttons",showactive=False,x=0.02,y=1.13,xanchor="left",yanchor="top",direction="right",buttons=[
                 dict(label="▶ START",method="animate",args=[None,{"frame":{"duration":animation_ms,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),
                 dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}]),
                 dict(label="↺ RESET",method="animate",args=[[frame_labels[0][0]],{"frame":{"duration":0,"redraw":True},"mode":"immediate","transition":{"duration":0}}])
             ])],
-            sliders=[dict(active=0,currentvalue={"prefix":"Simulation time: ","suffix":" s","font":{"color":"#55f6dc"}},pad={"t":30},x=0.0,y=-0.13,len=1.0,steps=slider_steps)]
+            sliders=[dict(active=0,currentvalue={"prefix":"Simulation time: ","suffix":" s","font":{"color":"#55f6dc"}},pad={"t":28},x=0.05,y=-0.12,len=0.90,steps=slider_steps)]
         )
         st.plotly_chart(fig_sync,use_container_width=True,config={"displaylogo":False,"scrollZoom":True},key="dynamics_synchronized_timeline")
     st.markdown("### Head-to-head prediction")
