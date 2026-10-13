@@ -149,7 +149,7 @@ with st.sidebar:
     st.markdown('<div class="eyebrow">AMAN EDGE PHYSICS</div>', unsafe_allow_html=True)
     st.markdown("## ◉ MOI QUEST")
     st.caption("ROTATIONAL MECHANICS / GAME LAB")
-    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Challenge Arena", "Formula Vault", "How to Play"]
+    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Torque Duel", "Challenge Arena", "Formula Vault", "How to Play"]
     jump = st.session_state.pop("nav_jump", None)
     nav_index = nav_options.index(jump) if jump in nav_options else 0
     page = st.radio("NAVIGATION", nav_options, index=nav_index, label_visibility="collapsed")
@@ -377,6 +377,87 @@ elif page == "3D Lab":
     comp_df={"Body":list(comparison.keys()),"I (kg·m²)":list(comparison.values())}
     st.bar_chart(comp_df,x="Body",y="I (kg·m²)")
     st.caption("Comparison uses the same mass and outer radius. Thick-shell entries use the selected inner radius; bodies have different geometries and idealized mass distributions.")
+
+elif page == "Torque Duel":
+    st.markdown("## Torque Duel <span style='color:#55f6dc'>/ predict • compare • prove</span>", unsafe_allow_html=True)
+    st.write("Two bodies, the same applied torque. Predict which accelerates faster, then reveal the physics.")
+    duel_pairs = {
+        "Solid cylinder vs thin hollow cylinder": ("Solid cylinder", "Thin hollow cylinder", 0.5, 1.0),
+        "Solid sphere vs thin hollow sphere": ("Solid sphere", "Thin hollow sphere", 0.4, 2/3),
+        "Solid cylinder vs solid cone": ("Solid cylinder", "Solid cone", 0.5, 0.3),
+        "Thick hollow cylinder: inner radius test": ("Thick hollow cylinder (small bore)", "Thick hollow cylinder (large bore)", 0.5*(1+0.25**2), 0.5*(1+0.75**2))
+    }
+    pair_name = st.selectbox("DUEL SCENARIO", list(duel_pairs.keys()), key="duel_pair")
+    body_a, body_b, coeff_a, coeff_b = duel_pairs[pair_name]
+    left, right = st.columns(2, gap="large")
+    with left:
+        st.markdown(f'<div class="card"><span class="tag">ROTOR A</span><h3>{body_a}</h3><p class="smallmuted">Reference object</p></div>',unsafe_allow_html=True)
+    with right:
+        st.markdown(f'<div class="card"><span class="tag">ROTOR B</span><h3>{body_b}</h3><p class="smallmuted">Challenger object</p></div>',unsafe_allow_html=True)
+    mass = st.slider("Same mass for both bodies M (kg)", 1.0, 20.0, 5.0, 0.5, key="duel_mass")
+    radius = st.slider("Same outer radius R (m)", 0.2, 2.0, 1.0, 0.1, key="duel_radius")
+    torque = st.slider("Same net torque τ (N·m)", 1.0, 30.0, 10.0, 0.5, key="duel_torque")
+    prediction_key = "duel_prediction_" + pair_name
+    prediction = st.radio("PREDICT FIRST — which body has greater angular acceleration?", [f"Rotor A — {body_a}", f"Rotor B — {body_b}", "They accelerate equally"], horizontal=True, key=prediction_key)
+    if "duel_results" not in st.session_state:
+        st.session_state.duel_results = {}
+    result_key = f"{pair_name}|{mass}|{radius}|{torque}"
+    reveal = st.button("REVEAL THE PHYSICS", use_container_width=True, key="duel_reveal")
+    if reveal:
+        IA, IB = coeff_a*mass*radius**2, coeff_b*mass*radius**2
+        aa, ab = torque/IA, torque/IB
+        expected = 0 if abs(aa-ab)<1e-9 else (1 if aa>ab else 2)
+        selected = 0 if prediction.startswith("Rotor A") else 1 if prediction.startswith("Rotor B") else 2
+        correct = selected == expected
+        if result_key not in st.session_state.duel_results:
+            st.session_state.duel_results[result_key] = correct
+            if correct:
+                st.session_state.score += 15
+                st.session_state.best = max(st.session_state.best, st.session_state.score)
+        st.session_state.duel_revealed = {"key":result_key,"correct":correct,"IA":IA,"IB":IB,"aa":aa,"ab":ab,"expected":expected,"a":body_a,"b":body_b}
+    result = st.session_state.get("duel_revealed")
+    if result and result["key"] == result_key:
+        if result["correct"]:
+            st.success("CORRECT PREDICTION · +15 XP")
+        else:
+            st.warning("Prediction missed. Study the comparison below — this is where the intuition develops.")
+        ca, cb = st.columns(2)
+        ca.metric("ROTOR A — MOMENT OF INERTIA", f'{result["IA"]:.4f} kg·m²')
+        cb.metric("ROTOR B — MOMENT OF INERTIA", f'{result["IB"]:.4f} kg·m²')
+        ca.metric("ROTOR A — ANGULAR ACCELERATION", f'{result["aa"]:.4f} rad/s²')
+        cb.metric("ROTOR B — ANGULAR ACCELERATION", f'{result["ab"]:.4f} rad/s²')
+        if result["expected"] == 2:
+            st.info("Both accelerate equally: their moments of inertia are equal, and α = τ/I.")
+        else:
+            winner = result["a"] if result["expected"] == 0 else result["b"]
+            st.info(f"{winner} accelerates faster because it has the smaller moment of inertia for the same applied torque.")
+        # Side-by-side 3D visualisation with shared scale and axis.
+        def duel_cylinder(radius_factor=1.0, hollow=False, sphere=False, cone=False):
+            u=np.linspace(0,2*np.pi,48)
+            fig=go.Figure()
+            teal="#55f6dc"; purple="#9a7bff"
+            if sphere:
+                v=np.linspace(0,np.pi,32); U,V=np.meshgrid(u,v)
+                fig.add_trace(go.Surface(x=radius_factor*np.sin(V)*np.cos(U),y=radius_factor*np.sin(V)*np.sin(U),z=radius_factor*np.cos(V),opacity=.65,colorscale=[[0,teal],[1,teal]],showscale=False))
+            elif cone:
+                z=np.linspace(0,1.6,28); U,Z=np.meshgrid(u,z); rr=radius_factor*(1-Z/1.6)
+                fig.add_trace(go.Surface(x=rr*np.cos(U),y=rr*np.sin(U),z=Z,opacity=.65,colorscale=[[0,teal],[1,teal]],showscale=False))
+            else:
+                z=np.linspace(-.8,.8,24); U,Z=np.meshgrid(u,z)
+                fig.add_trace(go.Surface(x=radius_factor*np.cos(U),y=radius_factor*np.sin(U),z=Z,opacity=.62,colorscale=[[0,teal],[1,teal]],showscale=False))
+                if hollow:
+                    rinner=radius_factor*.5
+                    fig.add_trace(go.Surface(x=rinner*np.cos(U),y=rinner*np.sin(U),z=Z,opacity=.72,colorscale=[[0,purple],[1,purple]],showscale=False))
+            fig.add_trace(go.Scatter3d(x=[0,0],y=[0,0],z=[-1.1,1.8],mode="lines",line=dict(color="white",width=4,dash="dash"),name="Axis"))
+            fig.update_layout(height=350,margin=dict(l=0,r=0,t=12,b=0),paper_bgcolor="rgba(0,0,0,0)",font=dict(color="#eaf2ff"),showlegend=False,scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False,range=[-1.5,1.5]),yaxis=dict(visible=False,range=[-1.5,1.5]),zaxis=dict(visible=False,range=[-1.3,1.9]),aspectmode="cube"))
+            return fig
+        va,vb=st.columns(2)
+        with va:
+            st.plotly_chart(duel_cylinder(sphere="sphere" in result["a"].lower(),cone="cone" in result["a"].lower()),use_container_width=True,config={"displaylogo":False})
+        with vb:
+            st.plotly_chart(duel_cylinder(sphere="sphere" in result["b"].lower(),cone="cone" in result["b"].lower(),hollow="hollow" in result["b"].lower()),use_container_width=True,config={"displaylogo":False})
+        st.markdown('<div class="card"><span class="tag">DUEL RULE</span><div class="bigformula">α = τ / I</div><p>With the same net torque, angular acceleration is inversely proportional to moment of inertia. Keep mass and outer radius fixed to isolate the effect of mass distribution.</p></div>',unsafe_allow_html=True)
+    st.caption("XP is awarded once per unique combination of scenario and parameter values. The 3D objects are conceptual visualisations; the equations determine the numerical results.")
 
 elif page == "Challenge Arena":
     st.markdown("## Challenge Arena <span style='color:#55f6dc'>/ prove your intuition</span>",unsafe_allow_html=True)
