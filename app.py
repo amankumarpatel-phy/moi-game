@@ -186,6 +186,25 @@ st.markdown("""
    linear-gradient(90deg,rgba(18,12,24,.24),transparent 32%,transparent 72%,rgba(18,12,24,.16));
 }
 @media(min-width:1200px){.swarg-layer{background-position:center 43%}}
+
+/* Gold-glass Swarg Lok dashboard treatment inspired by the generated concept */
+.swarg-welcome{text-align:center;position:relative;overflow:hidden;padding:28px 18px 24px;margin:4px 0 18px;border:1px solid rgba(255,221,157,.48);border-radius:22px;background:linear-gradient(180deg,rgba(43,28,38,.30),rgba(19,21,34,.42));box-shadow:0 12px 60px rgba(5,4,14,.2),inset 0 0 38px rgba(255,218,151,.08);backdrop-filter:blur(8px)}
+.swarg-eyebrow{font:700 10px/1.7 monospace;letter-spacing:.28em;color:#ffe7b0}
+.swarg-welcome h1{font-family:Georgia,'Times New Roman',serif!important;font-size:clamp(40px,6vw,76px)!important;letter-spacing:.08em!important;line-height:1.08!important;margin:8px 0!important;color:#ffe3a0!important;text-shadow:0 2px 2px #54331d,0 0 22px rgba(255,203,104,.42)}
+.swarg-subtitle{font:600 12px/1.7 Georgia,serif;letter-spacing:.2em;color:#fff1d0}
+.swarg-byline{font:italic 14px/1.7 Georgia,serif;color:#f7d9c5;margin-top:7px}
+.swarg-hero-card{text-align:center;margin:8px auto 14px;padding:25px 18px 22px;max-width:920px;border:1px solid rgba(255,221,157,.54);border-radius:20px;background:linear-gradient(120deg,rgba(68,43,48,.65),rgba(28,30,46,.72),rgba(72,48,48,.56));box-shadow:0 14px 50px rgba(8,5,15,.2),inset 0 0 35px rgba(255,213,143,.09);backdrop-filter:blur(12px)}
+.swarg-hero-kicker{font:700 10px/1.7 monospace;letter-spacing:.22em;color:#ffe1a0}
+.swarg-hero-card h2{font:700 clamp(23px,3vw,34px)/1.2 Georgia,serif!important;color:#ffe0a0!important;margin:10px 0 7px!important;text-shadow:0 0 15px rgba(255,204,105,.25)}
+.swarg-hero-card p{font:16px/1.7 Georgia,serif;color:#fff0d5;margin:0}
+.swarg-quote{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,220,160,.32);font:italic 16px Georgia,serif;color:#f9e8d1}
+.swarg-pillars{margin-top:10px;font:700 10px/1.7 monospace;letter-spacing:.16em;color:#ffe2a0}
+[data-testid="stMetric"]{border-radius:16px!important;background:linear-gradient(145deg,rgba(93,64,67,.66),rgba(25,29,44,.82))!important;border:1px solid rgba(255,221,157,.4)!important;box-shadow:0 8px 28px rgba(8,5,16,.2),inset 0 1px rgba(255,245,219,.1)!important}
+[data-testid="stMetricLabel"]{color:#f9dfb0!important}
+.stButton>button{font-family:Georgia,'Times New Roman',serif!important;font-weight:700!important;letter-spacing:.04em!important;color:#fff0cf!important;border:1px solid rgba(255,219,143,.65)!important;border-radius:12px!important;background:linear-gradient(120deg,rgba(135,83,42,.76),rgba(83,54,54,.83),rgba(110,77,50,.76))!important;box-shadow:0 0 20px rgba(255,198,91,.1)!important}
+.stButton>button:hover{border-color:#ffe8ad!important;box-shadow:0 0 28px rgba(255,211,116,.26)!important}
+.aep-love-footer{border-color:rgba(255,221,157,.42)!important}
+
 @media(prefers-reduced-motion:reduce){.swarg-layer{animation:none!important}.swarg-layer:before{animation:none!important}}
 
 </style>
@@ -318,11 +337,33 @@ $('vol').oninput=()=>{const v=+$('vol').value;$('volread').textContent=v+'%';if(
 components.html(SOUND_STUDIO, height=142, scrolling=False)
 
 if page == "Mission Control":
+    st.markdown("""
+    <div class="swarg-welcome">
+      <div class="swarg-eyebrow">✦ AMAN EDGE PHYSICS PRESENTS ✦</div>
+      <h1>MOI QUEST</h1>
+      <div class="swarg-subtitle">INERTIA · MOTION · IMAGINATION</div>
+      <div class="swarg-byline">A celestial journey through rotational mechanics</div>
+    </div>
+    """, unsafe_allow_html=True)
     c1,c2,c3,c4 = st.columns(4)
-    c1.metric("TOTAL XP", st.session_state.score, "Keep experimenting")
-    c2.metric("CHALLENGES", f"{len(st.session_state.answered)}/12", "Knowledge checkpoints")
-    c3.metric("BEST RUN", st.session_state.best, "Personal record")
-    c4.metric("CORE LAW", "τ = Iα", "Rotational dynamics")
+    c1.metric("LEVEL", "1", "The journey begins")
+    c2.metric("SCORE", st.session_state.score, "Keep exploring")
+    c3.metric("PROBLEMS SOLVED", len(st.session_state.answered), "Knowledge unlocked")
+    c4.metric("BADGES", st.session_state.best, "Mastery in progress")
+    st.markdown("""
+    <div class="swarg-hero-card">
+      <div class="swarg-hero-kicker">✧ WELCOME TO THE CELESTIAL REALM ✧</div>
+      <h2>Welcome to MOI QUEST</h2>
+      <p>Explore Rotational Mechanics in the Realm of Imagination</p>
+      <div class="swarg-quote">“When Physics Meets the Infinite …”</div>
+      <div class="swarg-pillars">LEARN&nbsp; · &nbsp;PLAY&nbsp; · &nbsp;EXPLORE&nbsp; · &nbsp;MASTER</div>
+    </div>
+    """, unsafe_allow_html=True)
+    start_col, _, _ = st.columns([1.1,1,1])
+    with start_col:
+        if st.button("✦  BEGIN YOUR JOURNEY  →", use_container_width=True):
+            st.session_state.nav_jump = "Spin Lab"
+            st.rerun()
     st.write("")
     left,right = st.columns([1.15,.85], gap="large")
     with left:
