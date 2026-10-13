@@ -28,7 +28,10 @@ radial-gradient(circle at 48% 16%,rgba(85,246,220,.8) 0 1px,transparent 2px);
 animation:particleFlow 18s linear infinite}
 @keyframes nebulaDrift{0%{transform:translate3d(-2%,-1%,0) rotate(0deg) scale(1)}100%{transform:translate3d(3%,2%,0) rotate(8deg) scale(1.08)}}
 @keyframes particleFlow{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-1.5%,2%,0)}100%{transform:translate3d(1.5%,-2%,0)}}
+.cosmic-layer{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;pointer-events:none;z-index:0;opacity:.78}
+.cosmic-layer svg{width:100%;height:100%;display:block}
 .block-container,[data-testid="stSidebar"],[data-testid="stHeader"]{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.stApp:before,.stApp:after{animation:none!important}.cosmic-layer{display:none}}
 .block-container{max-width:1400px;padding-top:1.3rem;padding-bottom:2rem}
 [data-testid="stSidebar"]{background:#0b101a;border-right:1px solid var(--line)}
 [data-testid="stSidebar"] *{color:var(--white)}
@@ -54,6 +57,49 @@ hr{border-color:var(--line)}
 .footer strong{color:#f2f5ff}.footer .accent{color:var(--cyan)}
 div[data-testid="stAlert"]{border-radius:14px}
 </style>
+""", unsafe_allow_html=True)
+
+# ---------- Ambient abstract geometry layer ----------
+# Inline SVG animation stays behind the Streamlit interface and never captures clicks.
+st.markdown("""
+<div class="cosmic-layer" aria-hidden="true">
+<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+<defs>
+ <radialGradient id="orbGlow"><stop offset="0" stop-color="#55f6dc" stop-opacity=".28"/><stop offset="1" stop-color="#55f6dc" stop-opacity="0"/></radialGradient>
+ <linearGradient id="wire" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#55f6dc" stop-opacity=".85"/><stop offset="1" stop-color="#9a7bff" stop-opacity=".8"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="1120" cy="210" r="190" fill="url(#orbGlow)"/>
+<!-- Large drifting orbital gyroscope -->
+<g transform="translate(1120 210)" fill="none" stroke="url(#wire)" filter="url(#glow)" opacity=".48">
+ <ellipse rx="155" ry="53" stroke-width="1.6"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="34s" repeatCount="indefinite"/></ellipse>
+ <ellipse rx="155" ry="53" stroke-width="1.2" transform="rotate(58)"><animateTransform attributeName="transform" type="rotate" from="58" to="418" dur="27s" repeatCount="indefinite"/></ellipse>
+ <ellipse rx="155" ry="53" stroke-width="1" transform="rotate(118)"><animateTransform attributeName="transform" type="rotate" from="118" to="478" dur="42s" repeatCount="indefinite"/></ellipse>
+ <circle r="10" fill="#55f6dc" fill-opacity=".6" stroke="none"><animate attributeName="r" values="7;13;7" dur="4s" repeatCount="indefinite"/></circle>
+</g>
+<!-- Wireframe sphere -->
+<g transform="translate(270 640)" fill="none" stroke="url(#wire)" stroke-width="1.3" opacity=".36" filter="url(#glow)">
+ <circle r="100"/>
+ <ellipse rx="100" ry="35"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/></ellipse>
+ <ellipse rx="100" ry="65"><animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="25s" repeatCount="indefinite"/></ellipse>
+ <ellipse rx="35" ry="100"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="22s" repeatCount="indefinite"/></ellipse>
+ <ellipse rx="65" ry="100"><animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="31s" repeatCount="indefinite"/></ellipse>
+</g>
+<!-- Floating abstract polyhedra -->
+<g stroke="#55f6dc" stroke-width="1.5" fill="#55f6dc" fill-opacity=".035" opacity=".72">
+ <g transform="translate(790 170)"><polygon points="0,-34 30,-15 24,20 -8,34 -31,8 -22,-22"/><path d="M0 -34 L24 20 L-22 -22 L30 -15 L-8 34 L-31 8 L0 -34"/><animateTransform attributeName="transform" type="translate" values="790 170;810 140;790 170" dur="12s" repeatCount="indefinite"/></g>
+ <g transform="translate(1300 610)" stroke="#9a7bff"><polygon points="0,-45 39,0 0,45 -39,0"/><path d="M-39 0 L39 0 M0 -45 L0 45 M-39 0 L0 45 L39 0 L0 -45"/><animateTransform attributeName="transform" type="translate" values="1300 610;1278 650;1300 610" dur="15s" repeatCount="indefinite"/></g>
+ <g transform="translate(600 770)" stroke="#9a7bff"><polygon points="0,-24 22,12 -22,12"/><path d="M0 -24 L0 24 M-22 12 L22 12"/><animateTransform attributeName="transform" type="rotate" from="0 600 770" to="360 600 770" dur="24s" repeatCount="indefinite"/></g>
+</g>
+<!-- Fine drifting particles -->
+<g fill="#b7fff5" filter="url(#glow)">
+ <circle cx="480" cy="250" r="2"><animate attributeName="cy" values="250;210;250" dur="9s" repeatCount="indefinite"/></circle>
+ <circle cx="970" cy="470" r="2.5"><animate attributeName="cx" values="970;1000;970" dur="11s" repeatCount="indefinite"/></circle>
+ <circle cx="390" cy="420" r="1.5"><animate attributeName="cy" values="420;460;420" dur="8s" repeatCount="indefinite"/></circle>
+ <circle cx="1180" cy="760" r="2"><animate attributeName="cy" values="760;720;760" dur="10s" repeatCount="indefinite"/></circle>
+</g>
+</svg>
+</div>
 """, unsafe_allow_html=True)
 
 # ---------- Physics engine ----------
