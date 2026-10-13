@@ -499,6 +499,69 @@ elif page == "Dynamics Arena":
         angles[j] = angles[j-1] + 0.5*(omegas[j-1]+omegas[j])*dt
     alphas[-1] = alphas[-2]
     energy = 0.5*Iaxis*omegas**2
+
+    # Physics-linked audio: the rotor pitch follows the simulated angular-speed curve.
+    # The user must press PLAY because browsers block unsolicited audio.
+    import json
+    audio_times = json.dumps(times.tolist())
+    audio_omegas = json.dumps(omegas.tolist())
+    audio_angles = json.dumps(angles.tolist())
+    audio_friction = float(friction)
+    audio_torque = float(torque)
+    audio_duration = float(duration)
+    DYNAMICS_AUDIO = r"""
+    <div class="dyn-audio">
+      <div class="dyn-audio-top"><span class="live-dot"></span><b>PHYSICS-LINKED AUDIO</b><span id="soundState">STANDBY</span></div>
+      <div class="dyn-audio-controls">
+        <button id="soundPlay">▶ PLAY SIM + SOUND</button><button id="soundPause">Ⅱ PAUSE</button><button id="soundReset">↺ RESET</button>
+        <label>VOLUME <input id="soundVol" type="range" min="0" max="100" value="25"><span id="soundVolText">25%</span></label>
+      </div>
+      <div class="dyn-audio-readout"><span>TIME <strong id="soundTime">0.00 s</strong></span><span>ANGULAR SPEED <strong id="soundOmega">0.00 rad/s</strong></span><span>ROTOR PITCH <strong id="soundPitch">— Hz</strong></span></div>
+      <input id="soundSeek" aria-label="Simulation time" type="range" min="0" max="__DURATION__" step="0.01" value="0">
+      <p>Audio pitch follows |ω(t)|. Friction adds a subtle mechanical texture; mute or pause at any time.</p>
+    </div>
+    <style>
+    *{box-sizing:border-box}.dyn-audio{font-family:Arial,sans-serif;color:#eaf2ff;background:linear-gradient(110deg,rgba(8,18,30,.97),rgba(25,17,43,.96));border:1px solid rgba(85,246,220,.28);border-radius:15px;padding:13px 15px}
+    .dyn-audio-top,.dyn-audio-controls,.dyn-audio-readout{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.dyn-audio-top{font-size:11px;letter-spacing:.1em;color:#55f6dc}.dyn-audio-top #soundState{margin-left:auto;color:#a8b5c8;font-size:10px}
+    .live-dot{width:7px;height:7px;border-radius:50%;background:#55f6dc;box-shadow:0 0 10px #55f6dc}.dyn-audio-controls{margin:12px 0}.dyn-audio button{background:rgba(85,246,220,.08);border:1px solid rgba(85,246,220,.35);border-radius:8px;padding:8px 10px;color:#eaf2ff;font-weight:700;font-size:10px;cursor:pointer}.dyn-audio button:hover{border-color:#9a7bff}.dyn-audio label{display:flex;align-items:center;gap:6px;font-size:9px;color:#a8b5c8}.dyn-audio input[type=range]{accent-color:#55f6dc;width:100px}.dyn-audio-readout{justify-content:space-between;font-size:9px;color:#93a4bb;letter-spacing:.07em}.dyn-audio-readout strong{display:block;color:#fff;font-size:12px;letter-spacing:0;margin-top:3px}.dyn-audio #soundSeek{width:100%;margin:12px 0 2px;accent-color:#55f6dc}.dyn-audio p{font-size:10px;line-height:1.5;color:#8f9db1;margin:5px 0 0}
+    </style>
+    <script>
+    (()=>{
+      const ts=__TIMES__, ws=__OMEGAS__, duration=__DURATION__, friction=__FRICTION__, torque=__TORQUE__;
+      const $=id=>document.getElementById(id);
+      let ctx=null,master=null,osc=null,oscGain=null,noiseGain=null,noiseSrc=null,playing=false,startWall=0,startTime=0,elapsed=0,raf=0;
+      function init(){
+        if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=+$('soundVol').value/100*.28;master.connect(ctx.destination);
+          osc=ctx.createOscillator();osc.type='triangle';osc.frequency.value=65;oscGain=ctx.createGain();oscGain.gain.value=0;osc.connect(oscGain);oscGain.connect(master);osc.start();
+          const n=Math.floor(ctx.sampleRate*2),buf=ctx.createBuffer(1,n,ctx.sampleRate),data=buf.getChannelData(0);for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*.35;
+          noiseSrc=ctx.createBufferSource();noiseSrc.buffer=buf;noiseSrc.loop=true;const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=Math.min(1400,350+friction*80);noiseGain=ctx.createGain();noiseGain.gain.value=0;noiseSrc.connect(filter);filter.connect(noiseGain);noiseGain.connect(master);noiseSrc.start();
+        }if(ctx.state==='suspended')ctx.resume();
+      }
+      function sample(t){let i=Math.max(0,Math.min(ts.length-2,Math.floor(t/duration*(ts.length-1))));let f=(t-ts[i])/(ts[i+1]-ts[i]||1);return ws[i]+(ws[i+1]-ws[i])*Math.max(0,Math.min(1,f))}
+      function draw(){
+        if(!playing)return;const t=Math.min(duration,startTime+(performance.now()-startWall)/1000);
+        $('soundSeek').value=t;$('soundTime').textContent=t.toFixed(2)+' s';
+        const w=sample(t),pitch=Math.max(38,Math.min(420,55+Math.abs(w)*15));
+        $('soundOmega').textContent=w.toFixed(2)+' rad/s';$('soundPitch').textContent=pitch.toFixed(0)+' Hz';
+        osc.frequency.setTargetAtTime(pitch,ctx.currentTime,.045);
+        const amp=Math.min(.16,.018+Math.abs(w)*.004);oscGain.gain.setTargetAtTime(amp,ctx.currentTime,.06);
+        noiseGain.gain.setTargetAtTime(Math.min(.045,friction*.003),ctx.currentTime,.08);
+        if(t>=duration){playing=false;elapsed=duration;$('soundState').textContent='COMPLETE';oscGain.gain.setTargetAtTime(0,ctx.currentTime,.15);noiseGain.gain.setTargetAtTime(0,ctx.currentTime,.15);return}
+        raf=requestAnimationFrame(draw);
+      }
+      function play(){if(playing)return;init();playing=true;startTime=elapsed;startWall=performance.now();$('soundState').textContent='PLAYING';draw()}
+      function pause(){if(playing){elapsed=Math.min(duration,startTime+(performance.now()-startWall)/1000);playing=false;cancelAnimationFrame(raf)}if(ctx){oscGain.gain.setTargetAtTime(0,ctx.currentTime,.04);noiseGain.gain.setTargetAtTime(0,ctx.currentTime,.04)}$('soundState').textContent='PAUSED'}
+      $('soundPlay').onclick=play;
+      $('soundPause').onclick=pause;
+      $('soundReset').onclick=()=>{pause();elapsed=0;$('soundSeek').value=0;$('soundTime').textContent='0.00 s';$('soundOmega').textContent=ws[0].toFixed(2)+' rad/s';$('soundPitch').textContent='— Hz';$('soundState').textContent='STANDBY'};
+      $('soundSeek').oninput=()=>{pause();elapsed=+$('soundSeek').value;const w=sample(elapsed);$('soundTime').textContent=elapsed.toFixed(2)+' s';$('soundOmega').textContent=w.toFixed(2)+' rad/s';$('soundPitch').textContent=Math.max(38,Math.min(420,55+Math.abs(w)*15)).toFixed(0)+' Hz';$('soundState').textContent='SCRUBBED'};
+      $('soundVol').oninput=()=>{$('soundVolText').textContent=$('soundVol').value+'%';if(master)master.gain.setTargetAtTime(+$('soundVol').value/100*.28,ctx.currentTime,.03)};
+      $('soundOmega').textContent=ws[0].toFixed(2)+' rad/s';
+    })();
+    </script>
+    """
+    DYNAMICS_AUDIO = DYNAMICS_AUDIO.replace("__TIMES__", audio_times).replace("__OMEGAS__", audio_omegas).replace("__DURATION__", str(audio_duration)).replace("__FRICTION__", str(audio_friction)).replace("__TORQUE__", str(audio_torque))
+    components.html(DYNAMICS_AUDIO, height=190, scrolling=False)
     with view:
         m1,m2,m3,m4=st.columns(4)
         m1.metric("MOMENT OF INERTIA",f"{Iaxis:.4f} kg·m²")
