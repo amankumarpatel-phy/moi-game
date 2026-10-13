@@ -172,6 +172,64 @@ st.markdown('<div class="eyebrow">INTERACTIVE PHYSICS • SEASON 01</div>', unsa
 st.markdown('<div class="hero"><span class="tag">LEARN BY PLAYING</span><h1 style="margin:.8rem 0 .5rem">MOI <span style="color:#55f6dc">QUEST.</span></h1><p style="font-size:1.12rem;max-width:720px;margin-bottom:.7rem">The axis is your choice. The mass distribution is your puzzle. Discover why some objects resist rotational acceleration more than others.</p><span class="smallmuted">A rotational mechanics game by Aman Edge Physics</span></div>', unsafe_allow_html=True)
 st.write("")
 
+# ---------- Sound studio: synthesized audio, no external assets ----------
+# Browsers require a user gesture before audio can start. The control panel is intentionally opt-in.
+SOUND_STUDIO = r"""
+<div class="sound-shell">
+  <div class="sound-head"><span class="sound-dot"></span><span class="sound-title">MOI AUDIO ENGINE</span><span class="sound-sub">SYNTH · AMBIENCE · MOTION FX</span></div>
+  <div class="sound-controls">
+    <button id="ambience">◉ AMBIENCE OFF</button>
+    <button id="rotor">⟳ ROTOR HUM OFF</button>
+    <button id="whoosh">〰 WHOOSH</button>
+    <button id="clickfx">✦ UI PULSE</button>
+    <button id="successfx">✓ SUCCESS</button>
+    <button id="stopfx" class="stop">■ MUTE ALL</button>
+  </div>
+  <div class="sound-bottom"><label for="vol">MASTER VOLUME</label><input id="vol" type="range" min="0" max="100" value="22"><span id="volread">22%</span><span class="sound-hint">Audio starts only when you press a control.</span></div>
+</div>
+<style>
+*{box-sizing:border-box}body{margin:0;background:transparent;color:#f4f7ff;font-family:Arial,sans-serif}
+.sound-shell{padding:13px 15px;border:1px solid rgba(85,246,220,.24);border-radius:16px;background:linear-gradient(110deg,rgba(11,20,34,.94),rgba(24,18,43,.91));box-shadow:0 8px 32px rgba(0,0,0,.18)}
+.sound-head{display:flex;align-items:center;gap:9px;margin-bottom:11px;flex-wrap:wrap}.sound-dot{width:8px;height:8px;border-radius:50%;background:#55f6dc;box-shadow:0 0 12px #55f6dc}.sound-title{font-weight:800;letter-spacing:.13em;font-size:12px;color:#55f6dc}.sound-sub{font-size:9px;letter-spacing:.12em;color:#9ba8bc}
+.sound-controls{display:flex;gap:7px;flex-wrap:wrap}.sound-controls button{border:1px solid rgba(154,123,255,.4);background:rgba(154,123,255,.09);color:#f4f7ff;border-radius:9px;padding:9px 11px;font-weight:700;font-size:10px;letter-spacing:.04em;cursor:pointer;transition:.18s}
+.sound-controls button:hover{border-color:#55f6dc;transform:translateY(-1px)}.sound-controls button.active{border-color:#55f6dc;background:rgba(85,246,220,.13);color:#55f6dc}.sound-controls .stop{border-color:rgba(255,110,130,.4)}
+.sound-bottom{display:flex;align-items:center;gap:10px;margin-top:11px;flex-wrap:wrap;font-size:9px;letter-spacing:.1em;color:#9ba8bc}.sound-bottom input{width:115px;accent-color:#55f6dc}.sound-hint{letter-spacing:0;font-size:10px;color:#8795ab;margin-left:auto}
+</style>
+<script>
+(()=>{
+let ctx=null, master=null, ambienceOn=false, rotorOn=false, ambienceNodes=[], rotorNodes=[], activeTones=[];
+const $=id=>document.getElementById(id);
+function init(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();master=ctx.createGain();master.gain.value=+$('vol').value/100*.22;master.connect(ctx.destination)}if(ctx.state==='suspended')ctx.resume();return ctx}
+function tone(freq,dur,type='sine',gain=.12,slide=null){
+ const a=init(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(freq,a.currentTime);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,slide),a.currentTime+dur);
+ g.gain.setValueAtTime(.0001,a.currentTime);g.gain.exponentialRampToValueAtTime(gain,a.currentTime+.025);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur);
+ o.connect(g);g.connect(master);o.start();o.stop(a.currentTime+dur+.04);activeTones.push(o);o.onended=()=>{activeTones=activeTones.filter(n=>n!==o)}
+}
+function noise(dur,gain=.07,filterFreq=800){
+ const a=init(),n=Math.floor(a.sampleRate*dur),buf=a.createBuffer(1,n,a.sampleRate),data=buf.getChannelData(0);
+ for(let i=0;i<n;i++)data[i]=(Math.random()*2-1)*(1-i/n);
+ const src=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();src.buffer=buf;f.type='lowpass';f.frequency.value=filterFreq;g.gain.setValueAtTime(gain,a.currentTime);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+dur);src.connect(f);f.connect(g);g.connect(master);src.start();src.stop(a.currentTime+dur)
+}
+function loopTone(freq,type,gain,detune=0){
+ const a=init(),o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=freq;o.detune.value=detune;g.gain.value=gain;o.connect(g);g.connect(master);o.start();return {o,g}
+}
+function startAmbience(){if(ambienceOn)return;init();ambienceOn=true;ambienceNodes=[loopTone(55,'sine',.18),loopTone(82.4,'triangle',.045),loopTone(164.8,'sine',.025,7)];$('ambience').classList.add('active');$('ambience').textContent='◉ AMBIENCE ON'}
+function stopNodes(nodes){nodes.forEach(n=>{try{n.g.gain.setTargetAtTime(.0001,ctx.currentTime,.04);n.o.stop(ctx.currentTime+.2)}catch(e){}})}
+function stopAmbience(){ambienceOn=false;stopNodes(ambienceNodes);ambienceNodes=[];$('ambience').classList.remove('active');$('ambience').textContent='◉ AMBIENCE OFF'}
+function startRotor(){if(rotorOn)return;init();rotorOn=true;rotorNodes=[loopTone(42,'sawtooth',.025),loopTone(43.7,'triangle',.02),loopTone(86,'sine',.018)];$('rotor').classList.add('active');$('rotor').textContent='⟳ ROTOR HUM ON'}
+function stopRotor(){rotorOn=false;stopNodes(rotorNodes);rotorNodes=[];$('rotor').classList.remove('active');$('rotor').textContent='⟳ ROTOR HUM OFF'}
+$('ambience').onclick=()=>ambienceOn?stopAmbience():startAmbience();
+$('rotor').onclick=()=>rotorOn?stopRotor():startRotor();
+$('whoosh').onclick=()=>{noise(.65,.11,1800);tone(180,.55,'sine',.035,55)};
+$('clickfx').onclick=()=>{tone(740,.09,'sine',.075);setTimeout(()=>tone(1120,.12,'sine',.045),65)};
+$('successfx').onclick=()=>{tone(523.25,.22,'sine',.075);setTimeout(()=>tone(659.25,.22,'sine',.075),100);setTimeout(()=>tone(783.99,.34,'sine',.075),200)};
+$('stopfx').onclick=()=>{stopAmbience();stopRotor();activeTones.forEach(o=>{try{o.stop()}catch(e){}});activeTones=[]};
+$('vol').oninput=()=>{const v=+$('vol').value;$('volread').textContent=v+'%';if(master)master.gain.setTargetAtTime(v/100*.22,ctx.currentTime,.03)};
+})();
+</script>
+"""
+components.html(SOUND_STUDIO, height=142, scrolling=False, key="moi_audio_engine")
+
 if page == "Mission Control":
     c1,c2,c3,c4 = st.columns(4)
     c1.metric("TOTAL XP", st.session_state.score, "Keep experimenting")
