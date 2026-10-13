@@ -73,62 +73,69 @@ hr{border-color:var(--line)}
 .footer{margin-top:3rem;padding:1.5rem 0 1rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;color:#8997ac;font-size:.85rem}
 .footer strong{color:#f2f5ff}.footer .accent{color:var(--cyan)}
 div[data-testid="stAlert"]{border-radius:14px}
+
+.swarg-layer{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;pointer-events:none;z-index:0;opacity:.9;mix-blend-mode:screen}
+.swarg-layer svg{width:100%;height:100%;display:block}
+.stApp{background:radial-gradient(ellipse at 50% 5%,rgba(255,220,160,.17),transparent 34%),radial-gradient(ellipse at 15% 35%,rgba(255,184,217,.14),transparent 35%),radial-gradient(ellipse at 88% 25%,rgba(174,193,255,.13),transparent 34%),linear-gradient(180deg,#171127 0%,#29203d 52%,#121a34 100%)!important}
+:root{--cyan:#ffe7b0;--violet:#f4c4df;--muted:#d2c3da;--white:#fff8ef}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,rgba(29,20,44,.98),rgba(19,24,47,.97))!important;border-right:1px solid rgba(255,226,175,.22)!important}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(70,47,77,.62),rgba(25,31,59,.78))!important;border-color:rgba(255,224,174,.22)!important;box-shadow:0 12px 35px rgba(5,3,18,.2),inset 0 1px rgba(255,255,255,.08)!important}
+.stButton>button{border-color:rgba(255,224,174,.42)!important;background:linear-gradient(120deg,rgba(255,221,167,.15),rgba(244,190,222,.16),rgba(174,193,255,.12))!important}
+.hero,.card{background:linear-gradient(135deg,rgba(61,43,78,.76),rgba(24,32,59,.78))!important;border-color:rgba(255,225,183,.2)!important;box-shadow:0 18px 60px rgba(6,3,20,.2),inset 0 1px rgba(255,255,255,.06)!important}
+.aep-love-footer{background:radial-gradient(ellipse at 15% 0%,rgba(255,220,160,.2),transparent 35%),radial-gradient(ellipse at 85% 100%,rgba(244,190,222,.2),transparent 40%),linear-gradient(135deg,#20172f,#171e39 60%,#25172d)!important;border-color:rgba(255,225,183,.35)!important}
+.aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
+.aep-footer-kicker,.aep-footer-bottom span:first-child{color:#ffe7b0!important}
+@media(prefers-reduced-motion:reduce){.swarg-layer{display:none!important}}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Ambient abstract geometry layer ----------
-# Inline SVG animation stays behind the Streamlit interface and never captures clicks.
+# ---------- Mythological Hindu heaven-inspired ambient layer ----------
+# Sacred, respectful, celestial architecture: no wireframes or abstract geometry.
 st.markdown("""
-<div class="cosmic-layer" aria-hidden="true">
+<div class="swarg-layer" aria-hidden="true">
 <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
 <defs>
- <radialGradient id="orbGlow"><stop offset="0" stop-color="#55f6dc" stop-opacity=".28"/><stop offset="1" stop-color="#55f6dc" stop-opacity="0"/></radialGradient>
- <linearGradient id="wire" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#55f6dc" stop-opacity=".85"/><stop offset="1" stop-color="#9a7bff" stop-opacity=".8"/></linearGradient>
- <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <linearGradient id="swargSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffdca0" stop-opacity=".22"/><stop offset=".43" stop-color="#ffb8d9" stop-opacity=".09"/><stop offset="1" stop-color="#a8baff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="divineGlow"><stop stop-color="#fff6cc" stop-opacity=".9"/><stop offset=".25" stop-color="#ffdca0" stop-opacity=".25"/><stop offset="1" stop-color="#ffdca0" stop-opacity="0"/></radialGradient>
+ <linearGradient id="goldMarble" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0c9" stop-opacity=".8"/><stop offset=".5" stop-color="#f3c985" stop-opacity=".38"/><stop offset="1" stop-color="#fff7e7" stop-opacity=".65"/></linearGradient>
+ <linearGradient id="cloudGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4e7" stop-opacity=".34"/><stop offset="1" stop-color="#f4bce2" stop-opacity="0"/></linearGradient>
+ <filter id="softGlow"><feGaussianBlur stdDeviation="9"/></filter>
+ <filter id="templeGlow"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>
-<circle cx="1120" cy="210" r="190" fill="url(#orbGlow)"/>
-<!-- Large drifting orbital gyroscope -->
-<g transform="translate(1120 210)" fill="none" stroke="url(#wire)" filter="url(#glow)" opacity=".48">
- <ellipse rx="155" ry="53" stroke-width="1.6"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="34s" repeatCount="indefinite"/></ellipse>
- <ellipse rx="155" ry="53" stroke-width="1.2" transform="rotate(58)"><animateTransform attributeName="transform" type="rotate" from="58" to="418" dur="27s" repeatCount="indefinite"/></ellipse>
- <ellipse rx="155" ry="53" stroke-width="1" transform="rotate(118)"><animateTransform attributeName="transform" type="rotate" from="118" to="478" dur="42s" repeatCount="indefinite"/></ellipse>
- <circle r="10" fill="#55f6dc" fill-opacity=".6" stroke="none"><animate attributeName="r" values="7;13;7" dur="4s" repeatCount="indefinite"/></circle>
+<rect width="1440" height="900" fill="url(#swargSky)"/>
+<circle cx="1090" cy="185" r="230" fill="url(#divineGlow)"><animate attributeName="r" values="215;245;215" dur="14s" repeatCount="indefinite"/></circle>
+<!-- distant heavenly palace silhouette, drawn as architecture rather than abstract shapes -->
+<g fill="#f8dba9" fill-opacity=".12" stroke="#ffe7b4" stroke-opacity=".38" stroke-width="1.2">
+ <path d="M610 430 L610 320 Q650 270 690 320 L690 430 Z M700 430 L700 285 Q750 220 800 285 L800 430 Z M810 430 L810 320 Q850 270 890 320 L890 430 Z"/>
+ <path d="M580 320 L650 260 L720 320 M670 285 L750 205 L830 285 M780 320 L850 260 L920 320" fill="none"/>
+ <path d="M570 430 H930 V455 H570 Z M600 455 H900 V468 H600 Z"/>
+ <path d="M635 350 V425 M665 350 V425 M725 315 V425 M750 300 V425 M775 315 V425 M835 350 V425 M865 350 V425" stroke-opacity=".5"/>
 </g>
-<!-- Wireframe sphere -->
-<g transform="translate(270 640)" fill="none" stroke="url(#wire)" stroke-width="1.3" opacity=".36" filter="url(#glow)">
- <circle r="100"/>
- <ellipse rx="100" ry="35"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/></ellipse>
- <ellipse rx="100" ry="65"><animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="25s" repeatCount="indefinite"/></ellipse>
- <ellipse rx="35" ry="100"><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="22s" repeatCount="indefinite"/></ellipse>
- <ellipse rx="65" ry="100"><animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="31s" repeatCount="indefinite"/></ellipse>
+<g fill="none" stroke="url(#goldMarble)" stroke-width="2" opacity=".55" filter="url(#templeGlow)">
+ <path d="M625 430 V345 Q650 300 675 345 V430 M705 430 V300 Q750 240 795 300 V430 M825 430 V345 Q850 300 875 345 V430"/>
 </g>
-<!-- Floating abstract polyhedra -->
-<g stroke="#55f6dc" stroke-width="1.5" fill="#55f6dc" fill-opacity=".035" opacity=".72">
- <g transform="translate(790 170)"><polygon points="0,-34 30,-15 24,20 -8,34 -31,8 -22,-22"/><path d="M0 -34 L24 20 L-22 -22 L30 -15 L-8 34 L-31 8 L0 -34"/><animateTransform attributeName="transform" type="translate" values="790 170;810 140;790 170" dur="12s" repeatCount="indefinite"/></g>
- <g transform="translate(1300 610)" stroke="#9a7bff"><polygon points="0,-45 39,0 0,45 -39,0"/><path d="M-39 0 L39 0 M0 -45 L0 45 M-39 0 L0 45 L39 0 L0 -45"/><animateTransform attributeName="transform" type="translate" values="1300 610;1278 650;1300 610" dur="15s" repeatCount="indefinite"/></g>
- <g transform="translate(600 770)" stroke="#9a7bff"><polygon points="0,-24 22,12 -22,12"/><path d="M0 -24 L0 24 M-22 12 L22 12"/><animateTransform attributeName="transform" type="rotate" from="0 600 770" to="360 600 770" dur="24s" repeatCount="indefinite"/></g>
+<!-- broad soft heavenly cloud banks -->
+<g fill="url(#cloudGold)">
+ <path d="M0 485 C120 420 220 480 330 450 S520 425 620 485 V720 H0Z"><animateTransform attributeName="transform" type="translate" values="0 0;35 0;0 0" dur="38s" repeatCount="indefinite"/></path>
+ <path d="M730 500 C850 420 970 490 1080 450 S1300 420 1440 490 V740 H730Z"><animateTransform attributeName="transform" type="translate" values="0 0;-32 0;0 0" dur="42s" repeatCount="indefinite"/></path>
+ <path d="M0 620 C180 550 320 650 490 600 S780 560 930 630 S1230 560 1440 625 V900 H0Z" opacity=".65"/>
 </g>
-<!-- Fine drifting particles -->
-<g fill="#b7fff5" filter="url(#glow)">
- <circle cx="480" cy="250" r="2"><animate attributeName="cy" values="250;210;250" dur="9s" repeatCount="indefinite"/></circle>
- <circle cx="970" cy="470" r="2.5"><animate attributeName="cx" values="970;1000;970" dur="11s" repeatCount="indefinite"/></circle>
- <circle cx="390" cy="420" r="1.5"><animate attributeName="cy" values="420;460;420" dur="8s" repeatCount="indefinite"/></circle>
- <circle cx="1180" cy="760" r="2"><animate attributeName="cy" values="760;720;760" dur="10s" repeatCount="indefinite"/></circle>
+<!-- gentle falling golden blessings / stardust -->
+<g fill="#fff1c2" filter="url(#templeGlow)">
+ <circle cx="180" cy="200" r="2.2"><animate attributeName="cy" values="200;260;200" dur="11s" repeatCount="indefinite"/></circle>
+ <circle cx="365" cy="320" r="1.7"><animate attributeName="cy" values="320;380;320" dur="13s" repeatCount="indefinite"/></circle>
+ <circle cx="1010" cy="290" r="2"><animate attributeName="cy" values="290;350;290" dur="10s" repeatCount="indefinite"/></circle>
+ <circle cx="1240" cy="380" r="2.4"><animate attributeName="cy" values="380;430;380" dur="12s" repeatCount="indefinite"/></circle>
+ <circle cx="530" cy="175" r="1.8"><animate attributeName="cy" values="175;230;175" dur="14s" repeatCount="indefinite"/></circle>
+ <circle cx="890" cy="190" r="1.6"><animate attributeName="cy" values="190;240;190" dur="9s" repeatCount="indefinite"/></circle>
 </g>
-<!-- Celestial light streams and fairy-like floating motes -->
-<g fill="none" stroke-linecap="round" opacity=".5">
- <path d="M-40 350 C220 180 360 520 610 300 S1040 130 1480 320" stroke="#ffb8ed" stroke-width="1.2" stroke-dasharray="2 12"><animate attributeName="stroke-dashoffset" values="0;-140" dur="18s" repeatCount="indefinite"/></path>
- <path d="M-20 520 C230 700 470 300 740 500 S1190 720 1460 480" stroke="#a5fff2" stroke-width="1.4" stroke-dasharray="1 16"><animate attributeName="stroke-dashoffset" values="0;180" dur="23s" repeatCount="indefinite"/></path>
+<!-- floating lotus petals -->
+<g fill="#ffd6e8" fill-opacity=".46" stroke="#fff0f7" stroke-opacity=".45">
+ <path d="M275 260 C248 226 260 201 278 191 C294 215 296 237 275 260Z"><animateTransform attributeName="transform" type="translate" values="0 0;24 -30;0 0" dur="18s" repeatCount="indefinite"/></path>
+ <path d="M1130 340 C1107 308 1117 284 1136 274 C1151 298 1150 320 1130 340Z"><animateTransform attributeName="transform" type="translate" values="0 0;-18 -28;0 0" dur="21s" repeatCount="indefinite"/></path>
+ <path d="M450 520 C429 492 437 471 454 462 C470 484 469 502 450 520Z"><animateTransform attributeName="transform" type="translate" values="0 0;18 -20;0 0" dur="17s" repeatCount="indefinite"/></path>
 </g>
-<g filter="url(#glow)">
- <circle cx="710" cy="330" r="5" fill="#ffd5f3"><animate attributeName="cy" values="330;290;330" dur="7s" repeatCount="indefinite"/></circle>
- <circle cx="880" cy="570" r="3" fill="#b5fff4"><animate attributeName="cy" values="570;525;570" dur="8s" repeatCount="indefinite"/></circle>
- <circle cx="180" cy="300" r="4" fill="#c9b1ff"><animate attributeName="cx" values="180;230;180" dur="11s" repeatCount="indefinite"/></circle>
- <circle cx="1240" cy="420" r="4" fill="#ffd1eb"><animate attributeName="cy" values="420;380;420" dur="9s" repeatCount="indefinite"/></circle>
- <circle cx="1040" cy="720" r="2.5" fill="#c9fff6"><animate attributeName="cx" values="1040;990;1040" dur="12s" repeatCount="indefinite"/></circle>
-</g>
-</svg>
-</div>
+</svg></div>
 """, unsafe_allow_html=True)
 
 # ---------- Physics engine ----------
