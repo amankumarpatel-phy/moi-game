@@ -507,11 +507,41 @@ elif page == "Dynamics Arena":
     if "dyn_leaderboard" not in st.session_state: st.session_state.dyn_leaderboard=[]
     if st.button("SAVE MY SCORE",key="dyn_save_score"):
         entry={"player":player.strip() or "Anonymous","xp":int(st.session_state.score)}
-        st.session_state.dyn_leaderboard.append(entry)
+        try:
+            import requests
+            sb_url=st.secrets["SUPABASE_URL"].rstrip("/")
+            sb_key=st.secrets["SUPABASE_ANON_KEY"]
+            headers={"apikey":sb_key,"Authorization":f"Bearer {sb_key}","Content-Type":"application/json","Prefer":"return=minimal"}
+            post=requests.post(sb_url+"/rest/v1/moi_leaderboard",headers=headers,json=entry,timeout=6)
+            if post.ok:
+                st.session_state.dyn_db_enabled=True
+                st.success("Score saved to the shared leaderboard.")
+            else:
+                st.session_state.dyn_db_enabled=False
+                st.warning(f"Shared save failed (HTTP {post.status_code}); saved to this session instead.")
+                st.session_state.dyn_leaderboard.append(entry)
+        except Exception:
+            st.session_state.dyn_db_enabled=False
+            st.session_state.dyn_leaderboard.append(entry)
+            st.info("Supabase is not configured; score saved to this browser session.")
+        st.rerun()
+    shared_rows=None
+    try:
+        import requests
+        sb_url=st.secrets["SUPABASE_URL"].rstrip("/")
+        sb_key=st.secrets["SUPABASE_ANON_KEY"]
+        resp=requests.get(sb_url+"/rest/v1/moi_leaderboard?select=player,xp,created_at&order=xp.desc&limit=20",
+            headers={"apikey":sb_key,"Authorization":f"Bearer {sb_key}"},timeout=6)
+        if resp.ok: shared_rows=resp.json()
+    except Exception:
+        shared_rows=None
+    if shared_rows is not None:
+        st.caption("Shared leaderboard — persisted in Supabase and visible across devices.")
+        st.dataframe(shared_rows,use_container_width=True,hide_index=True)
+    else:
         st.session_state.dyn_leaderboard=sorted(st.session_state.dyn_leaderboard,key=lambda x:x["xp"],reverse=True)[:20]
-        st.success("Score saved to this session leaderboard.")
-    if st.session_state.dyn_leaderboard:
-        st.dataframe(st.session_state.dyn_leaderboard,use_container_width=True,hide_index=True)
+        if st.session_state.dyn_leaderboard:
+            st.dataframe(st.session_state.dyn_leaderboard,use_container_width=True,hide_index=True)
     with st.expander("Enable a persistent, shared leaderboard across devices"):
         st.markdown("Create a Supabase table named `moi_leaderboard` with columns `id` (identity primary key), `player` (text), `xp` (integer), and `created_at` (timestamp, default now()). Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Streamlit Cloud app secrets and enable INSERT/SELECT policies for that table. The app will use the database once configured; otherwise it keeps a session leaderboard.")
         if st.button("TEST DATABASE CONNECTION",key="dyn_test_db"):
