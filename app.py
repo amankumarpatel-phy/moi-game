@@ -102,151 +102,72 @@ div[data-testid="stAlert"]{border-radius:14px}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Mythological Hindu heaven-inspired ambient layer ----------
-# Sacred, respectful, celestial architecture: no wireframes or abstract geometry.
+# ---------- Photorealistic Swarg Lok-inspired background ----------
+# A real temple photograph supplies photographic texture; cinematic atmospheric layers
+# add a restrained, heavenly Indra-Lok mood without cartoon SVG objects.
+st.markdown('<div class="swarg-layer" aria-hidden="true"></div>', unsafe_allow_html=True)
 st.markdown("""
-<div class="swarg-layer" aria-hidden="true">
-<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-<defs>
- <linearGradient id="swargSky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffdca0" stop-opacity=".22"/><stop offset=".43" stop-color="#ffb8d9" stop-opacity=".09"/><stop offset="1" stop-color="#a8baff" stop-opacity="0"/></linearGradient>
- <radialGradient id="divineGlow"><stop stop-color="#fff6cc" stop-opacity=".9"/><stop offset=".25" stop-color="#ffdca0" stop-opacity=".25"/><stop offset="1" stop-color="#ffdca0" stop-opacity="0"/></radialGradient>
- <linearGradient id="goldMarble" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0c9" stop-opacity=".8"/><stop offset=".5" stop-color="#f3c985" stop-opacity=".38"/><stop offset="1" stop-color="#fff7e7" stop-opacity=".65"/></linearGradient>
- <linearGradient id="cloudGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff4e7" stop-opacity=".34"/><stop offset="1" stop-color="#f4bce2" stop-opacity="0"/></linearGradient>
- <filter id="softGlow"><feGaussianBlur stdDeviation="9"/></filter>
- <filter id="templeGlow"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<rect width="1440" height="900" fill="url(#swargSky)"/>
-<circle cx="1090" cy="185" r="230" fill="url(#divineGlow)"><animate attributeName="r" values="215;245;215" dur="14s" repeatCount="indefinite"/></circle>
-<!-- distant heavenly palace silhouette, drawn as architecture rather than abstract shapes -->
-<g fill="#f8dba9" fill-opacity=".12" stroke="#ffe7b4" stroke-opacity=".38" stroke-width="1.2">
- <path d="M610 430 L610 320 Q650 270 690 320 L690 430 Z M700 430 L700 285 Q750 220 800 285 L800 430 Z M810 430 L810 320 Q850 270 890 320 L890 430 Z"/>
- <path d="M580 320 L650 260 L720 320 M670 285 L750 205 L830 285 M780 320 L850 260 L920 320" fill="none"/>
- <path d="M570 430 H930 V455 H570 Z M600 455 H900 V468 H600 Z"/>
- <path d="M635 350 V425 M665 350 V425 M725 315 V425 M750 300 V425 M775 315 V425 M835 350 V425 M865 350 V425" stroke-opacity=".5"/>
-</g>
-<g fill="none" stroke="url(#goldMarble)" stroke-width="2" opacity=".55" filter="url(#templeGlow)">
- <path d="M625 430 V345 Q650 300 675 345 V430 M705 430 V300 Q750 240 795 300 V430 M825 430 V345 Q850 300 875 345 V430"/>
-</g>
-<!-- broad soft heavenly cloud banks -->
-<g fill="url(#cloudGold)">
- <path d="M0 485 C120 420 220 480 330 450 S520 425 620 485 V720 H0Z"><animateTransform attributeName="transform" type="translate" values="0 0;35 0;0 0" dur="38s" repeatCount="indefinite"/></path>
- <path d="M730 500 C850 420 970 490 1080 450 S1300 420 1440 490 V740 H730Z"><animateTransform attributeName="transform" type="translate" values="0 0;-32 0;0 0" dur="42s" repeatCount="indefinite"/></path>
- <path d="M0 620 C180 550 320 650 490 600 S780 560 930 630 S1230 560 1440 625 V900 H0Z" opacity=".65"/>
-</g>
-<!-- gentle falling golden blessings / stardust -->
-<g fill="#fff1c2" filter="url(#templeGlow)">
- <circle cx="180" cy="200" r="2.2"><animate attributeName="cy" values="200;260;200" dur="11s" repeatCount="indefinite"/></circle>
- <circle cx="365" cy="320" r="1.7"><animate attributeName="cy" values="320;380;320" dur="13s" repeatCount="indefinite"/></circle>
- <circle cx="1010" cy="290" r="2"><animate attributeName="cy" values="290;350;290" dur="10s" repeatCount="indefinite"/></circle>
- <circle cx="1240" cy="380" r="2.4"><animate attributeName="cy" values="380;430;380" dur="12s" repeatCount="indefinite"/></circle>
- <circle cx="530" cy="175" r="1.8"><animate attributeName="cy" values="175;230;175" dur="14s" repeatCount="indefinite"/></circle>
- <circle cx="890" cy="190" r="1.6"><animate attributeName="cy" values="190;240;190" dur="9s" repeatCount="indefinite"/></circle>
-</g>
-<!-- floating lotus petals -->
-<g fill="#ffd6e8" fill-opacity=".46" stroke="#fff0f7" stroke-opacity=".45">
- <path d="M275 260 C248 226 260 201 278 191 C294 215 296 237 275 260Z"><animateTransform attributeName="transform" type="translate" values="0 0;24 -30;0 0" dur="18s" repeatCount="indefinite"/></path>
- <path d="M1130 340 C1107 308 1117 284 1136 274 C1151 298 1150 320 1130 340Z"><animateTransform attributeName="transform" type="translate" values="0 0;-18 -28;0 0" dur="21s" repeatCount="indefinite"/></path>
- <path d="M450 520 C429 492 437 471 454 462 C470 484 469 502 450 520Z"><animateTransform attributeName="transform" type="translate" values="0 0;18 -20;0 0" dur="17s" repeatCount="indefinite"/></path>
-</g>
-
-<!-- Indra-lok inspired celestial vista: moving cloud oceans, palace terraces, swans and Airavata -->
-<g opacity=".52" fill="#fff5df">
- <path d="M-100 560 C-50 500 10 510 50 550 C85 490 145 505 180 550 C225 520 270 540 300 580 L300 650 L-100 650Z"><animateTransform attributeName="transform" type="translate" values="-120 0;90 0;-120 0" dur="47s" repeatCount="indefinite"/></path>
- <path d="M1120 565 C1160 510 1220 515 1250 550 C1290 500 1350 520 1380 555 C1420 525 1470 545 1510 585 L1510 675 L1120 675Z"><animateTransform attributeName="transform" type="translate" values="90 0;-100 0;90 0" dur="52s" repeatCount="indefinite"/></path>
- <path d="M-80 700 C-20 650 35 665 75 700 C130 645 200 670 230 710 C300 675 360 695 395 730 L395 810 L-80 810Z"><animateTransform attributeName="transform" type="translate" values="-70 0;120 0;-70 0" dur="39s" repeatCount="indefinite"/></path>
- <path d="M1060 720 C1110 665 1170 680 1205 715 C1255 660 1320 680 1350 720 C1395 690 1450 710 1490 745 L1490 840 L1060 840Z"><animateTransform attributeName="transform" type="translate" values="80 0;-90 0;80 0" dur="43s" repeatCount="indefinite"/></path>
-</g>
-<!-- Golden terraces and stairway leading into the palace of the devas -->
-<g fill="#ffe5ad" fill-opacity=".18" stroke="#fff0c9" stroke-opacity=".42" stroke-width="1.5">
- <path d="M520 472 H960 L925 492 H555Z M550 495 H930 L900 514 H580Z M580 517 H900 L875 535 H605Z"/>
- <path d="M480 470 Q740 425 1000 470" fill="none" stroke-width="3"/>
- <path d="M505 465 V435 M975 465 V435 M530 450 L550 430 M950 450 L930 430" fill="none"/>
-</g>
-<!-- Hanging celestial lamps -->
-<g stroke="#ffe6a8" stroke-opacity=".7" fill="#fff0bc" filter="url(#templeGlow)">
- <path d="M405 0 V95 M405 95 l-12 17 h24Z M1040 0 V120 M1040 120 l-12 17 h24Z M1280 0 V85 M1280 85 l-10 15 h20Z" fill="none"/>
- <circle cx="405" cy="116" r="4"><animate attributeName="opacity" values=".4;1;.4" dur="3s" repeatCount="indefinite"/></circle>
- <circle cx="1040" cy="137" r="4"><animate attributeName="opacity" values=".4;1;.4" dur="4s" repeatCount="indefinite"/></circle>
- <circle cx="1280" cy="103" r="3"><animate attributeName="opacity" values=".4;1;.4" dur="3.5s" repeatCount="indefinite"/></circle>
-</g>
-<!-- Celestial swans gliding across the cloud sea -->
-<g fill="none" stroke="#fff8e8" stroke-width="2.5" stroke-linecap="round" opacity=".8">
- <g><path d="M0 0 Q10 -12 20 0 Q30 -12 40 0 M17 1 Q22 -8 26 -17 Q28 -20 32 -15" transform="translate(180 390) scale(1.0)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;320 -35;650 5" dur="31s" repeatCount="indefinite"/></path></g>
- <g><path d="M0 0 Q8 -9 16 0 Q24 -9 32 0 M13 1 Q18 -7 21 -13" transform="translate(850 330) scale(.75)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;220 25;520 -5" dur="37s" repeatCount="indefinite"/></path></g>
- <g><path d="M0 0 Q7 -8 14 0 Q21 -8 28 0 M11 1 Q15 -6 18 -12" transform="translate(600 280) scale(.6)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;-150 -22;-420 0" dur="34s" repeatCount="indefinite"/></path></g>
-</g>
-<!-- Airavata-inspired white elephant silhouette, kept as distant decorative art -->
-<g transform="translate(1110 440)" fill="#fff4e5" fill-opacity=".2" stroke="#fff1d1" stroke-opacity=".55" stroke-width="1.5">
- <path d="M0 0 C-8 -25 10 -42 35 -38 C58 -34 70 -16 66 5 L60 32 L52 32 L50 5 L20 5 L17 32 L9 32 L8 5 C-5 3 -10 -8 0 0Z"/>
- <path d="M4 -26 Q-8 -34 -12 -20 L-6 -4 M34 -37 L30 -48 L39 -39 M45 -38 L50 -49 L52 -35" fill="none"/>
- <circle cx="19" cy="-24" r="2.2" fill="#ffe7ac"/>
- <path d="M-3 -6 Q-16 6 -12 23" fill="none" stroke-width="3"/>
- <animateTransform attributeName="transform" type="translate" values="1110 440;1118 434;1110 440" dur="9s" repeatCount="indefinite"/>
-</g>
-
-<!-- Tall palace towers, golden windows, flags and distant domes -->
-<g stroke="#ffe8b4" stroke-opacity=".52" fill="#ffe2a6" fill-opacity=".16" stroke-width="1.5">
- <path d="M360 455 V335 Q360 315 380 300 Q400 315 400 335 V455Z M1040 455 V320 Q1040 295 1062 278 Q1084 295 1084 320 V455Z"/>
- <path d="M345 335 L380 290 L415 335 M1023 320 L1062 268 L1101 320" fill="none" stroke-width="2"/>
- <path d="M370 355 H390 V380 H370Z M370 398 H390 V423 H370Z M1052 335 H1072 V365 H1052Z M1052 386 H1072 V416 H1052Z" fill="#fff1c2" fill-opacity=".55"/>
- <path d="M380 290 V250 M1062 268 V230" fill="none" stroke-width="2"/>
- <path d="M380 250 Q405 265 380 278 Q355 265 380 250Z M1062 230 Q1087 245 1062 258 Q1037 245 1062 230Z" fill="#f7c6dc" fill-opacity=".55"/>
-</g>
-<!-- Heavenly garden trees with gently swaying canopies -->
-<g stroke="#d6b985" stroke-opacity=".5" fill="#d9edc9" fill-opacity=".18">
- <path d="M250 630 V550 M238 630 H262 M250 565 L225 545 M250 580 L275 558" fill="none" stroke-width="4"/>
- <circle cx="226" cy="540" r="28"><animate attributeName="r" values="28;30;28" dur="8s" repeatCount="indefinite"/></circle>
- <circle cx="254" cy="522" r="34"><animate attributeName="r" values="34;32;34" dur="9s" repeatCount="indefinite"/></circle>
- <circle cx="279" cy="546" r="25"><animate attributeName="r" values="25;27;25" dur="7s" repeatCount="indefinite"/></circle>
- <path d="M1190 650 V565 M1178 650 H1202 M1190 585 L1165 565 M1190 600 L1215 580" fill="none" stroke-width="4"/>
- <circle cx="1165" cy="562" r="27"><animate attributeName="r" values="27;29;27" dur="8s" repeatCount="indefinite"/></circle>
- <circle cx="1193" cy="544" r="33"><animate attributeName="r" values="33;31;33" dur="10s" repeatCount="indefinite"/></circle>
- <circle cx="1218" cy="570" r="25"><animate attributeName="r" values="25;27;25" dur="7s" repeatCount="indefinite"/></circle>
-</g>
-<!-- Silver waterfalls descending from cloud terraces -->
-<g fill="none" stroke-linecap="round">
- <path d="M465 520 C455 560 475 590 462 635 S470 685 460 720" stroke="#b8f5f4" stroke-opacity=".42" stroke-width="5"><animate attributeName="stroke-dashoffset" values="0;90" dur="4s" repeatCount="indefinite"/></path>
- <path d="M475 525 C468 565 485 600 474 635 S481 680 472 714" stroke="#fff4da" stroke-opacity=".7" stroke-width="1.8"><animate attributeName="stroke-dashoffset" values="0;-70" dur="3s" repeatCount="indefinite"/></path>
- <path d="M970 525 C980 570 960 600 975 640 S965 685 978 720" stroke="#b8f5f4" stroke-opacity=".38" stroke-width="5"><animate attributeName="stroke-dashoffset" values="0;100" dur="4.5s" repeatCount="indefinite"/></path>
- <path d="M960 530 C970 570 952 605 964 642 S955 685 965 715" stroke="#fff4da" stroke-opacity=".7" stroke-width="1.8"><animate attributeName="stroke-dashoffset" values="0;-80" dur="3.5s" repeatCount="indefinite"/></path>
-</g>
-<!-- A distant peacock: jewel-like tail feathers opening gently -->
-<g transform="translate(720 575)" stroke="#a9e8df" stroke-opacity=".65" fill="#79cfc4" fill-opacity=".22">
- <path d="M0 0 Q-60 -65 -52 -100 Q-18 -95 0 -35 Q18 -95 52 -100 Q60 -65 0 0Z"><animateTransform attributeName="transform" type="rotate" values="-3;3;-3" dur="7s" repeatCount="indefinite"/></path>
- <path d="M0 -12 Q-38 -70 -42 -90 M0 -12 Q38 -70 42 -90" fill="none" stroke-width="2"/>
- <ellipse cx="-39" cy="-87" rx="6" ry="9" fill="#8dbdff" fill-opacity=".6"/><ellipse cx="39" cy="-87" rx="6" ry="9" fill="#8dbdff" fill-opacity=".6"/>
- <path d="M0 0 L-5 35 L5 35Z" fill="#f2d59d" stroke="none"/>
-</g>
-<!-- Tiny celestial chariots of light crossing distant clouds -->
-<g fill="#ffe8b4" stroke="#fff0d2" stroke-opacity=".8">
- <g transform="translate(120 350)">
-  <path d="M0 0 H42 L34 12 H8Z" fill-opacity=".35"/>
-  <path d="M12 0 L21 -10 L30 0 M20 -10 V-16" fill="none"/>
-  <circle cx="8" cy="15" r="2"/><circle cx="34" cy="15" r="2"/>
-  <animateTransform attributeName="transform" type="translate" values="120 350;430 315;760 350" dur="46s" repeatCount="indefinite"/>
- </g>
- <g transform="translate(980 270)">
-  <path d="M0 0 H30 L24 9 H6Z" fill-opacity=".3"/>
-  <path d="M8 0 L15 -7 L22 0 M15 -7 V-12" fill="none"/>
-  <animateTransform attributeName="transform" type="translate" values="980 270;760 250;500 275" dur="39s" repeatCount="indefinite"/>
- </g>
-</g>
-<!-- A second foreground cloud layer creates gentle parallax -->
-<g fill="#fff8ee" fill-opacity=".12">
- <path d="M-80 780 C-30 730 25 755 70 780 C110 720 180 740 220 785 C275 750 335 770 370 810 L370 940 H-80Z"><animateTransform attributeName="transform" type="translate" values="-70 0;65 0;-70 0" dur="33s" repeatCount="indefinite"/></path>
- <path d="M1050 805 C1100 750 1160 770 1200 805 C1250 745 1320 770 1350 810 C1400 780 1460 800 1500 835 L1500 940 H1050Z"><animateTransform attributeName="transform" type="translate" values="70 0;-70 0;70 0" dur="36s" repeatCount="indefinite"/></path>
-</g>
-<!-- Drifting petals and luminous blessings, moving in different directions -->
-<g fill="#fff0c9" filter="url(#templeGlow)">
- <circle cx="90" cy="150" r="2"><animate attributeName="cy" values="150;560;150" dur="29s" repeatCount="indefinite"/><animate attributeName="cx" values="90;145;90" dur="17s" repeatCount="indefinite"/></circle>
- <circle cx="330" cy="80" r="1.6"><animate attributeName="cy" values="80;470;80" dur="34s" repeatCount="indefinite"/></circle>
- <circle cx="720" cy="120" r="2.5"><animate attributeName="cy" values="120;580;120" dur="31s" repeatCount="indefinite"/></circle>
- <circle cx="950" cy="70" r="1.7"><animate attributeName="cy" values="70;520;70" dur="27s" repeatCount="indefinite"/></circle>
- <circle cx="1370" cy="210" r="2"><animate attributeName="cy" values="210;620;210" dur="33s" repeatCount="indefinite"/></circle>
- <circle cx="510" cy="410" r="1.5"><animate attributeName="cy" values="410;150;410" dur="23s" repeatCount="indefinite"/></circle>
- <circle cx="1180" cy="480" r="1.8"><animate attributeName="cy" values="480;220;480" dur="25s" repeatCount="indefinite"/></circle>
-</g>
-</svg></div>
+<style>
+/* Real photographic scene with cinematic colour grading and restrained cloud haze */
+.swarg-layer{
+  position:fixed;inset:-2.5vh -2.5vw;width:105vw;height:105vh;z-index:0;pointer-events:none;overflow:hidden;
+  background-image:
+    linear-gradient(180deg,rgba(18,13,27,.12) 0%,rgba(22,17,31,.13) 28%,rgba(14,17,31,.38) 68%,rgba(10,12,24,.66) 100%),
+    linear-gradient(90deg,rgba(29,18,29,.58) 0%,rgba(22,21,38,.19) 28%,rgba(22,22,40,.08) 64%,rgba(24,17,35,.28) 100%),
+    url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=85&w=2400');
+  background-size:cover;background-position:center 46%;background-repeat:no-repeat;
+  filter:saturate(.88) contrast(1.04);transform:scale(1.015);transform-origin:center;
+  animation:indraLokKenBurns 95s ease-in-out infinite alternate;
+}
+.swarg-layer:before{
+  content:"";position:absolute;inset:-8%;
+  background:
+   radial-gradient(ellipse at 72% 23%,rgba(255,215,150,.19) 0%,rgba(255,215,150,.06) 17%,transparent 40%),
+   radial-gradient(ellipse at 15% 54%,rgba(255,194,218,.13) 0%,transparent 34%),
+   radial-gradient(ellipse at 86% 62%,rgba(190,203,255,.13) 0%,transparent 32%);
+  filter:blur(28px);animation:indraLokHaze 48s ease-in-out infinite alternate;
+}
+.swarg-layer:after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(22,15,31,.02),rgba(18,19,34,.04) 45%,rgba(12,15,29,.40));
+}
+@keyframes indraLokKenBurns{
+  0%{transform:scale(1.015) translate3d(0,0,0)}
+  100%{transform:scale(1.105) translate3d(-.8%,.3%,0)}
+}
+@keyframes indraLokHaze{
+  0%{transform:translate3d(-1.5%,0,0) scale(1);opacity:.55}
+  100%{transform:translate3d(1.8%,-1%,0) scale(1.06);opacity:.9}
+}
+/* Glass panels remain readable over a luminous photographic background */
+.stApp{background:linear-gradient(180deg,rgba(23,17,32,.18),rgba(12,16,29,.38))!important}
+.block-container,[data-testid="stSidebar"],[data-testid="stHeader"]{position:relative;z-index:1}
+[data-testid="stSidebar"]{
+ background:linear-gradient(180deg,rgba(26,19,34,.90),rgba(17,22,41,.91))!important;
+ border-right:1px solid rgba(255,225,181,.22)!important;backdrop-filter:blur(20px);
+}
+[data-testid="stMetric"]{
+ background:linear-gradient(140deg,rgba(58,45,61,.74),rgba(20,29,48,.78))!important;
+ border:1px solid rgba(255,225,181,.25)!important;backdrop-filter:blur(17px);
+ box-shadow:0 12px 36px rgba(6,4,16,.18),inset 0 1px rgba(255,255,255,.08)!important;
+}
+.hero,.card{
+ background:linear-gradient(135deg,rgba(45,34,52,.78),rgba(18,27,47,.79))!important;
+ border:1px solid rgba(255,226,182,.24)!important;backdrop-filter:blur(17px);
+ box-shadow:0 18px 55px rgba(5,5,16,.22),inset 0 1px rgba(255,255,255,.07)!important;
+}
+.stButton>button{
+ background:linear-gradient(120deg,rgba(255,219,160,.18),rgba(233,189,211,.15),rgba(170,192,238,.13))!important;
+ border-color:rgba(255,223,176,.45)!important;backdrop-filter:blur(12px);
+}
+.stButton>button:hover{box-shadow:0 0 25px rgba(255,219,160,.17),0 0 34px rgba(215,191,244,.12)!important}
+.aep-love-footer{
+ background:linear-gradient(110deg,rgba(31,22,35,.90),rgba(25,30,49,.87)),url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=70&w=1400') center 64%/cover!important;
+ border-color:rgba(255,224,179,.35)!important;backdrop-filter:blur(8px);
+}
+.aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
+@media(prefers-reduced-motion:reduce){.swarg-layer{animation:none!important}.swarg-layer:before{animation:none!important}}
+</style>
 """, unsafe_allow_html=True)
 
 # ---------- Physics engine ----------
@@ -1093,7 +1014,7 @@ st.markdown("""
     <div class="aep-footer-title">A little universe, built with <span class="aep-heart">❤️</span></div>
     <div class="aep-footer-credit">Developed in love by <span class="aep-name">Aman Kumar Patel</span></div>
     <div class="aep-footer-line"></div>
-    <div class="aep-footer-bottom"><span>MOI QUEST</span><span>INERTIA · MOTION · IMAGINATION</span><span>© 2026</span></div>
+    <div class="aep-footer-bottom"><span>MOI QUEST</span><span>INERTIA · MOTION · IMAGINATION</span><span>SCENIC BACKDROP: GAF CLICKZ / UNSPLASH</span><span>© 2026</span></div>
   </div><div class="aep-footer-glyph">I = ∫ r² dm</div>
 </div>
 <style>
