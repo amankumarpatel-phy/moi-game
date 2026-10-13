@@ -359,7 +359,7 @@ elif page == "3D Lab":
             scene=dict(bgcolor="rgba(5,9,16,0.0)",xaxis=dict(visible=False,range=[-2.4,2.4]),yaxis=dict(visible=False,range=[-2.4,2.4]),zaxis=dict(visible=False,range=[min(-2.4,zmin-0.3),max(2.4,zmax+0.3)]),aspectmode="manual",aspectratio=dict(x=1,y=1,z=max(.7,min(1.7,H/(2*R))))),
             legend=dict(orientation="h",yanchor="bottom",y=0.01,x=0.02,bgcolor="rgba(0,0,0,0)"),
             updatemenus=[dict(type="buttons",showactive=False,x=0.02,y=0.98,xanchor="left",yanchor="top",buttons=[
-                dict(label="▶ PLAY ROTATION",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),
+                dict(label="▶ PLAY ROTATION",method="animate",args=[None,{"frame":{"duration":animation_duration_ms,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),
                 dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}])
             ])]
         )
@@ -431,9 +431,12 @@ elif page == "Dynamics Arena":
             net = 0.0
         alphas[j-1] = net/Iaxis
         omegas[j] = omegas[j-1] + alphas[j-1]*dt
+        # Static friction can hold the body at rest; prevent numerical overshoot
+        # through zero when applied torque cannot overcome friction.
         if omegas[j-1]*omegas[j] < 0 and abs(torque) <= friction:
             omegas[j] = 0.0
-        angles[j] = angles[j-1] + omegas[j]*dt
+            alphas[j-1] = 0.0
+        angles[j] = angles[j-1] + 0.5*(omegas[j-1]+omegas[j])*dt
     alphas[-1] = alphas[-2]
     energy = 0.5*Iaxis*omegas**2
     with view:
@@ -472,8 +475,12 @@ elif page == "Dynamics Arena":
         fig3.add_trace(go.Scatter3d(x=[R,R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7),name="Surface tracer"))
         base_meshes=[(np.array(t.x),np.array(t.y),np.array(t.z)) for t in list(fig3.data)[:surface_count]]
         frames=[]
+        animation_duration_ms=max(40, int(duration*1000/48))
         for fi in range(48):
-            ang=2*np.pi*fi/48
+            # Each frame samples the numerically integrated angle theta(t), so
+            # animation direction and changing speed follow the torque/friction model.
+            sample_index=int(round(fi*(len(angles)-1)/47))
+            ang=angles[sample_index]
             frame_data=[]
             for bx,by,bz in base_meshes:
                 if axis == "Central transverse axis (x)":
