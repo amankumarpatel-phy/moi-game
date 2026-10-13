@@ -35,3 +35,7 @@ The simulation assumes a rigid body, fixed axis, constant net torque and no spee
 - Explore torque, opposing friction, angular velocity and rotational kinetic energy plots.
 - The 3D animation rotates the complete displayed surface mesh around the selected axis; its play/pause loop is a visual aid and is not yet time-synchronized to the computed angular-velocity curve.
 - Optional shared leaderboard uses Supabase when configured; otherwise scores are session-local.
+
+
+### MOI Audio Engine
+The app includes a user-activated synthesized sound panel: ambient sci-fi drone, rotor hum, whoosh, UI pulse, success chime, master volume, and mute-all. Audio is generated locally with the browser Web Audio API; no external audio files are required. Browsers block autoplay, so users must click a sound control to begin playback.
