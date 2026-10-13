@@ -5,6 +5,7 @@ A dark, neon-accented Streamlit learning game for rotational mechanics by **Aman
 ## Features
 - Mission Control dashboard and session XP
 - Animated canvas rotor in the Spin Lab
+- Interactive 3D geometry lab with play/pause tracer animation, rotation-axis display, and body comparison
 - Live calculations for common bodies and axes
 - Challenge Arena with 12 conceptual questions and explanations
 - Formula Vault and field manual
@@ -23,9 +24,6 @@ streamlit run app.py
 4. Open Streamlit Community Cloud and sign in with GitHub.
 5. Choose **Create app**, select this repository, branch `main`, and main file path `app.py`.
 6. Deploy. Your students can then open the generated app URL.
-
-## Footer customization
-In `app.py`, search for `Footer is intentionally global`. Edit the text inside the final HTML block. The footer is outside the page-specific branches, so it appears on every section.
 
 ## Physics model
 The simulation assumes a rigid body, fixed axis, constant net torque and no speed-dependent drag. The animation is illustrative; numerical outputs use `alpha = net_torque / I` and constant-angular-acceleration kinematics.
