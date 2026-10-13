@@ -400,6 +400,8 @@ elif page == "Dynamics Arena":
         friction = st.slider("Friction torque magnitude (N·m)", 0.0, 10.0, 0.5, 0.5, key="dyn_friction")
         omega0 = st.slider("Initial angular velocity ω₀ (rad/s)", -15.0, 15.0, 2.0, 0.5, key="dyn_omega")
         duration = st.slider("Simulation duration (s)", 1.0, 10.0, 5.0, 0.5, key="dyn_duration")
+        playback_speed_label = st.select_slider("PLAYBACK SPEED", options=["0.5× — slow", "1× — normal", "2× — fast"], value="1× — normal", key="dyn_playback_speed")
+        playback_speed = {"0.5× — slow": 0.5, "1× — normal": 1.0, "2× — fast": 2.0}[playback_speed_label]
     # Inertia about selected centre-of-mass axis; transverse-axis models are explicit idealisations.
     if body == "Solid cylinder":
         Iz, Ix = 0.5*M*R**2, M*(3*R**2+H**2)/12
@@ -446,46 +448,79 @@ elif page == "Dynamics Arena":
         m3.metric("FINAL ω",f"{omegas[-1]:.3f} rad/s")
         m4.metric("FINAL Krot",f"{energy[-1]:.3f} J")
         st.caption(f"Axis: {axis}. Icm = {Icm:.4f} kg·m²; parallel-axis contribution Md² = {M*d*d:.4f} kg·m².")
-        # Build a true rotating 3D body. Animation frames rotate every surface mesh
-        # around the selected axis, not just a marker.
-        u=np.linspace(0,2*np.pi,48); fig3=go.Figure()
+        # One synchronized Plotly timeline: body mesh, omega graph, and kinetic-energy graph.
+        # Playback frames use the numerically integrated angle theta(t).
+        from plotly.subplots import make_subplots
+        u=np.linspace(0,2*np.pi,48)
+        fig_sync=make_subplots(
+            rows=1, cols=3,
+            specs=[[{"type":"scene"},{"type":"xy"},{"type":"xy"}]],
+            column_widths=[1.22,0.9,0.9],
+            horizontal_spacing=0.055,
+            subplot_titles=("3D ROTOR · SELECTED AXIS","ANGULAR VELOCITY ω(t)","ROTATIONAL ENERGY K(t)")
+        )
+        mesh_coords=[]; mesh_styles=[]
+        def add_sync_surface(x,y,z,color="#55f6dc",opacity=0.66,name="Body surface"):
+            x,y,z=np.asarray(x),np.asarray(y),np.asarray(z)
+            mesh_coords.append((x,y,z))
+            mesh_styles.append((color,opacity,name))
+            fig_sync.add_trace(go.Surface(x=x,y=y,z=z,colorscale=[[0,color],[1,color]],showscale=False,opacity=opacity,name=name,hovertemplate=name+"<extra></extra>",lighting=dict(ambient=.45,diffuse=.78,specular=.65,roughness=.3)),row=1,col=1)
         if "sphere" in body.lower():
             v=np.linspace(0,np.pi,28); U,V=np.meshgrid(u,v)
-            fig3.add_trace(go.Surface(x=R*np.sin(V)*np.cos(U),y=R*np.sin(V)*np.sin(U),z=R*np.cos(V),opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            add_sync_surface(R*np.sin(V)*np.cos(U),R*np.sin(V)*np.sin(U),R*np.cos(V),"#55f6dc",.68,body)
             if hollow:
-                fig3.add_trace(go.Surface(x=Ri*np.sin(V)*np.cos(U),y=Ri*np.sin(V)*np.sin(U),z=Ri*np.cos(V),opacity=.42,colorscale=[[0,"#9a7bff"],[1,"#9a7bff"]],showscale=False,name="Inner surface"))
+                add_sync_surface(Ri*np.sin(V)*np.cos(U),Ri*np.sin(V)*np.sin(U),Ri*np.cos(V),"#9a7bff",.42,"Inner spherical surface")
         elif "cone" in body.lower():
-            zz=np.linspace(0,H,24); U,Z=np.meshgrid(u,zz); RR=R*(1-Z/H)
-            fig3.add_trace(go.Surface(x=RR*np.cos(U),y=RR*np.sin(U),z=Z-H/2,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            zz=np.linspace(-H/2,H/2,28); U,Z=np.meshgrid(u,zz); RR=R*(0.5-Z/H)
+            add_sync_surface(RR*np.cos(U),RR*np.sin(U),Z,"#55f6dc",.68,body)
+            if body=="Solid cone":
+                U2,RR2=np.meshgrid(u,np.linspace(0,R,16))
+                add_sync_surface(RR2*np.cos(U2),RR2*np.sin(U2),np.full_like(U2,-H/2),"#9a7bff",.28,"Base")
         else:
-            zz=np.linspace(-H/2,H/2,20); U,Z=np.meshgrid(u,zz)
-            fig3.add_trace(go.Surface(x=R*np.cos(U),y=R*np.sin(U),z=Z,opacity=.62,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False,name=body))
+            zz=np.linspace(-H/2,H/2,22); U,Z=np.meshgrid(u,zz)
+            add_sync_surface(R*np.cos(U),R*np.sin(U),Z,"#55f6dc",.62,body)
             if hollow:
-                fig3.add_trace(go.Surface(x=Ri*np.cos(U),y=Ri*np.sin(U),z=Z,opacity=.75,colorscale=[[0,"#9a7bff"],[1,"#9a7bff"]],showscale=False,name="Inner wall"))
-        surface_count=len(fig3.data)
-        if axis == "Central transverse axis (x)":
-            ax=dict(x=[-R*1.4,R*1.4],y=[0,0],z=[0,0])
-        elif axis == "Parallel axis offset by d":
-            ax=dict(x=[d,d],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
+                add_sync_surface(Ri*np.cos(U),Ri*np.sin(U),Z,"#9a7bff",.78,"Inner wall")
+        surface_count=len(mesh_coords)
+        if axis=="Central transverse axis (x)":
+            ax=dict(x=[-R*1.5,R*1.5],y=[0,0],z=[0,0])
+        elif axis=="Parallel axis offset by d":
+            ax=dict(x=[d,d],y=[0,0],z=[-max(R,H/2)*1.5,max(R,H/2)*1.5])
         else:
-            ax=dict(x=[0,0],y=[0,0],z=[-max(R,H/2)*1.4,max(R,H/2)*1.4])
-        fig3.add_trace(go.Scatter3d(**ax,mode="lines",line=dict(color="white",width=6,dash="dash"),name="Selected rotation axis"))
-        # Tracer point is a visual reference on the rotating body.
-        tracer_index=len(fig3.data)
-        fig3.add_trace(go.Scatter3d(x=[R,R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7),name="Surface tracer"))
-        base_meshes=[(np.array(t.x),np.array(t.y),np.array(t.z)) for t in list(fig3.data)[:surface_count]]
+            ax=dict(x=[0,0],y=[0,0],z=[-max(R,H/2)*1.5,max(R,H/2)*1.5])
+        fig_sync.add_trace(go.Scatter3d(**ax,mode="lines",line=dict(color="white",width=5,dash="dash"),name="Selected axis",hoverinfo="skip"),row=1,col=1)
+        tracer_index=len(fig_sync.data)
+        fig_sync.add_trace(go.Scatter3d(x=[R,R*np.cos(.18)],y=[0,R*np.sin(.18)],z=[0,0],mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=6),name="Surface tracer",hoverinfo="skip"),row=1,col=1)
+
+        # Full histories stay visible; each frame moves a vertical cursor and a point on both curves.
+        fig_sync.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=2.5),showlegend=False),row=1,col=2)
+        omega_lo=float(np.min(omegas)); omega_hi=float(np.max(omegas))
+        omega_pad=max(0.2,(omega_hi-omega_lo)*0.12)
+        omega_cursor_index=len(fig_sync.data)
+        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[omega_lo-omega_pad,omega_hi+omega_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=1,col=2)
+        omega_dot_index=len(fig_sync.data)
+        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[omegas[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#55f6dc",width=2)),showlegend=False,name="Current ω",hovertemplate="t=%{x:.2f} s<br>ω=%{y:.3f} rad/s<extra></extra>"),row=1,col=2)
+
+        fig_sync.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=2.5),fill="tozeroy",fillcolor="rgba(154,123,255,.12)",showlegend=False),row=1,col=3)
+        energy_lo=0.0; energy_hi=float(np.max(energy))
+        energy_pad=max(0.2,energy_hi*0.12)
+        energy_cursor_index=len(fig_sync.data)
+        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[energy_lo,energy_hi+energy_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=1,col=3)
+        energy_dot_index=len(fig_sync.data)
+        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[energy[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#9a7bff",width=2)),showlegend=False,name="Current K",hovertemplate="t=%{x:.2f} s<br>K=%{y:.3f} J<extra></extra>"),row=1,col=3)
+
+        # Build animation frames from the simulated angle array, including friction-induced slowdowns.
+        sample_indices=np.unique(np.linspace(0,len(times)-1,61).astype(int))
         frames=[]
-        animation_duration_ms=max(40, int(duration*1000/48))
-        for fi in range(48):
-            # Each frame samples the numerically integrated angle theta(t), so
-            # animation direction and changing speed follow the torque/friction model.
-            sample_index=int(round(fi*(len(angles)-1)/47))
-            ang=angles[sample_index]
+        frame_labels=[]
+        animation_ms=max(25,int(90/playback_speed))
+        for fi,si in enumerate(sample_indices):
+            ang=float(angles[si]); ct=float(times[si])
             frame_data=[]
-            for bx,by,bz in base_meshes:
-                if axis == "Central transverse axis (x)":
+            for bx,by,bz in mesh_coords:
+                if axis=="Central transverse axis (x)":
                     fx,fy,fz=bx,by*np.cos(ang)-bz*np.sin(ang),by*np.sin(ang)+bz*np.cos(ang)
-                elif axis == "Parallel axis offset by d":
+                elif axis=="Parallel axis offset by d":
                     xx=bx-d
                     fx=d+xx*np.cos(ang)-by*np.sin(ang)
                     fy=xx*np.sin(ang)+by*np.cos(ang)
@@ -494,26 +529,43 @@ elif page == "Dynamics Arena":
                     fx=bx*np.cos(ang)-by*np.sin(ang)
                     fy=bx*np.sin(ang)+by*np.cos(ang)
                     fz=bz
-                frame_data.append(go.Surface(x=fx,y=fy,z=fz,opacity=.68,colorscale=[[0,"#55f6dc"],[1,"#55f6dc"]],showscale=False))
-            if axis == "Central transverse axis (x)":
+                color,opacity,name=mesh_styles[len(frame_data)]
+                frame_data.append(go.Surface(x=fx,y=fy,z=fz,colorscale=[[0,color],[1,color]],showscale=False,opacity=opacity,name=name))
+            if axis=="Central transverse axis (x)":
                 tx=[0,0]; ty=[R*np.cos(ang),R*np.cos(ang+.18)]; tz=[R*np.sin(ang),R*np.sin(ang+.18)]
-            elif axis == "Parallel axis offset by d":
-                tx=[d+R*np.cos(ang),d+R*np.cos(ang+.18)]; ty=[R*np.sin(ang),R*np.sin(ang+.18)]; tz=[0,0]
+            elif axis=="Parallel axis offset by d":
+                radial=max(0.05,R-d)
+                tx=[d+radial*np.cos(ang),d+radial*np.cos(ang+.18)]; ty=[radial*np.sin(ang),radial*np.sin(ang+.18)]; tz=[0,0]
             else:
                 tx=[R*np.cos(ang),R*np.cos(ang+.18)]; ty=[R*np.sin(ang),R*np.sin(ang+.18)]; tz=[0,0]
-            frame_data.append(go.Scatter3d(x=tx,y=ty,z=tz,mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=7)))
-            frames.append(go.Frame(data=frame_data,traces=list(range(surface_count))+[tracer_index],name=str(fi)))
-        fig3.frames=frames
-        fig3.update_layout(height=450,margin=dict(l=0,r=0,t=8,b=0),paper_bgcolor="rgba(0,0,0,0)",font=dict(color="#eaf2ff"),scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),updatemenus=[dict(type="buttons",showactive=False,x=.02,y=.98,buttons=[dict(label="▶ ROTATE BODY",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}])])])
-        st.plotly_chart(fig3,use_container_width=True,config={"displaylogo":False},key="dynamics_rotor_3d")
-        graphs=go.Figure()
-        graphs.add_trace(go.Scatter(x=times,y=omegas,mode="lines",name="ω(t)",line=dict(color="#55f6dc",width=3)))
-        graphs.update_layout(title="Angular velocity vs time",xaxis_title="Time (s)",yaxis_title="Angular velocity ω (rad/s)",height=300,margin=dict(l=10,r=10,t=45,b=10),paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.45)",font=dict(color="#eaf2ff"))
-        st.plotly_chart(graphs,use_container_width=True,config={"displaylogo":False},key="dynamics_omega_graph")
-        energy_fig=go.Figure()
-        energy_fig.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=3),fill="tozeroy"))
-        energy_fig.update_layout(title="Rotational kinetic energy vs time",xaxis_title="Time (s)",yaxis_title="Krot (J)",height=280,margin=dict(l=10,r=10,t=45,b=10),paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.45)",font=dict(color="#eaf2ff"))
-        st.plotly_chart(energy_fig,use_container_width=True,config={"displaylogo":False},key="dynamics_energy_graph")
+            frame_data.append(go.Scatter3d(x=tx,y=ty,z=tz,mode="markers+lines",marker=dict(size=[7,3],color=["#55f6dc","#9a7bff"]),line=dict(color="#55f6dc",width=6)))
+            frame_data.append(go.Scatter(x=[ct,ct],y=[omega_lo-omega_pad,omega_hi+omega_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False))
+            frame_data.append(go.Scatter(x=[ct],y=[omegas[si]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#55f6dc",width=2)),showlegend=False))
+            frame_data.append(go.Scatter(x=[ct,ct],y=[energy_lo,energy_hi+energy_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False))
+            frame_data.append(go.Scatter(x=[ct],y=[energy[si]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#9a7bff",width=2)),showlegend=False))
+            target_traces=list(range(surface_count))+[tracer_index,omega_cursor_index,omega_dot_index,energy_cursor_index,energy_dot_index]
+            frame_name=f"frame_{fi:02d}"
+            frame_labels.append((frame_name,ct))
+            frames.append(go.Frame(data=frame_data,traces=target_traces,name=frame_name))
+        fig_sync.frames=frames
+        slider_steps=[dict(method="animate",args=[[name],{"mode":"immediate","frame":{"duration":0,"redraw":True},"transition":{"duration":0}}],label=f"{tval:.1f}") for name,tval in frame_labels]
+        fig_sync.update_layout(
+            height=535,margin=dict(l=4,r=4,t=58,b=48),
+            paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(10,15,25,.42)",
+            font=dict(color="#eaf2ff",family="Space Grotesk, sans-serif"),
+            scene=dict(bgcolor="rgba(0,0,0,0)",xaxis=dict(visible=False),yaxis=dict(visible=False),zaxis=dict(visible=False),aspectmode="cube"),
+            xaxis2=dict(title="Time (s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)"),
+            yaxis2=dict(title="ω (rad/s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[omega_lo-omega_pad,omega_hi+omega_pad]),
+            xaxis3=dict(title="Time (s)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)"),
+            yaxis3=dict(title="Krot (J)",gridcolor="rgba(148,163,184,.17)",zerolinecolor="rgba(148,163,184,.25)",range=[energy_lo,energy_hi+energy_pad]),
+            updatemenus=[dict(type="buttons",showactive=False,x=.0,y=1.12,xanchor="left",yanchor="top",direction="right",buttons=[
+                dict(label="▶ START",method="animate",args=[None,{"frame":{"duration":animation_ms,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),
+                dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}]),
+                dict(label="↺ RESET",method="animate",args=[[frame_labels[0][0]],{"frame":{"duration":0,"redraw":True},"mode":"immediate","transition":{"duration":0}}])
+            ])],
+            sliders=[dict(active=0,currentvalue={"prefix":"Simulation time: ","suffix":" s","font":{"color":"#55f6dc"}},pad={"t":30},x=0.0,y=-0.13,len=1.0,steps=slider_steps)]
+        )
+        st.plotly_chart(fig_sync,use_container_width=True,config={"displaylogo":False,"scrollZoom":True},key="dynamics_synchronized_timeline")
     st.markdown("### Head-to-head prediction")
     challenge=st.selectbox("Which has greater angular acceleration under the same torque?",["Solid cylinder vs thin hollow cylinder","Solid sphere vs thin hollow sphere","Solid cylinder vs solid cone"],key="dyn_challenge")
     answer=st.radio("Your prediction",["First body","Second body","Equal"],horizontal=True,key="dyn_prediction")
