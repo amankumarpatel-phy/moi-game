@@ -255,7 +255,7 @@ with st.sidebar:
     st.markdown('<div class="eyebrow">AMAN EDGE PHYSICS</div>', unsafe_allow_html=True)
     st.markdown("## ◉ MOI QUEST")
     st.caption("ROTATIONAL MECHANICS / GAME LAB")
-    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Dynamics Arena", "Torque Duel", "Challenge Arena", "Formula Vault", "How to Play"]
+    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Dynamics Arena", "Torque Duel", "Spin Goblin 😂", "Challenge Arena", "Formula Vault", "How to Play"]
     jump = st.session_state.pop("nav_jump", None)
     nav_index = nav_options.index(jump) if jump in nav_options else 0
     page = st.radio("NAVIGATION", nav_options, index=nav_index, label_visibility="collapsed")
@@ -1067,26 +1067,97 @@ elif page == "How to Play":
     st.latex(r"\tau_{\mathrm{net}}=I\alpha")
 
 
-# ---------- Signature footer: Aman Edge Physics ----------
+
+elif page == "Spin Goblin 😂":
+    st.markdown("""
+    <div class="goblin-hero">
+      <div class="goblin-kicker">THE CHAOS COURT OF ROTATION</div>
+      <h1>SPIN GOBLIN <span>😂</span></h1>
+      <p>Two objects enter. One spins away like a champion. One rotates like it forgot why it came.</p>
+      <div class="goblin-law">Same mass · Same radius · Same torque → smaller moment of inertia wins</div>
+    </div>
+    """, unsafe_allow_html=True)
+    goblin_rounds = [
+      {"a":"Solid cylinder 🥫","b":"Thin hollow cylinder 🛟","ia":"½MR²","ib":"MR²","winner":"Solid cylinder 🥫","joke":"The hollow cylinder keeps all its mass far from the axis. It is literally carrying emotional distance."},
+      {"a":"Solid sphere ⚽","b":"Thin hollow sphere 🪩","ia":"⅖MR²","ib":"⅔MR²","winner":"Solid sphere ⚽","joke":"The solid sphere keeps its mass closer to the axis. The hollow one is full of vibes and empty space."},
+      {"a":"Solid disc 🍪","b":"Thin ring 🍩","ia":"½MR²","ib":"MR²","winner":"Solid disc 🍪","joke":"The ring puts all its mass on the outside edge. Maximum drama, minimum angular acceleration."},
+      {"a":"Solid sphere 🏀","b":"Solid cylinder 🥫","ia":"⅖MR²","ib":"½MR²","winner":"Solid sphere 🏀","joke":"For the same M and R, the sphere has the smaller I. It wins by keeping mass nearer the axis."},
+      {"a":"Thin ring 🍩","b":"Solid disc 🍕","ia":"MR²","ib":"½MR²","winner":"Solid disc 🍕","joke":"The pizza disc wins. Finally, a scientifically valid reason to choose pizza."},
+    ]
+    if "goblin_round" not in st.session_state:
+        st.session_state.goblin_round = 0
+    if "goblin_score" not in st.session_state:
+        st.session_state.goblin_score = 0
+    if "goblin_feedback" not in st.session_state:
+        st.session_state.goblin_feedback = None
+    if "goblin_seen" not in st.session_state:
+        st.session_state.goblin_seen = []
+    q = goblin_rounds[st.session_state.goblin_round % len(goblin_rounds)]
+    g1,g2,g3 = st.columns(3)
+    g1.metric("CHAOS POINTS", st.session_state.goblin_score)
+    g2.metric("ROUND", f"{st.session_state.goblin_round + 1}")
+    g3.metric("GOBLIN STATUS", "UNHINGED" if st.session_state.goblin_score < 3 else "LEGEND")
+    st.markdown('<div class="goblin-question"><div class="goblin-tag">YOUR MISSION</div><h2>Which object gets the bigger angular acceleration?</h2><p>Both get the same net torque. Both have equal mass and outer radius. Pick the winner!</p></div>', unsafe_allow_html=True)
+    left,right=st.columns(2, gap="large")
+    with left:
+        st.markdown(f'<div class="goblin-object"><div class="goblin-emoji">{q["a"].split()[-1]}</div><h3>{q["a"]}</h3><div class="goblin-formula">I = {q["ia"]}</div></div>',unsafe_allow_html=True)
+        if st.button(f"BET ON {q['a']}",key=f"goblin_a_{st.session_state.goblin_round}",use_container_width=True):
+            if st.session_state.goblin_feedback is None:
+                correct=q["winner"]==q["a"]
+                st.session_state.goblin_feedback={"correct":correct,"message":q["joke"] if correct else "The goblin has stolen your torque! Remember: α = τ/I, so the smaller I gets the bigger angular acceleration."}
+                if correct: st.session_state.goblin_score += 1; st.session_state.score += 5
+                st.rerun()
+    with right:
+        st.markdown(f'<div class="goblin-object goblin-object-alt"><div class="goblin-emoji">{q["b"].split()[-1]}</div><h3>{q["b"]}</h3><div class="goblin-formula">I = {q["ib"]}</div></div>',unsafe_allow_html=True)
+        if st.button(f"BET ON {q['b']}",key=f"goblin_b_{st.session_state.goblin_round}",use_container_width=True):
+            if st.session_state.goblin_feedback is None:
+                correct=q["winner"]==q["b"]
+                st.session_state.goblin_feedback={"correct":correct,"message":q["joke"] if correct else "The goblin has stolen your torque! Remember: α = τ/I, so the smaller I gets the bigger angular acceleration."}
+                if correct: st.session_state.goblin_score += 1; st.session_state.score += 5
+                st.rerun()
+    if st.session_state.goblin_feedback is not None:
+        fb=st.session_state.goblin_feedback
+        if fb["correct"]: st.success("GOBLIN APPROVED! +1 Chaos Point, +5 XP")
+        else: st.error("BONK! Not this time.")
+        st.info(fb["message"])
+        if st.button("NEXT CHAOTIC ROUND →",use_container_width=True):
+            st.session_state.goblin_round += 1
+            st.session_state.goblin_feedback = None
+            st.rerun()
+    else:
+        st.caption("Choose carefully. The goblin is watching. Wrong answers are scientifically embarrassing.")
+    if st.button("↻ Reset Goblin's memory",key="goblin_reset"):
+        st.session_state.goblin_round=0
+        st.session_state.goblin_score=0
+        st.session_state.goblin_feedback=None
+        st.rerun()
+    st.markdown("""
+    <style>
+    .goblin-hero,.goblin-question{padding:24px;border:1px solid rgba(255,198,110,.3);border-radius:20px;background:radial-gradient(ellipse at 85% 0%,rgba(255,115,170,.15),transparent 38%),linear-gradient(130deg,rgba(47,31,62,.9),rgba(16,25,43,.92));box-shadow:0 16px 45px rgba(0,0,0,.2);margin-bottom:18px}
+    .goblin-kicker,.goblin-tag{font:700 10px/1.6 monospace;letter-spacing:.2em;color:#ffd78b}
+    .goblin-hero h1{font-size:clamp(32px,5vw,58px)!important;color:#ffe0a0!important;margin:10px 0!important;text-shadow:0 0 22px rgba(255,179,82,.22)}
+    .goblin-hero p,.goblin-question p{color:#e1d8e8}
+    .goblin-law{display:inline-block;margin-top:9px;padding:9px 13px;border-radius:99px;border:1px solid rgba(255,215,139,.3);color:#ffe7b2;font-size:12px}
+    .goblin-question h2{font-size:clamp(20px,3vw,30px)!important;color:#fff0d0!important;margin:7px 0}
+    .goblin-object{min-height:205px;padding:22px;text-align:center;border-radius:20px;border:1px solid rgba(100,245,220,.35);background:linear-gradient(145deg,rgba(28,72,78,.35),rgba(17,25,44,.88));box-shadow:inset 0 0 32px rgba(85,246,220,.06)}
+    .goblin-object-alt{border-color:rgba(255,142,191,.38);background:linear-gradient(145deg,rgba(91,44,76,.35),rgba(23,23,45,.88))}
+    .goblin-emoji{font-size:42px;filter:drop-shadow(0 0 14px rgba(255,222,145,.25))}
+    .goblin-object h3{font-size:20px!important;color:#fff5e7!important;letter-spacing:0!important}
+    .goblin-formula{font:16px monospace;color:#a5fff2;margin-top:10px}
+    @media(prefers-reduced-motion:no-preference){.goblin-emoji{animation:goblinBob 2.8s ease-in-out infinite alternate}@keyframes goblinBob{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-8px) rotate(4deg)}}}
+    </style>
+    """,unsafe_allow_html=True)
+
+# ---------- Minimal creator footer ----------
 st.markdown("""
-<div class="aep-love-footer">
-  <div class="aep-orbit aep-orbit-one"></div><div class="aep-orbit aep-orbit-two"></div><div class="aep-orbit aep-orbit-three"></div><div class="aep-footer-grid"></div>
-  <div class="aep-footer-content">
-    <div class="aep-footer-kicker"><span class="aep-pulse"></span> AMAN EDGE PHYSICS <span class="aep-footer-sep">/</span> ROTATIONAL MECHANICS LAB</div>
-    <div class="aep-footer-title">A little universe, built with <span class="aep-heart">❤️</span></div>
-    <div class="aep-footer-credit">Developed in love by <span class="aep-name">Aman Kumar Patel</span></div>
-    <div class="aep-footer-line"></div>
-    <div class="aep-footer-bottom"><span>MOI QUEST</span><span>INERTIA · MOTION · IMAGINATION</span><span>SCENIC BACKDROP: GAF CLICKZ / UNSPLASH</span><span>© 2026</span></div>
-  </div><div class="aep-footer-glyph">I = ∫ r² dm</div>
+<div class="aep-minimal-footer">
+  <span>Made with <span class="aep-footer-heart">♥️</span> by <span class="aep-footer-name">Aman Kumar Patel</span></span>
 </div>
 <style>
-.aep-love-footer{position:relative;isolation:isolate;overflow:hidden;margin:3.2rem 0 1rem;padding:38px 34px 23px;min-height:245px;border-radius:24px;border:1px solid rgba(85,246,220,.24);background:radial-gradient(ellipse at 12% 5%,rgba(85,246,220,.17),transparent 32%),radial-gradient(ellipse at 88% 90%,rgba(154,123,255,.24),transparent 38%),linear-gradient(125deg,#080d18,#10172b 47%,#090b16);box-shadow:0 20px 70px rgba(0,0,0,.28),inset 0 0 45px rgba(85,246,220,.035);color:#f5f7ff}
-.aep-footer-grid{position:absolute;inset:0;z-index:-1;opacity:.18;background-image:linear-gradient(rgba(130,160,200,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(130,160,200,.15) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(90deg,black,transparent 80%)}
-.aep-orbit{position:absolute;z-index:-1;right:-35px;top:10px;width:260px;height:105px;border:1px solid rgba(85,246,220,.48);border-radius:50%;transform:rotate(-28deg);box-shadow:0 0 24px rgba(85,246,220,.08)}.aep-orbit-two{right:5px;top:0;width:225px;height:145px;border-color:rgba(154,123,255,.48);transform:rotate(42deg)}.aep-orbit-three{right:25px;top:32px;width:290px;height:95px;border-color:rgba(255,105,180,.3);transform:rotate(12deg)}
-.aep-footer-content{position:relative;z-index:1}.aep-footer-kicker{font:700 10px/1.5 monospace;letter-spacing:.19em;color:#55f6dc;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.aep-pulse{width:7px;height:7px;background:#55f6dc;border-radius:50%;box-shadow:0 0 13px #55f6dc}.aep-footer-sep{color:#ff9d70}
-.aep-footer-title{font:800 clamp(27px,4vw,43px)/1.15 system-ui,sans-serif;letter-spacing:-.045em;margin-top:25px}.aep-heart{display:inline-block;filter:drop-shadow(0 0 12px rgba(255,65,125,.7));animation:aep-heartbeat 1.7s ease-in-out infinite}.aep-footer-credit{font:500 clamp(13px,2vw,17px)/1.7 system-ui,sans-serif;color:#b8c4d8;margin-top:7px}.aep-name{font-weight:800;color:#fff;background:linear-gradient(90deg,#55f6dc,#a99aff,#ff9ccf);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.aep-footer-line{height:1px;margin:25px 0 15px;background:linear-gradient(90deg,rgba(85,246,220,.75),rgba(154,123,255,.6),transparent 85%)}.aep-footer-bottom{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 9px/1.5 monospace;letter-spacing:.13em;color:#8493ab}.aep-footer-bottom span:first-child{color:#55f6dc}.aep-footer-glyph{position:absolute;right:25px;bottom:43px;font:700 clamp(15px,2vw,24px) Georgia,serif;color:rgba(224,232,255,.09);transform:rotate(-8deg);pointer-events:none;white-space:nowrap}
-@keyframes aep-heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.14)}24%{transform:scale(1)}36%{transform:scale(1.08)}48%{transform:scale(1)}}
-@media(max-width:600px){.aep-love-footer{padding:27px 20px 19px;min-height:235px}.aep-footer-glyph{right:12px;bottom:63px;font-size:16px}.aep-footer-bottom{font-size:8px}}
+.aep-minimal-footer{margin:2.5rem 0 0;padding:18px 12px;text-align:center;border-top:1px solid rgba(255,221,157,.25);color:#e8d9ca;font:500 14px/1.6 'Space Grotesk',sans-serif;letter-spacing:.025em}
+.aep-footer-heart{display:inline-block;color:#ff668d;filter:drop-shadow(0 0 7px rgba(255,77,130,.65));animation:aep-footer-beat 1.8s ease-in-out infinite}
+.aep-footer-name{font-weight:700;color:#ffe2a3}
+@keyframes aep-footer-beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+@media(prefers-reduced-motion:reduce){.aep-footer-heart{animation:none}}
 </style>
 """, unsafe_allow_html=True)
