@@ -79,7 +79,10 @@ with st.sidebar:
     st.markdown('<div class="eyebrow">AMAN EDGE PHYSICS</div>', unsafe_allow_html=True)
     st.markdown("## ◉ MOI QUEST")
     st.caption("ROTATIONAL MECHANICS / GAME LAB")
-    page = st.radio("NAVIGATION", ["Mission Control", "Spin Lab", "Challenge Arena", "Formula Vault", "How to Play"], label_visibility="collapsed")
+    nav_options = ["Mission Control", "Spin Lab", "Challenge Arena", "Formula Vault", "How to Play"]
+    jump = st.session_state.pop("nav_jump", None)
+    nav_index = nav_options.index(jump) if jump in nav_options else 0
+    page = st.radio("NAVIGATION", nav_options, index=nav_index, label_visibility="collapsed")
     st.markdown("---")
     st.markdown("**PLAYER STATUS**")
     st.progress(min(st.session_state.score/120,1.0))
