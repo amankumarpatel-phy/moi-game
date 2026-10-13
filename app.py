@@ -183,6 +183,59 @@ st.markdown("""
  <path d="M-3 -6 Q-16 6 -12 23" fill="none" stroke-width="3"/>
  <animateTransform attributeName="transform" type="translate" values="1110 440;1118 434;1110 440" dur="9s" repeatCount="indefinite"/>
 </g>
+
+<!-- Tall palace towers, golden windows, flags and distant domes -->
+<g stroke="#ffe8b4" stroke-opacity=".52" fill="#ffe2a6" fill-opacity=".16" stroke-width="1.5">
+ <path d="M360 455 V335 Q360 315 380 300 Q400 315 400 335 V455Z M1040 455 V320 Q1040 295 1062 278 Q1084 295 1084 320 V455Z"/>
+ <path d="M345 335 L380 290 L415 335 M1023 320 L1062 268 L1101 320" fill="none" stroke-width="2"/>
+ <path d="M370 355 H390 V380 H370Z M370 398 H390 V423 H370Z M1052 335 H1072 V365 H1052Z M1052 386 H1072 V416 H1052Z" fill="#fff1c2" fill-opacity=".55"/>
+ <path d="M380 290 V250 M1062 268 V230" fill="none" stroke-width="2"/>
+ <path d="M380 250 Q405 265 380 278 Q355 265 380 250Z M1062 230 Q1087 245 1062 258 Q1037 245 1062 230Z" fill="#f7c6dc" fill-opacity=".55"/>
+</g>
+<!-- Heavenly garden trees with gently swaying canopies -->
+<g stroke="#d6b985" stroke-opacity=".5" fill="#d9edc9" fill-opacity=".18">
+ <path d="M250 630 V550 M238 630 H262 M250 565 L225 545 M250 580 L275 558" fill="none" stroke-width="4"/>
+ <circle cx="226" cy="540" r="28"><animate attributeName="r" values="28;30;28" dur="8s" repeatCount="indefinite"/></circle>
+ <circle cx="254" cy="522" r="34"><animate attributeName="r" values="34;32;34" dur="9s" repeatCount="indefinite"/></circle>
+ <circle cx="279" cy="546" r="25"><animate attributeName="r" values="25;27;25" dur="7s" repeatCount="indefinite"/></circle>
+ <path d="M1190 650 V565 M1178 650 H1202 M1190 585 L1165 565 M1190 600 L1215 580" fill="none" stroke-width="4"/>
+ <circle cx="1165" cy="562" r="27"><animate attributeName="r" values="27;29;27" dur="8s" repeatCount="indefinite"/></circle>
+ <circle cx="1193" cy="544" r="33"><animate attributeName="r" values="33;31;33" dur="10s" repeatCount="indefinite"/></circle>
+ <circle cx="1218" cy="570" r="25"><animate attributeName="r" values="25;27;25" dur="7s" repeatCount="indefinite"/></circle>
+</g>
+<!-- Silver waterfalls descending from cloud terraces -->
+<g fill="none" stroke-linecap="round">
+ <path d="M465 520 C455 560 475 590 462 635 S470 685 460 720" stroke="#b8f5f4" stroke-opacity=".42" stroke-width="5"><animate attributeName="stroke-dashoffset" values="0;90" dur="4s" repeatCount="indefinite"/></path>
+ <path d="M475 525 C468 565 485 600 474 635 S481 680 472 714" stroke="#fff4da" stroke-opacity=".7" stroke-width="1.8"><animate attributeName="stroke-dashoffset" values="0;-70" dur="3s" repeatCount="indefinite"/></path>
+ <path d="M970 525 C980 570 960 600 975 640 S965 685 978 720" stroke="#b8f5f4" stroke-opacity=".38" stroke-width="5"><animate attributeName="stroke-dashoffset" values="0;100" dur="4.5s" repeatCount="indefinite"/></path>
+ <path d="M960 530 C970 570 952 605 964 642 S955 685 965 715" stroke="#fff4da" stroke-opacity=".7" stroke-width="1.8"><animate attributeName="stroke-dashoffset" values="0;-80" dur="3.5s" repeatCount="indefinite"/></path>
+</g>
+<!-- A distant peacock: jewel-like tail feathers opening gently -->
+<g transform="translate(720 575)" stroke="#a9e8df" stroke-opacity=".65" fill="#79cfc4" fill-opacity=".22">
+ <path d="M0 0 Q-60 -65 -52 -100 Q-18 -95 0 -35 Q18 -95 52 -100 Q60 -65 0 0Z"><animateTransform attributeName="transform" type="rotate" values="-3;3;-3" dur="7s" repeatCount="indefinite"/></path>
+ <path d="M0 -12 Q-38 -70 -42 -90 M0 -12 Q38 -70 42 -90" fill="none" stroke-width="2"/>
+ <ellipse cx="-39" cy="-87" rx="6" ry="9" fill="#8dbdff" fill-opacity=".6"/><ellipse cx="39" cy="-87" rx="6" ry="9" fill="#8dbdff" fill-opacity=".6"/>
+ <path d="M0 0 L-5 35 L5 35Z" fill="#f2d59d" stroke="none"/>
+</g>
+<!-- Tiny celestial chariots of light crossing distant clouds -->
+<g fill="#ffe8b4" stroke="#fff0d2" stroke-opacity=".8">
+ <g transform="translate(120 350)">
+  <path d="M0 0 H42 L34 12 H8Z" fill-opacity=".35"/>
+  <path d="M12 0 L21 -10 L30 0 M20 -10 V-16" fill="none"/>
+  <circle cx="8" cy="15" r="2"/><circle cx="34" cy="15" r="2"/>
+  <animateTransform attributeName="transform" type="translate" values="120 350;430 315;760 350" dur="46s" repeatCount="indefinite"/>
+ </g>
+ <g transform="translate(980 270)">
+  <path d="M0 0 H30 L24 9 H6Z" fill-opacity=".3"/>
+  <path d="M8 0 L15 -7 L22 0 M15 -7 V-12" fill="none"/>
+  <animateTransform attributeName="transform" type="translate" values="980 270;760 250;500 275" dur="39s" repeatCount="indefinite"/>
+ </g>
+</g>
+<!-- A second foreground cloud layer creates gentle parallax -->
+<g fill="#fff8ee" fill-opacity=".12">
+ <path d="M-80 780 C-30 730 25 755 70 780 C110 720 180 740 220 785 C275 750 335 770 370 810 L370 940 H-80Z"><animateTransform attributeName="transform" type="translate" values="-70 0;65 0;-70 0" dur="33s" repeatCount="indefinite"/></path>
+ <path d="M1050 805 C1100 750 1160 770 1200 805 C1250 745 1320 770 1350 810 C1400 780 1460 800 1500 835 L1500 940 H1050Z"><animateTransform attributeName="transform" type="translate" values="70 0;-70 0;70 0" dur="36s" repeatCount="indefinite"/></path>
+</g>
 <!-- Drifting petals and luminous blessings, moving in different directions -->
 <g fill="#fff0c9" filter="url(#templeGlow)">
  <circle cx="90" cy="150" r="2"><animate attributeName="cy" values="150;560;150" dur="29s" repeatCount="indefinite"/><animate attributeName="cx" values="90;145;90" dur="17s" repeatCount="indefinite"/></circle>
