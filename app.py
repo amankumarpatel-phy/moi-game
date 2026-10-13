@@ -102,48 +102,79 @@ div[data-testid="stAlert"]{border-radius:14px}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- Ultra-abstract neon cosmos background ----------
+# ---------- Surreal infinite neon cosmos background ----------
 st.markdown("""
 <div class="neon-universe" aria-hidden="true">
-  <div class="nebula nebula-a"></div><div class="nebula nebula-b"></div><div class="nebula nebula-c"></div>
-  <div class="light-ribbon ribbon-a"></div><div class="light-ribbon ribbon-b"></div><div class="light-ribbon ribbon-c"></div>
-  <div class="om-float om-a">ॐ</div><div class="om-float om-b">ॐ</div><div class="om-float om-c">ॐ</div><div class="om-float om-d">ॐ</div><div class="om-float om-e">ॐ</div>
+  <div class="cosmic-grid"></div>
+  <div class="nebula nebula-a"></div><div class="nebula nebula-b"></div><div class="nebula nebula-c"></div><div class="nebula nebula-d"></div>
+  <div class="plasma-ring ring-a"></div><div class="plasma-ring ring-b"></div><div class="plasma-ring ring-c"></div><div class="plasma-ring ring-d"></div>
+  <div class="light-ribbon ribbon-a"></div><div class="light-ribbon ribbon-b"></div><div class="light-ribbon ribbon-c"></div><div class="light-ribbon ribbon-d"></div><div class="light-ribbon ribbon-e"></div>
+  <div class="cosmic-spiral spiral-a"></div><div class="cosmic-spiral spiral-b"></div>
+  <div class="om-float om-a">ॐ</div><div class="om-float om-b">ॐ</div><div class="om-float om-c">ॐ</div><div class="om-float om-d">ॐ</div><div class="om-float om-e">ॐ</div><div class="om-float om-f">ॐ</div><div class="om-float om-g">ॐ</div>
+  <div class="glyph-float glyph-a">✧</div><div class="glyph-float glyph-b">✺</div><div class="glyph-float glyph-c">☼</div><div class="glyph-float glyph-d">∞</div><div class="glyph-float glyph-e">✦</div>
   <div class="particle-field">
-    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
   </div>
-  <div class="light-orb orb-a"></div><div class="light-orb orb-b"></div><div class="light-orb orb-c"></div><div class="light-orb orb-d"></div>
+  <div class="stardust stardust-a"></div><div class="stardust stardust-b"></div><div class="stardust stardust-c"></div>
+  <div class="light-orb orb-a"></div><div class="light-orb orb-b"></div><div class="light-orb orb-c"></div><div class="light-orb orb-d"></div><div class="light-orb orb-e"></div><div class="light-orb orb-f"></div>
   <div class="cosmic-vignette"></div>
 </div>
 <style>
-.neon-universe{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 48% 48%,#17102f 0%,#090a1b 54%,#03040b 100%);isolation:isolate}
+.neon-universe{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 50% 45%,#1c1240 0%,#0a0b20 42%,#03040b 100%);isolation:isolate}
 .neon-universe *{box-sizing:border-box}
-.nebula{position:absolute;width:65vw;height:58vw;max-height:85vh;max-width:1000px;border-radius:50%;filter:blur(78px);mix-blend-mode:screen;opacity:.32;will-change:transform}
-.nebula-a{left:-20%;top:-30%;background:conic-gradient(from 20deg,transparent,#00f5d4,#5a28ff,transparent,#ff28bd,transparent);animation:nebulaFlow 29s ease-in-out infinite alternate}
-.nebula-b{right:-22%;top:8%;background:conic-gradient(from 190deg,transparent,#00b7ff,#a020f0,transparent,#ff4db8,transparent);animation:nebulaFlow 36s ease-in-out infinite alternate-reverse}
-.nebula-c{left:22%;bottom:-42%;background:conic-gradient(from 80deg,transparent,#fe32c5,#572dff,transparent,#00ffdb,transparent);animation:nebulaFlow 41s ease-in-out infinite alternate}
-.light-ribbon{position:absolute;width:150vw;height:19vh;left:-25vw;border-radius:50%;filter:blur(17px);opacity:.27;mix-blend-mode:screen;transform-origin:center;will-change:transform}
-.ribbon-a{top:22%;border-top:2px solid #00ffe1;box-shadow:0 -8px 28px #00d9ff,0 -20px 65px rgba(0,217,255,.45);transform:rotate(-18deg);animation:ribbonDriftA 24s ease-in-out infinite alternate}
-.ribbon-b{top:51%;border-top:2px solid #ff3dd1;box-shadow:0 -7px 26px #ff3dd1,0 -20px 60px rgba(255,61,209,.4);transform:rotate(13deg);animation:ribbonDriftB 31s ease-in-out infinite alternate}
-.ribbon-c{top:72%;border-top:1px solid #8c70ff;box-shadow:0 -7px 30px #8c70ff,0 -18px 65px rgba(111,76,255,.45);transform:rotate(-7deg);animation:ribbonDriftA 38s ease-in-out infinite alternate-reverse}
-.om-float{position:absolute;font-family:serif;font-weight:500;line-height:1;color:#ff9bfa;text-shadow:0 0 8px #ff40df,0 0 25px rgba(255,52,218,.8),0 0 55px rgba(134,69,255,.6);opacity:.44;user-select:none;will-change:transform}
-.om-a{font-size:clamp(42px,6vw,88px);left:9%;top:22%;animation:omFloatA 21s ease-in-out infinite}
-.om-b{font-size:clamp(28px,4vw,58px);right:14%;top:16%;color:#8afff0;text-shadow:0 0 10px #00ffe1,0 0 36px rgba(0,255,225,.7);animation:omFloatB 25s ease-in-out infinite}
-.om-c{font-size:clamp(55px,8vw,112px);right:21%;bottom:12%;opacity:.23;animation:omFloatA 30s ease-in-out infinite reverse}
-.om-d{font-size:clamp(24px,3vw,45px);left:38%;top:8%;color:#c8a5ff;text-shadow:0 0 10px #9d5cff,0 0 35px #743dff;animation:omFloatB 19s ease-in-out infinite reverse}
-.om-e{font-size:clamp(32px,4vw,62px);left:5%;bottom:12%;color:#a4c9ff;text-shadow:0 0 10px #4d8dff,0 0 35px #4d8dff;animation:omFloatB 28s ease-in-out infinite}
+.cosmic-grid{position:absolute;inset:-30%;opacity:.09;background-image:linear-gradient(rgba(0,255,230,.26) 1px,transparent 1px),linear-gradient(90deg,rgba(160,105,255,.24) 1px,transparent 1px);background-size:82px 82px;transform:perspective(420px) rotateX(62deg) rotateZ(-15deg);mask-image:radial-gradient(ellipse,black,transparent 67%);animation:gridDrift 55s linear infinite}
+.nebula{position:absolute;width:70vw;height:64vw;max-height:100vh;max-width:1100px;border-radius:50%;filter:blur(68px);mix-blend-mode:screen;opacity:.34;will-change:transform}
+.nebula-a{left:-23%;top:-34%;background:conic-gradient(from 20deg,transparent,#00f5d4,#5728ff,transparent,#ff28bd,transparent);animation:nebulaFlow 29s ease-in-out infinite alternate}
+.nebula-b{right:-25%;top:2%;background:conic-gradient(from 190deg,transparent,#00b7ff,#a020f0,transparent,#ff4db8,transparent);animation:nebulaFlow 36s ease-in-out infinite alternate-reverse}
+.nebula-c{left:16%;bottom:-47%;background:conic-gradient(from 80deg,transparent,#fe32c5,#572dff,transparent,#00ffdb,transparent);animation:nebulaFlow 41s ease-in-out infinite alternate}
+.nebula-d{left:34%;top:22%;width:38vw;height:38vw;opacity:.2;background:conic-gradient(from 220deg,transparent,#fff1a8,#ff3eb5,#693cff,transparent,#00ffe1);filter:blur(85px);animation:nebulaFlow 33s ease-in-out infinite alternate-reverse}
+.light-ribbon{position:absolute;width:165vw;height:25vh;left:-32vw;border-radius:50%;filter:blur(15px);opacity:.28;mix-blend-mode:screen;transform-origin:center;will-change:transform}
+.ribbon-a{top:14%;border-top:2px solid #00ffe1;box-shadow:0 -8px 28px #00d9ff,0 -20px 65px rgba(0,217,255,.5);transform:rotate(-19deg);animation:ribbonDriftA 24s ease-in-out infinite alternate}
+.ribbon-b{top:34%;border-top:2px solid #ff3dd1;box-shadow:0 -7px 26px #ff3dd1,0 -20px 60px rgba(255,61,209,.45);transform:rotate(14deg);animation:ribbonDriftB 31s ease-in-out infinite alternate}
+.ribbon-c{top:58%;border-top:1px solid #8c70ff;box-shadow:0 -7px 30px #8c70ff,0 -18px 65px rgba(111,76,255,.5);transform:rotate(-9deg);animation:ribbonDriftA 38s ease-in-out infinite alternate-reverse}
+.ribbon-d{top:79%;height:12vh;border-top:2px solid #ffe69b;box-shadow:0 -7px 28px #ffbd63,0 -16px 60px rgba(255,151,83,.3);transform:rotate(8deg);animation:ribbonDriftB 29s ease-in-out infinite alternate}
+.ribbon-e{top:46%;height:30vh;border-top:1px solid #69a6ff;box-shadow:0 -4px 28px #548cff,0 -12px 55px rgba(84,140,255,.45);transform:rotate(-31deg);animation:ribbonDriftA 43s ease-in-out infinite alternate}
+.plasma-ring{position:absolute;width:clamp(280px,48vw,850px);height:clamp(120px,20vw,340px);border:1px solid rgba(0,255,226,.24);border-radius:50%;box-shadow:inset 0 0 22px rgba(0,255,226,.06),0 0 24px rgba(0,255,226,.07);mix-blend-mode:screen;will-change:transform}
+.ring-a{left:-12%;top:18%;transform:rotate(-28deg);animation:ringOrbitA 36s linear infinite}
+.ring-b{right:-12%;top:40%;border-color:rgba(255,67,215,.25);box-shadow:inset 0 0 22px rgba(255,67,215,.07),0 0 30px rgba(255,67,215,.08);transform:rotate(33deg);animation:ringOrbitB 43s linear infinite}
+.ring-c{left:28%;bottom:-15%;width:clamp(320px,55vw,900px);height:clamp(150px,24vw,400px);border-color:rgba(149,110,255,.28);transform:rotate(-12deg);animation:ringOrbitA 51s linear infinite reverse}
+.ring-d{left:33%;top:10%;width:clamp(160px,27vw,460px);height:clamp(250px,43vw,700px);border-color:rgba(255,218,142,.14);transform:rotate(48deg);animation:ringOrbitB 58s linear infinite reverse}
+.cosmic-spiral{position:absolute;width:42vw;height:42vw;border:2px solid transparent;border-top-color:rgba(0,255,225,.19);border-left-color:rgba(170,80,255,.15);border-radius:50%;filter:drop-shadow(0 0 12px rgba(0,255,225,.4));mask-image:linear-gradient(110deg,black,transparent 72%);mix-blend-mode:screen}
+.spiral-a{left:24%;top:12%;animation:spiralTurn 70s linear infinite}
+.spiral-b{right:5%;bottom:-14%;width:32vw;height:32vw;border-top-color:rgba(255,70,214,.2);border-left-color:rgba(255,210,125,.13);animation:spiralTurn 58s linear infinite reverse}
+.om-float{position:absolute;font-family:serif;font-weight:500;line-height:1;color:#ff9bfa;text-shadow:0 0 8px #ff40df,0 0 25px rgba(255,52,218,.85),0 0 55px rgba(134,69,255,.7);opacity:.45;user-select:none;will-change:transform}
+.om-a{font-size:clamp(48px,7vw,98px);left:8%;top:22%;animation:omFloatA 21s ease-in-out infinite}
+.om-b{font-size:clamp(32px,4.5vw,64px);right:13%;top:16%;color:#8afff0;text-shadow:0 0 10px #00ffe1,0 0 36px rgba(0,255,225,.8);animation:omFloatB 25s ease-in-out infinite}
+.om-c{font-size:clamp(60px,9vw,124px);right:20%;bottom:11%;opacity:.24;animation:omFloatA 30s ease-in-out infinite reverse}
+.om-d{font-size:clamp(26px,3.5vw,49px);left:38%;top:8%;color:#c8a5ff;text-shadow:0 0 10px #9d5cff,0 0 35px #743dff;animation:omFloatB 19s ease-in-out infinite reverse}
+.om-e{font-size:clamp(36px,4.5vw,68px);left:5%;bottom:12%;color:#a4c9ff;text-shadow:0 0 10px #4d8dff,0 0 35px #4d8dff;animation:omFloatB 28s ease-in-out infinite}
+.om-f{font-size:clamp(24px,3vw,44px);right:38%;bottom:18%;color:#ffe8a7;text-shadow:0 0 10px #ffc86e,0 0 35px #ff9e52;animation:omFloatA 23s ease-in-out infinite}
+.om-g{font-size:clamp(25px,3.2vw,47px);left:61%;top:31%;color:#a7a1ff;text-shadow:0 0 10px #7d72ff,0 0 35px #8c64ff;animation:omFloatB 27s ease-in-out infinite reverse}
+.glyph-float{position:absolute;font-family:serif;font-size:clamp(24px,3vw,48px);color:rgba(255,231,174,.65);text-shadow:0 0 12px rgba(255,201,105,.8),0 0 30px rgba(255,120,180,.35);animation:glyphDrift 22s ease-in-out infinite alternate}
+.glyph-a{left:24%;top:34%}.glyph-b{right:28%;top:24%;animation-delay:-7s;color:rgba(0,255,225,.55)}.glyph-c{right:8%;bottom:28%;animation-delay:-13s}.glyph-d{left:49%;bottom:8%;font-size:clamp(38px,5vw,76px);animation-delay:-4s;color:rgba(180,140,255,.55)}.glyph-e{left:12%;top:68%;animation-delay:-10s;color:rgba(255,90,219,.65)}
 .particle-field{position:absolute;inset:0;overflow:hidden}
 .particle-field i{position:absolute;left:var(--x,50%);top:110%;width:var(--s,3px);height:var(--s,3px);border-radius:50%;background:var(--c,#b5fff5);box-shadow:0 0 8px 2px var(--c,#b5fff5),0 0 22px var(--c,#b5fff5);opacity:0;animation:particleAscend var(--d,19s) linear var(--delay,0s) infinite}
-.particle-field i:nth-child(6n+1){--x:4%;--s:2px;--c:#00ffe1;--d:17s;--delay:-8s}.particle-field i:nth-child(6n+2){--x:16%;--s:4px;--c:#ff55da;--d:23s;--delay:-16s}.particle-field i:nth-child(6n+3){--x:29%;--s:2px;--c:#9c7cff;--d:19s;--delay:-4s}.particle-field i:nth-child(6n+4){--x:42%;--s:3px;--c:#8dfbff;--d:27s;--delay:-20s}.particle-field i:nth-child(6n+5){--x:57%;--s:2px;--c:#ffd0fa;--d:21s;--delay:-12s}.particle-field i:nth-child(6n){--x:72%;--s:3px;--c:#7d7bff;--d:25s;--delay:-5s}
-.particle-field i:nth-child(3n){margin-left:13%}.particle-field i:nth-child(4n){margin-left:19%}.particle-field i:nth-child(5n){margin-left:8%}
-.light-orb{position:absolute;width:clamp(70px,12vw,180px);aspect-ratio:1;border-radius:50%;filter:blur(1px);opacity:.14;mix-blend-mode:screen}
+.particle-field i:nth-child(8n+1){--x:2%;--s:2px;--c:#00ffe1;--d:17s;--delay:-8s}.particle-field i:nth-child(8n+2){--x:14%;--s:4px;--c:#ff55da;--d:23s;--delay:-16s}.particle-field i:nth-child(8n+3){--x:27%;--s:2px;--c:#9c7cff;--d:19s;--delay:-4s}.particle-field i:nth-child(8n+4){--x:39%;--s:3px;--c:#8dfbff;--d:27s;--delay:-20s}.particle-field i:nth-child(8n+5){--x:52%;--s:2px;--c:#ffd0fa;--d:21s;--delay:-12s}.particle-field i:nth-child(8n+6){--x:66%;--s:3px;--c:#7d7bff;--d:25s;--delay:-5s}.particle-field i:nth-child(8n+7){--x:79%;--s:2px;--c:#ffca7a;--d:29s;--delay:-17s}.particle-field i:nth-child(8n){--x:92%;--s:4px;--c:#a1fff1;--d:22s;--delay:-11s}
+.particle-field i:nth-child(3n){margin-left:5%}.particle-field i:nth-child(4n){margin-left:11%}.particle-field i:nth-child(5n){margin-left:-4%}.particle-field i:nth-child(7n){margin-left:7%}
+.stardust{position:absolute;width:35vw;height:35vw;border-radius:50%;opacity:.19;mix-blend-mode:screen;background:repeating-radial-gradient(circle at center,transparent 0 12px,rgba(130,120,255,.25) 13px 14px,transparent 15px 25px);mask-image:radial-gradient(circle,black,transparent 70%);animation:stardustPulse 17s ease-in-out infinite alternate}
+.stardust-a{left:-12%;top:26%}.stardust-b{right:-14%;top:2%;background:repeating-radial-gradient(circle at center,transparent 0 16px,rgba(0,255,225,.25) 17px 18px,transparent 19px 31px);animation-delay:-7s}.stardust-c{left:35%;bottom:-25%;background:repeating-radial-gradient(circle at center,transparent 0 10px,rgba(255,80,215,.22) 11px 12px,transparent 13px 24px);animation-delay:-12s}
+.light-orb{position:absolute;width:clamp(75px,13vw,200px);aspect-ratio:1;border-radius:50%;filter:blur(1px);opacity:.17;mix-blend-mode:screen}
 .orb-a{left:18%;top:43%;background:radial-gradient(circle at 35% 30%,#fff,#00ffe1 13%,#00c8ff 34%,transparent 72%);animation:orbDrift 18s ease-in-out infinite alternate}
 .orb-b{right:22%;top:35%;background:radial-gradient(circle at 35% 30%,#fff,#ff52db 12%,#8d32ff 38%,transparent 72%);animation:orbDrift 23s ease-in-out infinite alternate-reverse}
 .orb-c{left:55%;bottom:3%;background:radial-gradient(circle at 35% 30%,#fff,#50a0ff 14%,#723dff 38%,transparent 72%);animation:orbDrift 28s ease-in-out infinite alternate}
 .orb-d{right:4%;bottom:30%;background:radial-gradient(circle at 35% 30%,#fff,#00ffe1 14%,#00aaff 38%,transparent 72%);animation:orbDrift 20s ease-in-out infinite alternate-reverse}
-.cosmic-vignette{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,4,12,.4),transparent 26%,transparent 76%,rgba(3,4,12,.28)),linear-gradient(180deg,rgba(3,4,12,.15),transparent 40%,rgba(3,4,12,.42));}
+.orb-e{left:43%;top:4%;width:clamp(50px,8vw,120px);background:radial-gradient(circle at 35% 30%,#fff,#ffe39b 12%,#ff7a55 38%,transparent 72%);animation:orbDrift 17s ease-in-out infinite alternate}
+.orb-f{right:36%;bottom:15%;width:clamp(45px,7vw,105px);background:radial-gradient(circle at 35% 30%,#fff,#d5a3ff 12%,#713cff 38%,transparent 72%);animation:orbDrift 26s ease-in-out infinite alternate-reverse}
+.cosmic-vignette{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,4,12,.44),transparent 24%,transparent 76%,rgba(3,4,12,.32)),linear-gradient(180deg,rgba(3,4,12,.17),transparent 40%,rgba(3,4,12,.45))}
 @keyframes nebulaFlow{0%{transform:translate3d(-4%,-3%,0) rotate(-16deg) scale(.88)}100%{transform:translate3d(8%,6%,0) rotate(21deg) scale(1.12)}}
 @keyframes ribbonDriftA{0%{translate:-3% -12%;rotate:-4deg}100%{translate:4% 15%;rotate:5deg}}
 @keyframes ribbonDriftB{0%{translate:3% 12%;rotate:4deg}100%{translate:-4% -10%;rotate:-5deg}}
+@keyframes ringOrbitA{0%{transform:rotate(-28deg) rotateX(8deg) scale(.92)}50%{transform:rotate(12deg) rotateX(-16deg) scale(1.08)}100%{transform:rotate(52deg) rotateX(8deg) scale(.92)}}
+@keyframes ringOrbitB{0%{transform:rotate(33deg) rotateY(12deg) scale(1)}50%{transform:rotate(-15deg) rotateY(-18deg) scale(.9)}100%{transform:rotate(-63deg) rotateY(12deg) scale(1)}}
+@keyframes spiralTurn{from{transform:rotate(0deg) scale(.9)}to{transform:rotate(360deg) scale(1.12)}}
+@keyframes gridDrift{from{background-position:0 0}to{background-position:164px 164px}}
+@keyframes stardustPulse{0%{transform:rotate(0deg) scale(.8);opacity:.08}100%{transform:rotate(70deg) scale(1.2);opacity:.24}}
+@keyframes glyphDrift{0%{transform:translate3d(0,0,0) rotate(-12deg) scale(.9)}100%{transform:translate3d(24px,-34px,0) rotate(14deg) scale(1.1)}}
 @keyframes omFloatA{0%,100%{transform:translate3d(0,0,0) rotate(-8deg) scale(.96)}50%{transform:translate3d(28px,-36px,0) rotate(8deg) scale(1.05)}}
 @keyframes omFloatB{0%,100%{transform:translate3d(0,0,0) rotate(7deg)}50%{transform:translate3d(-25px,32px,0) rotate(-9deg)}}
 @keyframes particleAscend{0%{transform:translate3d(0,0,0) scale(.4);opacity:0}10%{opacity:.8}85%{opacity:.5}100%{transform:translate3d(45px,-125vh,0) scale(1.4);opacity:0}}
