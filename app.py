@@ -114,7 +114,7 @@ st.markdown("""
   background-image:
     linear-gradient(180deg,rgba(18,13,27,.12) 0%,rgba(22,17,31,.13) 28%,rgba(14,17,31,.38) 68%,rgba(10,12,24,.66) 100%),
     linear-gradient(90deg,rgba(29,18,29,.58) 0%,rgba(22,21,38,.19) 28%,rgba(22,22,40,.08) 64%,rgba(24,17,35,.28) 100%),
-    url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=85&w=2400');
+    url('https://images.unsplash.com/photo-1759134334657-30db77958a01?auto=format&fit=crop&fm=jpg&q=90&w=2560');
   background-size:cover;background-position:center 46%;background-repeat:no-repeat;
   filter:saturate(.88) contrast(1.04);transform:scale(1.015);transform-origin:center;
   animation:indraLokKenBurns 95s ease-in-out infinite alternate;
@@ -166,7 +166,28 @@ st.markdown("""
  border-color:rgba(255,224,179,.35)!important;backdrop-filter:blur(8px);
 }
 .aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
+
+/* Cinematic Swarg-Lok atmosphere: layered mist, god-rays and drifting cloud veils */
+.swarg-layer{background-position:center 42%;will-change:transform;background-color:#211a2b}
+.swarg-layer:before{
+  content:"";position:absolute;inset:-12%;
+  background:
+   radial-gradient(ellipse at 76% 20%,rgba(255,224,164,.23) 0%,rgba(255,218,165,.09) 15%,transparent 34%),
+   radial-gradient(ellipse at 42% 62%,rgba(255,245,228,.10) 0%,transparent 30%),
+   radial-gradient(ellipse at 14% 72%,rgba(245,195,222,.13) 0%,transparent 33%),
+   linear-gradient(108deg,transparent 28%,rgba(255,236,194,.075) 43%,transparent 53%),
+   linear-gradient(78deg,transparent 48%,rgba(255,232,184,.06) 58%,transparent 66%);
+  filter:blur(24px);animation:indraLokHaze 48s ease-in-out infinite alternate;
+}
+.swarg-layer:after{
+  content:"";position:absolute;inset:0;
+  background:
+   linear-gradient(180deg,rgba(19,14,29,.03),rgba(20,18,32,.06) 40%,rgba(11,14,27,.52) 100%),
+   linear-gradient(90deg,rgba(18,12,24,.24),transparent 32%,transparent 72%,rgba(18,12,24,.16));
+}
+@media(min-width:1200px){.swarg-layer{background-position:center 43%}}
 @media(prefers-reduced-motion:reduce){.swarg-layer{animation:none!important}.swarg-layer:before{animation:none!important}}
+
 </style>
 """, unsafe_allow_html=True)
 
