@@ -11,7 +11,24 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 :root{--bg:#080b12;--panel:#111827;--line:rgba(148,163,184,.18);--cyan:#55f6dc;--violet:#9a7bff;--muted:#9ba8bc;--white:#f4f7ff}
 html,body,[class*="css"]{font-family:'Space Grotesk',sans-serif}
-.stApp{background:radial-gradient(ellipse at 12% 0%,rgba(78,65,160,.19),transparent 35%),radial-gradient(ellipse at 88% 12%,rgba(28,202,180,.12),transparent 28%),var(--bg);color:var(--white)}
+.stApp{background:radial-gradient(ellipse at 12% 0%,rgba(78,65,160,.19),transparent 35%),radial-gradient(ellipse at 88% 12%,rgba(28,202,180,.12),transparent 28%),var(--bg);color:var(--white);overflow:hidden}
+.stApp:before{content:"";position:fixed;inset:-30%;pointer-events:none;z-index:0;background:
+radial-gradient(ellipse at 18% 28%,rgba(85,246,220,.12) 0%,transparent 17%),
+radial-gradient(ellipse at 78% 24%,rgba(154,123,255,.16) 0%,transparent 19%),
+radial-gradient(ellipse at 62% 78%,rgba(54,130,255,.10) 0%,transparent 20%),
+radial-gradient(ellipse at 28% 82%,rgba(255,73,173,.09) 0%,transparent 17%);
+filter:blur(28px);animation:nebulaDrift 22s ease-in-out infinite alternate}
+.stApp:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;background-image:
+radial-gradient(circle at 12% 22%,rgba(85,246,220,.85) 0 2px,transparent 3px),
+radial-gradient(circle at 83% 34%,rgba(154,123,255,.9) 0 3px,transparent 4px),
+radial-gradient(circle at 67% 78%,rgba(85,246,220,.8) 0 2px,transparent 3px),
+radial-gradient(circle at 32% 67%,rgba(255,255,255,.7) 0 1px,transparent 2px),
+radial-gradient(circle at 91% 82%,rgba(154,123,255,.9) 0 2px,transparent 3px),
+radial-gradient(circle at 48% 16%,rgba(85,246,220,.8) 0 1px,transparent 2px);
+animation:particleFlow 18s linear infinite}
+@keyframes nebulaDrift{0%{transform:translate3d(-2%,-1%,0) rotate(0deg) scale(1)}100%{transform:translate3d(3%,2%,0) rotate(8deg) scale(1.08)}}
+@keyframes particleFlow{0%{transform:translate3d(0,0,0)}50%{transform:translate3d(-1.5%,2%,0)}100%{transform:translate3d(1.5%,-2%,0)}}
+.block-container,[data-testid="stSidebar"],[data-testid="stHeader"]{position:relative;z-index:1}
 .block-container{max-width:1400px;padding-top:1.3rem;padding-bottom:2rem}
 [data-testid="stSidebar"]{background:#0b101a;border-right:1px solid var(--line)}
 [data-testid="stSidebar"] *{color:var(--white)}
@@ -283,14 +300,3 @@ elif page == "How to Play":
     st.latex(r"I=\int r^2\,dm")
     st.latex(r"I=I_{\mathrm{cm}}+Md^2")
     st.latex(r"\tau_{\mathrm{net}}=I\alpha")
-    st.markdown("### Footer & credit")
-    st.code("© 2026 Aman Edge Physics | Designed & developed by Aman Kumar Patel | Educational use")
-    st.caption("The footer is part of the app layout and will appear at the bottom of every section.")
-
-# Footer is intentionally global.
-st.markdown("""
-<div class="footer">
-  <div><strong>MOI QUEST</strong> <span class="accent">×</span> <strong>AMAN EDGE PHYSICS</strong><br>Learn the laws. Feel the motion. Master the spin.</div>
-  <div style="text-align:right">Designed &amp; developed by <strong>Aman Kumar Patel</strong><br>© 2026 Aman Edge Physics · For educational use</div>
-</div>
-""",unsafe_allow_html=True)
