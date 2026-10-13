@@ -348,7 +348,7 @@ elif page == "3D Lab":
             tr_x=[R*np.cos(ang),R*np.cos(ang+0.13)]
             tr_y=[R*np.sin(ang),R*np.sin(ang+0.13)]
             tr_z=[tracer_z,tracer_z]
-            frames.append(go.Frame(data=[go.Scatter3d(x=tr_x,y=tr_y,z=tr_z,mode="markers+lines",marker=dict(size=[7,3],color=[teal,purple]),line=dict(color=teal,width=7),name="Rotating tracer")],name=str(fi)))
+            frames.append(go.Frame(data=[go.Scatter3d(x=tr_x,y=tr_y,z=tr_z,mode="markers+lines",marker=dict(size=[7,3],color=[teal,purple]),line=dict(color=teal,width=7),name="Rotating tracer")],traces=[len(fig.data)],name=str(fi)))
         fig.add_trace(go.Scatter3d(x=[R, R*np.cos(.13)],y=[0,R*np.sin(.13)],z=[(zmin+zmax)*.12]*2,mode="markers+lines",marker=dict(size=[7,3],color=[teal,purple]),line=dict(color=teal,width=7),name="Rotating tracer"))
         # Frames update only the tracer; all body surfaces remain static in their own geometry.
         fig.frames=frames
