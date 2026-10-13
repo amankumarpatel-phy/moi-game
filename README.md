@@ -28,3 +28,10 @@ streamlit run app.py
 
 ## Physics model
 The simulation assumes a rigid body, fixed axis, constant net torque and no speed-dependent drag. The animation is illustrative; numerical outputs use `alpha = net_torque / I` and constant-angular-acceleration kinematics.
+
+
+### Dynamics Arena
+- Select symmetry, transverse, or offset parallel axes.
+- Explore torque, opposing friction, angular velocity and rotational kinetic energy plots.
+- The 3D animation rotates the complete displayed surface mesh around the selected axis; its play/pause loop is a visual aid and is not yet time-synchronized to the computed angular-velocity curve.
+- Optional shared leaderboard uses Supabase when configured; otherwise scores are session-local.
