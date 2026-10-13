@@ -2,6 +2,8 @@ import math
 import random
 import streamlit as st
 import streamlit.components.v1 as components
+import numpy as np
+import plotly.graph_objects as go
 
 st.set_page_config(page_title="MOI QUEST | Aman Edge Physics", page_icon="◉", layout="wide", initial_sidebar_state="expanded")
 
@@ -147,7 +149,7 @@ with st.sidebar:
     st.markdown('<div class="eyebrow">AMAN EDGE PHYSICS</div>', unsafe_allow_html=True)
     st.markdown("## ◉ MOI QUEST")
     st.caption("ROTATIONAL MECHANICS / GAME LAB")
-    nav_options = ["Mission Control", "Spin Lab", "Challenge Arena", "Formula Vault", "How to Play"]
+    nav_options = ["Mission Control", "Spin Lab", "3D Lab", "Challenge Arena", "Formula Vault", "How to Play"]
     jump = st.session_state.pop("nav_jump", None)
     nav_index = nav_options.index(jump) if jump in nav_options else 0
     page = st.radio("NAVIGATION", nav_options, index=nav_index, label_visibility="collapsed")
@@ -267,6 +269,114 @@ elif page == "Spin Lab":
     st.latex(r"I=\sum_i m_i r_i^2\qquad\text{or}\qquad I=\int r^2\,dm")
     st.latex(r"\tau_{\mathrm{net}}=I\alpha\qquad\Rightarrow\qquad\alpha=\frac{\tau_{\mathrm{net}}}{I}")
     st.caption("Idealized model: constant net torque, fixed axis, rigid body, and no speed-dependent drag. The rotor is a visual aid; the numerical outputs follow the stated model.")
+
+elif page == "3D Lab":
+    st.markdown("## 3D Rotational-Inertia Lab <span style='color:#55f6dc'>/ explore in three dimensions</span>", unsafe_allow_html=True)
+    st.write("Orbit the camera, compare solid and hollow mass distributions, and play the rotation animation. The axis shown is the z-axis.")
+    left, right = st.columns([0.82, 1.35], gap="large")
+    with left:
+        body = st.selectbox("BODY GEOMETRY", [
+            "Solid cylinder", "Thin hollow cylinder", "Thick hollow cylinder",
+            "Solid sphere", "Thin hollow sphere", "Thick hollow sphere",
+            "Solid cone", "Hollow cone"
+        ], key="lab3d_body")
+        M = st.slider("Mass M (kg)", 0.5, 20.0, 4.0, 0.5, key="lab3d_mass")
+        R = st.slider("Outer radius Rₒ (m)", 0.2, 2.0, 1.0, 0.1, key="lab3d_radius")
+        is_shell = body in ("Thick hollow cylinder", "Thick hollow sphere")
+        ri = st.slider("Inner radius Rᵢ (m)", 0.05, max(0.1, R-0.05), min(0.5, R-0.05), 0.05, key="lab3d_inner") if is_shell else 0.0
+        H = st.slider("Height / cone height (m)", 0.5, 4.0, 2.0, 0.1, key="lab3d_height") if "cylinder" in body.lower() or "cone" in body.lower() else 2*R
+        tau = st.slider("Net torque τ (N·m)", 0.0, 30.0, 8.0, 0.5, key="lab3d_tau")
+        omega0 = st.slider("Initial angular speed ω₀ (rad/s)", 0.0, 15.0, 2.0, 0.5, key="lab3d_omega")
+        sim_t = st.slider("Prediction time (s)", 0.5, 6.0, 3.0, 0.5, key="lab3d_time")
+    # Moments of inertia about the symmetry axis for cylinders/cones and a diameter for spheres.
+    if body == "Solid cylinder": I3 = 0.5*M*R**2
+    elif body == "Thin hollow cylinder": I3 = M*R**2
+    elif body == "Thick hollow cylinder": I3 = 0.5*M*(R**2+ri**2)
+    elif body == "Solid sphere": I3 = 0.4*M*R**2
+    elif body == "Thin hollow sphere": I3 = (2/3)*M*R**2
+    elif body == "Thick hollow sphere": I3 = (2/5)*M*(R**5-ri**5)/(R**3-ri**3)
+    elif body == "Solid cone": I3 = 0.3*M*R**2
+    else: I3 = 0.5*M*R**2
+    alpha3 = tau/I3 if I3 else 0.0
+    omega_end = omega0 + alpha3*sim_t
+    angle_end = omega0*sim_t + 0.5*alpha3*sim_t**2
+    st.session_state["lab3d_I"] = I3
+    with right:
+        k1,k2,k3=st.columns(3)
+        k1.metric("MOMENT OF INERTIA",f"{I3:.4f} kg·m²")
+        k2.metric("ANGULAR ACCELERATION",f"{alpha3:.3f} rad/s²")
+        k3.metric("FINAL ANGULAR SPEED",f"{omega_end:.3f} rad/s")
+        st.caption("Rotate the view by dragging. Scroll to zoom. Use the animation controls to see tracer particles orbit the axis.")
+        # Parametric surfaces. z is the rotation axis for every body in this learning lab.
+        u=np.linspace(0,2*np.pi,64)
+        fig=go.Figure()
+        teal="#55f6dc"; purple="#9a7bff"
+        def add_surface(x,y,z,color=teal,opacity=0.65,name="surface"):
+            fig.add_trace(go.Surface(x=x,y=y,z=z,colorscale=[[0,color],[1,color]],showscale=False,opacity=opacity,hovertemplate=name+"<extra></extra>",name=name,lighting=dict(ambient=0.42,diffuse=0.75,specular=0.8,roughness=0.28)))
+        if "cylinder" in body.lower():
+            zz=np.linspace(-H/2,H/2,28)
+            U,Z=np.meshgrid(u,zz)
+            rr=ri if body=="Thick hollow cylinder" else R
+            add_surface(R*np.cos(U),R*np.sin(U),Z,teal,0.58,"Outer cylindrical surface")
+            if body=="Thick hollow cylinder":
+                add_surface(ri*np.cos(U),ri*np.sin(U),Z,purple,0.72,"Inner cylindrical surface")
+            for zcap in (-H/2,H/2):
+                rradii=np.linspace(0 if body=="Solid cylinder" else (ri if body=="Thick hollow cylinder" else R),R,12)
+                U2,RR=np.meshgrid(u,rradii)
+                add_surface(RR*np.cos(U2),RR*np.sin(U2),np.full_like(U2,zcap),purple if zcap>0 else teal,0.28,"End face")
+        elif "sphere" in body.lower():
+            v=np.linspace(0,np.pi,40); U,V=np.meshgrid(u,v)
+            rr=R
+            add_surface(rr*np.sin(V)*np.cos(U),rr*np.sin(V)*np.sin(U),rr*np.cos(V),teal,0.60,"Outer spherical surface")
+            if body=="Thick hollow sphere":
+                add_surface(ri*np.sin(V)*np.cos(U),ri*np.sin(V)*np.sin(U),ri*np.cos(V),purple,0.42,"Inner spherical surface")
+        else:
+            # Right circular cone: z=0 at base and z=H at apex.
+            zz=np.linspace(0,H,32); U,Z=np.meshgrid(u,zz); RR=R*(1-Z/H)
+            add_surface(RR*np.cos(U),RR*np.sin(U),Z,teal,0.62,"Conical surface")
+            if body=="Solid cone":
+                U2,RR2=np.meshgrid(u,np.linspace(0,R,14))
+                add_surface(RR2*np.cos(U2),RR2*np.sin(U2),np.zeros_like(U2),purple,0.3,"Base")
+        # Rotation axis and reference rings
+        zmin,zmax=(-H/2,H/2) if "cylinder" in body.lower() else (0,H) if "cone" in body.lower() else (-R,R)
+        fig.add_trace(go.Scatter3d(x=[0,0],y=[0,0],z=[zmin*1.15,zmax*1.15],mode="lines",line=dict(color="#ffffff",width=5,dash="dash"),name="Rotation axis z"))
+        # A tracer ring makes the angular motion visible even when the body's outline is symmetric.
+        frames=[]
+        for fi in range(36):
+            ang=2*np.pi*fi/36
+            tracer_z=(zmin+zmax)*0.12
+            tr_x=[R*np.cos(ang),R*np.cos(ang+0.13)]
+            tr_y=[R*np.sin(ang),R*np.sin(ang+0.13)]
+            tr_z=[tracer_z,tracer_z]
+            frames.append(go.Frame(data=[go.Scatter3d(x=tr_x,y=tr_y,z=tr_z,mode="markers+lines",marker=dict(size=[7,3],color=[teal,purple]),line=dict(color=teal,width=7),name="Rotating tracer")],name=str(fi)))
+        fig.add_trace(go.Scatter3d(x=[R, R*np.cos(.13)],y=[0,R*np.sin(.13)],z=[(zmin+zmax)*.12]*2,mode="markers+lines",marker=dict(size=[7,3],color=[teal,purple]),line=dict(color=teal,width=7),name="Rotating tracer"))
+        # Frames update only the tracer; all body surfaces remain static in their own geometry.
+        fig.frames=frames
+        fig.update_layout(
+            height=570, margin=dict(l=0,r=0,t=18,b=0),
+            paper_bgcolor="rgba(5,9,16,0.0)", plot_bgcolor="rgba(5,9,16,0.0)",
+            font=dict(color="#eaf2ff",family="Space Grotesk, sans-serif"),
+            scene=dict(bgcolor="rgba(5,9,16,0.0)",xaxis=dict(visible=False,range=[-2.4,2.4]),yaxis=dict(visible=False,range=[-2.4,2.4]),zaxis=dict(visible=False,range=[min(-2.4,zmin-0.3),max(2.4,zmax+0.3)]),aspectmode="manual",aspectratio=dict(x=1,y=1,z=max(.7,min(1.7,H/(2*R))))),
+            legend=dict(orientation="h",yanchor="bottom",y=0.01,x=0.02,bgcolor="rgba(0,0,0,0)"),
+            updatemenus=[dict(type="buttons",showactive=False,x=0.02,y=0.98,xanchor="left",yanchor="top",buttons=[
+                dict(label="▶ PLAY ROTATION",method="animate",args=[None,{"frame":{"duration":70,"redraw":True},"fromcurrent":True,"transition":{"duration":0},"mode":"immediate"}]),
+                dict(label="Ⅱ PAUSE",method="animate",args=[[None],{"frame":{"duration":0,"redraw":False},"mode":"immediate","transition":{"duration":0}}])
+            ])]
+        )
+        st.plotly_chart(fig,use_container_width=True,config={"displaylogo":False,"scrollZoom":True})
+    st.markdown("### What does the geometry tell you?")
+    st.markdown(f'<div class="card"><span class="tag">PHYSICS DEBRIEF</span><h3>{body}</h3><div class="bigformula">I = {I3:.5g} kg·m²</div><p>{FORMULAS.get(body + (" (symmetry axis)" if "cylinder" in body.lower() or "cone" in body.lower() else " (diameter)"), ("",None,"","The formula is evaluated for the selected geometry."))[2] if body + (" (symmetry axis)" if "cylinder" in body.lower() or "cone" in body.lower() else " (diameter)") in FORMULAS else "The moment of inertia depends on the selected body's mass distribution and rotation axis."}</p><p class="smallmuted">For the chosen model, α = τ/I. At fixed torque, a larger I produces a smaller angular acceleration.</p></div>',unsafe_allow_html=True)
+    st.markdown("#### Compare the same mass and outer radius")
+    comparison = {
+        "Solid cylinder":0.5*M*R**2, "Thin hollow cylinder":M*R**2,
+        "Thick hollow cylinder":0.5*M*(R**2+ri**2),
+        "Solid sphere":0.4*M*R**2, "Thin hollow sphere":(2/3)*M*R**2,
+        "Thick hollow sphere":(2/5)*M*(R**5-ri**5)/(R**3-ri**3),
+        "Solid cone":0.3*M*R**2, "Hollow cone":0.5*M*R**2
+    }
+    comp_df={"Body":list(comparison.keys()),"I (kg·m²)":list(comparison.values())}
+    st.bar_chart(comp_df,x="Body",y="I (kg·m²)")
+    st.caption("Comparison uses the same mass and outer radius. Thick-shell entries use the selected inner radius; bodies have different geometries and idealized mass distributions.")
 
 elif page == "Challenge Arena":
     st.markdown("## Challenge Arena <span style='color:#55f6dc'>/ prove your intuition</span>",unsafe_allow_html=True)
