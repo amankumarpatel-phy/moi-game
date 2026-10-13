@@ -619,17 +619,17 @@ elif page == "Dynamics Arena":
         omega_lo=float(np.min(omegas)); omega_hi=float(np.max(omegas))
         omega_pad=max(0.2,(omega_hi-omega_lo)*0.12)
         omega_cursor_index=len(fig_sync.data)
-        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[omega_lo-omega_pad,omega_hi+omega_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=1,col=2)
+        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[omega_lo-omega_pad,omega_hi+omega_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=2,col=1)
         omega_dot_index=len(fig_sync.data)
-        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[omegas[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#55f6dc",width=2)),showlegend=False,name="Current ω",hovertemplate="t=%{x:.2f} s<br>ω=%{y:.3f} rad/s<extra></extra>"),row=1,col=2)
+        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[omegas[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#55f6dc",width=2)),showlegend=False,name="Current ω",hovertemplate="t=%{x:.2f} s<br>ω=%{y:.3f} rad/s<extra></extra>"),row=2,col=1)
 
         fig_sync.add_trace(go.Scatter(x=times,y=energy,mode="lines",name="Krot(t)",line=dict(color="#9a7bff",width=2.5),fill="tozeroy",fillcolor="rgba(154,123,255,.12)",showlegend=False),row=2,col=2)
         energy_lo=0.0; energy_hi=float(np.max(energy))
         energy_pad=max(0.2,energy_hi*0.12)
         energy_cursor_index=len(fig_sync.data)
-        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[energy_lo,energy_hi+energy_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=1,col=3)
+        fig_sync.add_trace(go.Scatter(x=[times[0],times[0]],y=[energy_lo,energy_hi+energy_pad],mode="lines",line=dict(color="white",width=1.7,dash="dash"),showlegend=False,hoverinfo="skip"),row=2,col=2)
         energy_dot_index=len(fig_sync.data)
-        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[energy[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#9a7bff",width=2)),showlegend=False,name="Current K",hovertemplate="t=%{x:.2f} s<br>K=%{y:.3f} J<extra></extra>"),row=1,col=3)
+        fig_sync.add_trace(go.Scatter(x=[times[0]],y=[energy[0]],mode="markers",marker=dict(size=9,color="#ffffff",line=dict(color="#9a7bff",width=2)),showlegend=False,name="Current K",hovertemplate="t=%{x:.2f} s<br>K=%{y:.3f} J<extra></extra>"),row=2,col=2)
 
         # Build animation frames from the simulated angle array, including friction-induced slowdowns.
         sample_indices=np.unique(np.linspace(0,len(times)-1,61).astype(int))
