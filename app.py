@@ -85,6 +85,19 @@ div[data-testid="stAlert"]{border-radius:14px}
 .aep-love-footer{background:radial-gradient(ellipse at 15% 0%,rgba(255,220,160,.2),transparent 35%),radial-gradient(ellipse at 85% 100%,rgba(244,190,222,.2),transparent 40%),linear-gradient(135deg,#20172f,#171e39 60%,#25172d)!important;border-color:rgba(255,225,183,.35)!important}
 .aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
 .aep-footer-kicker,.aep-footer-bottom span:first-child{color:#ffe7b0!important}
+
+/* Deeply immersive Swarg Lok / Indra Lok atmosphere; no abstract geometry overlays */
+.stApp:before,.stApp:after{display:none!important}
+.swarg-layer{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;pointer-events:none;z-index:0;opacity:.82;mix-blend-mode:screen}
+.swarg-layer svg{width:100%;height:100%;display:block}
+.stApp{background:radial-gradient(ellipse at 52% 8%,rgba(255,224,159,.23),transparent 35%),radial-gradient(ellipse at 12% 40%,rgba(255,193,218,.2),transparent 37%),radial-gradient(ellipse at 90% 34%,rgba(186,199,255,.18),transparent 38%),linear-gradient(180deg,#25182f 0%,#302444 43%,#1a2542 100%)!important}
+[data-testid="stSidebar"]{background:linear-gradient(180deg,rgba(43,27,48,.97),rgba(24,30,55,.97))!important;border-right:1px solid rgba(255,225,175,.28)!important}
+[data-testid="stMetric"]{background:linear-gradient(145deg,rgba(89,57,78,.57),rgba(30,39,67,.75))!important;border-color:rgba(255,225,175,.25)!important}
+.stButton>button{border-color:rgba(255,224,174,.48)!important;background:linear-gradient(120deg,rgba(255,222,166,.18),rgba(250,190,218,.17),rgba(179,196,255,.14))!important}
+.hero,.card{background:linear-gradient(135deg,rgba(73,49,77,.72),rgba(31,40,70,.76))!important;border-color:rgba(255,228,188,.24)!important}
+.aep-love-footer{background:radial-gradient(ellipse at 20% 0%,rgba(255,220,160,.22),transparent 38%),radial-gradient(ellipse at 90% 100%,rgba(244,190,222,.22),transparent 40%),linear-gradient(135deg,#30213b,#202b4b 60%,#30213b)!important}
+.aep-orbit,.aep-footer-grid,.aep-footer-glyph{display:none!important}
+@media(prefers-reduced-motion:reduce){.swarg-layer{display:none!important}}
 @media(prefers-reduced-motion:reduce){.swarg-layer{display:none!important}}
 </style>
 """, unsafe_allow_html=True)
@@ -134,6 +147,51 @@ st.markdown("""
  <path d="M275 260 C248 226 260 201 278 191 C294 215 296 237 275 260Z"><animateTransform attributeName="transform" type="translate" values="0 0;24 -30;0 0" dur="18s" repeatCount="indefinite"/></path>
  <path d="M1130 340 C1107 308 1117 284 1136 274 C1151 298 1150 320 1130 340Z"><animateTransform attributeName="transform" type="translate" values="0 0;-18 -28;0 0" dur="21s" repeatCount="indefinite"/></path>
  <path d="M450 520 C429 492 437 471 454 462 C470 484 469 502 450 520Z"><animateTransform attributeName="transform" type="translate" values="0 0;18 -20;0 0" dur="17s" repeatCount="indefinite"/></path>
+</g>
+
+<!-- Indra-lok inspired celestial vista: moving cloud oceans, palace terraces, swans and Airavata -->
+<g opacity=".52" fill="#fff5df">
+ <path d="M-100 560 C-50 500 10 510 50 550 C85 490 145 505 180 550 C225 520 270 540 300 580 L300 650 L-100 650Z"><animateTransform attributeName="transform" type="translate" values="-120 0;90 0;-120 0" dur="47s" repeatCount="indefinite"/></path>
+ <path d="M1120 565 C1160 510 1220 515 1250 550 C1290 500 1350 520 1380 555 C1420 525 1470 545 1510 585 L1510 675 L1120 675Z"><animateTransform attributeName="transform" type="translate" values="90 0;-100 0;90 0" dur="52s" repeatCount="indefinite"/></path>
+ <path d="M-80 700 C-20 650 35 665 75 700 C130 645 200 670 230 710 C300 675 360 695 395 730 L395 810 L-80 810Z"><animateTransform attributeName="transform" type="translate" values="-70 0;120 0;-70 0" dur="39s" repeatCount="indefinite"/></path>
+ <path d="M1060 720 C1110 665 1170 680 1205 715 C1255 660 1320 680 1350 720 C1395 690 1450 710 1490 745 L1490 840 L1060 840Z"><animateTransform attributeName="transform" type="translate" values="80 0;-90 0;80 0" dur="43s" repeatCount="indefinite"/></path>
+</g>
+<!-- Golden terraces and stairway leading into the palace of the devas -->
+<g fill="#ffe5ad" fill-opacity=".18" stroke="#fff0c9" stroke-opacity=".42" stroke-width="1.5">
+ <path d="M520 472 H960 L925 492 H555Z M550 495 H930 L900 514 H580Z M580 517 H900 L875 535 H605Z"/>
+ <path d="M480 470 Q740 425 1000 470" fill="none" stroke-width="3"/>
+ <path d="M505 465 V435 M975 465 V435 M530 450 L550 430 M950 450 L930 430" fill="none"/>
+</g>
+<!-- Hanging celestial lamps -->
+<g stroke="#ffe6a8" stroke-opacity=".7" fill="#fff0bc" filter="url(#templeGlow)">
+ <path d="M405 0 V95 M405 95 l-12 17 h24Z M1040 0 V120 M1040 120 l-12 17 h24Z M1280 0 V85 M1280 85 l-10 15 h20Z" fill="none"/>
+ <circle cx="405" cy="116" r="4"><animate attributeName="opacity" values=".4;1;.4" dur="3s" repeatCount="indefinite"/></circle>
+ <circle cx="1040" cy="137" r="4"><animate attributeName="opacity" values=".4;1;.4" dur="4s" repeatCount="indefinite"/></circle>
+ <circle cx="1280" cy="103" r="3"><animate attributeName="opacity" values=".4;1;.4" dur="3.5s" repeatCount="indefinite"/></circle>
+</g>
+<!-- Celestial swans gliding across the cloud sea -->
+<g fill="none" stroke="#fff8e8" stroke-width="2.5" stroke-linecap="round" opacity=".8">
+ <g><path d="M0 0 Q10 -12 20 0 Q30 -12 40 0 M17 1 Q22 -8 26 -17 Q28 -20 32 -15" transform="translate(180 390) scale(1.0)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;320 -35;650 5" dur="31s" repeatCount="indefinite"/></path></g>
+ <g><path d="M0 0 Q8 -9 16 0 Q24 -9 32 0 M13 1 Q18 -7 21 -13" transform="translate(850 330) scale(.75)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;220 25;520 -5" dur="37s" repeatCount="indefinite"/></path></g>
+ <g><path d="M0 0 Q7 -8 14 0 Q21 -8 28 0 M11 1 Q15 -6 18 -12" transform="translate(600 280) scale(.6)"><animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;-150 -22;-420 0" dur="34s" repeatCount="indefinite"/></path></g>
+</g>
+<!-- Airavata-inspired white elephant silhouette, kept as distant decorative art -->
+<g transform="translate(1110 440)" fill="#fff4e5" fill-opacity=".2" stroke="#fff1d1" stroke-opacity=".55" stroke-width="1.5">
+ <path d="M0 0 C-8 -25 10 -42 35 -38 C58 -34 70 -16 66 5 L60 32 L52 32 L50 5 L20 5 L17 32 L9 32 L8 5 C-5 3 -10 -8 0 0Z"/>
+ <path d="M4 -26 Q-8 -34 -12 -20 L-6 -4 M34 -37 L30 -48 L39 -39 M45 -38 L50 -49 L52 -35" fill="none"/>
+ <circle cx="19" cy="-24" r="2.2" fill="#ffe7ac"/>
+ <path d="M-3 -6 Q-16 6 -12 23" fill="none" stroke-width="3"/>
+ <animateTransform attributeName="transform" type="translate" values="1110 440;1118 434;1110 440" dur="9s" repeatCount="indefinite"/>
+</g>
+<!-- Drifting petals and luminous blessings, moving in different directions -->
+<g fill="#fff0c9" filter="url(#templeGlow)">
+ <circle cx="90" cy="150" r="2"><animate attributeName="cy" values="150;560;150" dur="29s" repeatCount="indefinite"/><animate attributeName="cx" values="90;145;90" dur="17s" repeatCount="indefinite"/></circle>
+ <circle cx="330" cy="80" r="1.6"><animate attributeName="cy" values="80;470;80" dur="34s" repeatCount="indefinite"/></circle>
+ <circle cx="720" cy="120" r="2.5"><animate attributeName="cy" values="120;580;120" dur="31s" repeatCount="indefinite"/></circle>
+ <circle cx="950" cy="70" r="1.7"><animate attributeName="cy" values="70;520;70" dur="27s" repeatCount="indefinite"/></circle>
+ <circle cx="1370" cy="210" r="2"><animate attributeName="cy" values="210;620;210" dur="33s" repeatCount="indefinite"/></circle>
+ <circle cx="510" cy="410" r="1.5"><animate attributeName="cy" values="410;150;410" dur="23s" repeatCount="indefinite"/></circle>
+ <circle cx="1180" cy="480" r="1.8"><animate attributeName="cy" values="480;220;480" dur="25s" repeatCount="indefinite"/></circle>
 </g>
 </svg></div>
 """, unsafe_allow_html=True)
