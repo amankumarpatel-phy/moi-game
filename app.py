@@ -104,12 +104,17 @@ st.markdown("""
 
 # ---------- Physics engine ----------
 FORMULAS = {
-    "Thin ring (central axis)": ("Ring", lambda m,r,l: m*r*r, "I = MR²", "All the mass lies at approximately the same radius."),
-    "Solid disc / cylinder (central axis)": ("Disc", lambda m,r,l: 0.5*m*r*r, "I = ½MR²", "Mass is distributed from the axis to the rim."),
-    "Solid sphere (diameter)": ("Sphere", lambda m,r,l: 0.4*m*r*r, "I = ⅖MR²", "For a uniform solid sphere about a diameter."),
-    "Thin spherical shell (diameter)": ("Shell", lambda m,r,l: (2/3)*m*r*r, "I = ⅔MR²", "The mass is concentrated on the spherical surface."),
-    "Thin rod (centre, perpendicular)": ("Rod", lambda m,r,l: m*l*l/12, "I = ML²/12", "The axis passes through the centre and is perpendicular to the rod."),
-    "Thin rod (end, perpendicular)": ("Rod end", lambda m,r,l: m*l*l/3, "I = ML²/3", "The axis is perpendicular to the rod and passes through one end."),
+    "Thin ring (central axis)": ("Ring", lambda m,r,l,ri=0: m*r*r, "I = MR²", "All the mass lies at approximately the same radius."),
+    "Solid cylinder (symmetry axis)": ("Solid cylinder", lambda m,r,l,ri=0: 0.5*m*r*r, "I = ½MR²", "Uniform solid cylinder about its longitudinal symmetry axis."),
+    "Thin hollow cylinder (symmetry axis)": ("Thin hollow cylinder", lambda m,r,l,ri=0: m*r*r, "I = MR²", "Thin-walled cylinder; its mass is concentrated at radius R."),
+    "Thick hollow cylinder (symmetry axis)": ("Thick hollow cylinder", lambda m,r,l,ri=0: 0.5*m*(r*r+ri*ri), "I = ½M(Rₒ² + Rᵢ²)", "Uniform annular cylinder about its longitudinal symmetry axis. R is outer radius and rᵢ is inner radius."),
+    "Solid sphere (diameter)": ("Solid sphere", lambda m,r,l,ri=0: 0.4*m*r*r, "I = ⅖MR²", "Uniform solid sphere about a diameter."),
+    "Thin hollow sphere (diameter)": ("Thin hollow sphere", lambda m,r,l,ri=0: (2/3)*m*r*r, "I = ⅔MR²", "Thin spherical shell about a diameter."),
+    "Thick hollow sphere (diameter)": ("Thick hollow sphere", lambda m,r,l,ri=0: (2/5)*m*(r**5-ri**5)/(r**3-ri**3) if r>ri else 0, "I = ⅖M(Rₒ⁵ − Rᵢ⁵)/(Rₒ³ − Rᵢ³)", "Uniform-density spherical shell with outer radius R and inner radius rᵢ, about a diameter."),
+    "Solid cone (symmetry axis)": ("Solid cone", lambda m,r,l,ri=0: 0.3*m*r*r, "I = 3/10 MR²", "Uniform solid right circular cone about its symmetry axis."),
+    "Hollow cone (symmetry axis)": ("Hollow cone", lambda m,r,l,ri=0: 0.5*m*r*r, "I = ½MR²", "Thin conical shell about its symmetry axis; mass is distributed over the conical surface."),
+    "Thin rod (centre, perpendicular)": ("Rod", lambda m,r,l,ri=0: m*l*l/12, "I = ML²/12", "The axis passes through the centre and is perpendicular to the rod."),
+    "Thin rod (end, perpendicular)": ("Rod end", lambda m,r,l,ri=0: m*l*l/3, "I = ML²/3", "The axis is perpendicular to the rod and passes through one end."),
 }
 
 QUESTIONS = [
@@ -127,8 +132,8 @@ QUESTIONS = [
     {"q":"Rotational kinetic energy is…","opts":["½Iω²","Iω","½Iα²","τω²"],"ans":0,"why":"For rotation about a fixed axis, Krot = ½Iω²."}
 ]
 
-def calc_I(shape, mass, radius, length):
-    return FORMULAS[shape][1](mass, radius, length)
+def calc_I(shape, mass, radius, length, inner_radius=0.0):
+    return FORMULAS[shape][1](mass, radius, length, inner_radius)
 
 if "score" not in st.session_state: st.session_state.score = 0
 if "answered" not in st.session_state: st.session_state.answered = {}
@@ -200,14 +205,16 @@ elif page == "Spin Lab":
     with a:
         shape = st.selectbox("BODY + ROTATION AXIS", list(FORMULAS.keys()), index=1)
         mass = st.slider("Mass M (kg)", 0.5, 20.0, 4.0, 0.5)
-        radius = st.slider("Radius R (m)", 0.1, 2.0, 0.8, 0.1)
+        radius = st.slider("Outer radius Rₒ (m)", 0.1, 2.0, 0.8, 0.1)
+        is_thick_shell = shape in ("Thick hollow cylinder (symmetry axis)", "Thick hollow sphere (diameter)")
+        inner_radius = st.slider("Inner radius Rᵢ (m)", 0.0, max(0.1, radius-0.05), min(0.4, max(0.0, radius-0.1)), 0.05) if is_thick_shell else 0.0
         length = st.slider("Length L (m) — for rods", 0.2, 4.0, 2.0, 0.1)
         torque = st.slider("Net applied torque τ (N·m)", 0.0, 30.0, 8.0, 0.5)
         omega = st.slider("Initial angular speed ω₀ (rad/s)", 0.0, 20.0, 3.0, 0.5)
         duration = st.slider("Simulation time (s)", 1.0, 8.0, 4.0, 0.5)
         friction = st.slider("Opposing friction torque (N·m)", 0.0, 10.0, 0.5, 0.5)
     with b:
-        I = calc_I(shape,mass,radius,length)
+        I = calc_I(shape,mass,radius,length,inner_radius)
         net_tau = torque-friction
         alpha = net_tau/I if I else 0
         omega_final = omega+alpha*duration
@@ -236,10 +243,18 @@ elif page == "Spin Lab":
       x.strokeStyle='#24344b';x.lineWidth=1;for(let r=25;r<150;r+=25){{x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.stroke();}}
       x.strokeStyle='#8a9ab3';x.setLineDash([4,6]);x.beginPath();x.moveTo(cx,22);x.lineTo(cx,278);x.stroke();x.setLineDash([]);
       x.save();x.translate(cx,cy);x.rotate(ang);
-      const kind='{FORMULAS[shape][0]}';
-      if(kind==='Rod'||kind==='Rod end'){{x.strokeStyle='#55f6dc';x.lineWidth=10;x.lineCap='round';x.beginPath();x.moveTo(kind==='Rod end'?-R:-R,0);x.lineTo(R,0);x.stroke();for(let i=0;i<9;i++){{let px=-R+2*R*i/8;x.fillStyle='#b8fff4';x.beginPath();x.arc(px,0,3,0,Math.PI*2);x.fill();}}}}
-      else if(kind==='Ring'||kind==='Shell'){{x.strokeStyle='#55f6dc';x.lineWidth=8;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.stroke();for(let i=0;i<20;i++){{let a=i*Math.PI/10;x.fillStyle='#d9fff9';x.beginPath();x.arc(R*Math.cos(a),R*Math.sin(a),3,0,Math.PI*2);x.fill();}}}}
-      else if(kind==='Sphere'){{x.strokeStyle='#55f6dc';x.lineWidth=5;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.stroke();x.strokeStyle='#9a7bff';x.beginPath();x.ellipse(0,0,R*.42,R,0,0,Math.PI*2);x.stroke();x.beginPath();x.ellipse(0,0,R,R*.42,0,0,Math.PI*2);x.stroke();}}
+      const kind='{FORMULAS[shape][0]}'; const innerR={inner_radius if 'inner_radius' in locals() else 0};
+      if(kind==='Rod'||kind==='Rod end'){{x.strokeStyle='#55f6dc';x.lineWidth=10;x.lineCap='round';x.beginPath();x.moveTo(-R,0);x.lineTo(R,0);x.stroke();for(let i=0;i<9;i++){{let px=-R+2*R*i/8;x.fillStyle='#b8fff4';x.beginPath();x.arc(px,0,3,0,Math.PI*2);x.fill();}}}}
+      else if(kind.includes('cylinder')){{const ry=R*.42; x.fillStyle='rgba(85,246,220,.10)';x.strokeStyle='#55f6dc';x.lineWidth=2.5;
+        x.beginPath();x.ellipse(0,-ry,R,ry,0,0,Math.PI*2);x.fill();x.stroke();x.beginPath();x.moveTo(-R,-ry);x.lineTo(-R,ry);x.ellipse(0,ry,R,ry,0,Math.PI,Math.PI*2);x.lineTo(R,-ry);x.stroke();
+        if(kind==='Thick hollow cylinder'){{x.strokeStyle='#9a7bff';x.beginPath();x.ellipse(0,-ry,R*innerR/{radius},ry*innerR/{radius},0,0,Math.PI*2);x.stroke();x.beginPath();x.ellipse(0,ry,R*innerR/{radius},ry*innerR/{radius},0,Math.PI,Math.PI*2);x.stroke();}}
+        else if(kind==='Thin hollow cylinder'){{x.setLineDash([4,4]);x.beginPath();x.ellipse(0,0,R,ry,0,0,Math.PI*2);x.stroke();x.setLineDash([]);}}
+      }}
+      else if(kind.includes('sphere')||kind==='Solid sphere'){{x.strokeStyle='#55f6dc';x.lineWidth=2.5;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.stroke();x.strokeStyle='#9a7bff';x.beginPath();x.ellipse(0,0,R*.42,R,0,0,Math.PI*2);x.stroke();x.beginPath();x.ellipse(0,0,R,R*.42,0,0,Math.PI*2);x.stroke();
+        if(kind==='Thick hollow sphere'){{x.strokeStyle='#9a7bff';x.beginPath();x.arc(0,0,R*innerR/{radius},0,Math.PI*2);x.stroke();}}
+        if(kind==='Thin hollow sphere'){{x.setLineDash([3,4]);x.beginPath();x.ellipse(0,0,R*.42,R,0,0,Math.PI*2);x.stroke();x.setLineDash([]);}}
+      }}
+      else if(kind.includes('cone')){{x.strokeStyle='#55f6dc';x.lineWidth=2.5;x.fillStyle='rgba(85,246,220,.10)';x.beginPath();x.moveTo(0,-R);x.lineTo(-R*.72,R*.55);x.ellipse(0,R*.55,R*.72,R*.25,0,Math.PI,Math.PI*2);x.closePath();x.fill();x.stroke();x.beginPath();x.moveTo(0,-R);x.lineTo(R*.72,R*.55);x.stroke();x.strokeStyle='#9a7bff';x.beginPath();x.ellipse(0,R*.55,R*.72,R*.25,0,0,Math.PI*2);x.stroke();}}
       else{{x.fillStyle='rgba(85,246,220,.13)';x.strokeStyle='#55f6dc';x.lineWidth=3;x.beginPath();x.arc(0,0,R,0,Math.PI*2);x.fill();x.stroke();for(let i=0;i<12;i++){{let a=i*Math.PI/6;x.strokeStyle='#4b8d98';x.beginPath();x.moveTo(0,0);x.lineTo(R*Math.cos(a),R*Math.sin(a));x.stroke();}}}}
       x.fillStyle='#f4f7ff';x.beginPath();x.arc(0,0,7,0,Math.PI*2);x.fill();x.strokeStyle='#9a7bff';x.lineWidth=3;x.beginPath();x.moveTo(0,0);x.lineTo(R*.82,0);x.stroke();x.restore();
       x.fillStyle='#a7b6cb';x.font='12px monospace';x.fillText('AXIS z',cx+12,cy-112);x.fillStyle='#55f6dc';x.fillText('θ = '+ang.toFixed(2)+' rad',18,25);
@@ -312,9 +327,14 @@ elif page == "Formula Vault":
     formulas=[
       ("Point mass","I = mr²","A point mass at perpendicular distance r from the axis."),
       ("Thin ring / hoop","I = MR²","Central symmetry axis, perpendicular to the plane."),
-      ("Solid disc / cylinder","I = ½MR²","Central symmetry axis."),
+      ("Solid cylinder","I = ½MR²","Longitudinal symmetry axis."),
+      ("Thin hollow cylinder","I = MR²","Thin-walled cylinder, symmetry axis."),
+      ("Thick hollow cylinder","I = ½M(Rₒ² + Rᵢ²)","Uniform annular cylinder, symmetry axis."),
       ("Solid sphere","I = ⅖MR²","Axis through a diameter."),
-      ("Thin spherical shell","I = ⅔MR²","Axis through a diameter."),
+      ("Thin hollow sphere","I = ⅔MR²","Thin spherical shell, diameter."),
+      ("Thick hollow sphere","I = ⅖M(Rₒ⁵ − Rᵢ⁵)/(Rₒ³ − Rᵢ³)","Uniform-density spherical shell, diameter."),
+      ("Solid cone","I = 3/10 MR²","Uniform solid cone, symmetry axis."),
+      ("Hollow cone","I = ½MR²","Thin conical shell, symmetry axis."),
       ("Thin rod — centre","I = ML²/12","Axis through centre, perpendicular to rod."),
       ("Thin rod — end","I = ML²/3","Axis through one end, perpendicular to rod."),
       ("Parallel-axis theorem","I = Icm + Md²","Parallel axis offset by distance d from the centre-of-mass axis."),
